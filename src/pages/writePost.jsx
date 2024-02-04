@@ -40,7 +40,7 @@ const WritePost = () => {
             Introduce your thoughts by writing your description about the topic.
           </p>
         </div>
-        <Button>Submit</Button>
+        <Button className="px-9">Submit</Button>
       </div>
     </form>
   </div>;
