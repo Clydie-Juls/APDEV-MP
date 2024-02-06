@@ -15,7 +15,7 @@ const PostList = ({ by }) => {
     // TODO: Based on the value of `by`, query the relevant post data.
     return (
         <div className='flex flex-col gap-3'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-3'>
                 {/* TODO: Display all visible posts here. */}
                 <PostCard 
                     title="Post Title"
