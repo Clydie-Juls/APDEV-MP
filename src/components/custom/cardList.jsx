@@ -6,28 +6,16 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-  } from "@/components/ui/pagination";
+} from "@/components/ui/pagination";
 
-import PostCard from './postCard';
-
-// eslint-disable-next-line no-unused-vars, react/prop-types
-const PostList = ({ by }) => {
-    // TODO: Based on the value of `by`, query the relevant post data.
+const CardList = ({ children }) => {
     return (
         <div className='flex flex-col gap-3'>
             <div className='grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-3'>
-                {/* TODO: Display all visible posts here. */}
-                <PostCard 
-                    title="Post Title"
-                    author="user1432"
-                    body="A very epic description."
-                    uploadDate="1/1/2024"
-                    views={12345}
-                    tags={['tag1', 'tag2']}
-                />
+                {children}
             </div>
 
-            {/* TODO: Based on the number of queried posts, populate the pagination
+            {/* TODO: Based on the number of child posts, populate the pagination
                 numberings accordingly. */}
             <Pagination>
                 <PaginationContent>
@@ -50,4 +38,4 @@ const PostList = ({ by }) => {
     );
 };
 
-export default PostList;
+export default CardList;

@@ -3,8 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import AnimBackground from '@/components/custom/animBackground';
+import CardList from '@/components/custom/cardList';
 import Header from '@/components/custom/header';
-import PostList from '@/components/custom/postList';
+import PostCard from '@/components/custom/postCard';
+import CommentCard from '@/components/custom/commentCard';
 
 const User = () => {
   return (
@@ -22,11 +24,31 @@ const User = () => {
             </TabsList>
 
             <TabsContent value="posts">
-              <PostList by="recent"/>
+              <CardList>
+                {/* TODO: Generate PostCard components based on retrived recent 
+                    posts. */}
+                <PostCard 
+                    title="Post Title"
+                    author="user1432"
+                    body="A very epic description."
+                    uploadDate="1/1/2024"
+                    views={12345}
+                    tags={['tag1', 'tag2']}
+                />
+              </CardList>
             </TabsContent>
 
             <TabsContent value="comments">
-              <PostList by="popular" />
+            <CardList>
+                {/* TODO: Generate CommentCard components based on retrived recent 
+                    comments. */}
+                <CommentCard
+                  postTitle="Epic post"
+                  body="Never gonna give you up. Never gonna let you down."
+                  uploadDate="1/1/2024"
+                  tags={['tag3', 'tag5']}
+                />
+              </CardList>
             </TabsContent>
           </Tabs>
         </main>

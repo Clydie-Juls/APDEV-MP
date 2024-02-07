@@ -2,8 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import AnimBackground from '@/components/custom/animBackground';
+import CardList from '@/components/custom/cardList';
 import Header from '@/components/custom/header';
-import PostList from '@/components/custom/postList';
+import PostCard from '@/components/custom/postCard';
 
 const Landing = () => {
   return (
@@ -26,11 +27,33 @@ const Landing = () => {
             </div>
         
             <TabsContent value="recent">
-              <PostList by="recent"/>
+              <CardList>
+                {/* TODO: Generate PostCard components based on retrived recent 
+                    posts. */}
+                <PostCard 
+                    title="Post Title"
+                    author="user1432"
+                    body="A very epic description."
+                    uploadDate="1/1/2024"
+                    views={12345}
+                    tags={['tag1', 'tag2']}
+                />
+              </CardList>
             </TabsContent>
 
             <TabsContent value="popular">
-              <PostList by="popular" />
+            <CardList>
+                {/* TODO: Generate PostCard components based on retrived popular 
+                    posts. */}
+                <PostCard 
+                    title="Post Title"
+                    author="user1432"
+                    body="A very epic description."
+                    uploadDate="1/1/2024"
+                    views={12345}
+                    tags={['tag1', 'tag2']}
+                />
+              </CardList>
             </TabsContent>
           </Tabs>
         </main>
