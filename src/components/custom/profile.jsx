@@ -22,8 +22,13 @@ const profile = () => {
                 </>
             ) : (
                 <>
-                    <Button>Log In</Button>
-                    <Button>Sign up</Button>
+                    <Button asChild>
+                        <a href="/login">Log In</a>
+                    </Button>
+
+                    <Button asChild>
+                        <a href="/signUp">Sign Up</a>
+                    </Button>
                 </>
             )}
 
