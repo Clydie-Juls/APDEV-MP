@@ -23,7 +23,9 @@ const Landing = () => {
                 <h2 className='text-3xl font-bold'>Posts</h2>
               </div>
 
-              <Button>Create a Post</Button>
+              <Button asChild>
+                <a href="/writePost">Create a Post</a>
+              </Button>
             </div>
         
             <TabsContent value="recent">
