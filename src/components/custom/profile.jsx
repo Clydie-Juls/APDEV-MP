@@ -9,7 +9,7 @@ const profile = () => {
         <div className='flex gap-4'>
             {IS_LOGGED_IN ? (
                 <>
-                    <a href="" className="flex items-center gap-4">
+                    <a href="/user" className="flex items-center gap-4">
                         <Avatar>
                             <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback>CN</AvatarFallback>
