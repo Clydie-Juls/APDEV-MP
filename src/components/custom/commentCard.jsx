@@ -1,3 +1,4 @@
+import RateButtons from './rateButtons';
 import Tag from './tag';
 
 // TODO: Complete all props.
@@ -18,6 +19,8 @@ const CommentCard = ({
 
                 <p>{body}</p>
             </div>
+
+            <RateButtons />
         </div>
     );
 };
