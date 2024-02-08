@@ -11,7 +11,7 @@ import {
 const CardList = ({ children }) => {
     return (
         <div className='flex flex-col gap-3'>
-            <div className='grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-3'>
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-3'>
                 {children}
             </div>
 
