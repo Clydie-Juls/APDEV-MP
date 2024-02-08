@@ -46,32 +46,6 @@ const SAMPLE_POSTS = [
   },
 ];
 
-// TODO: Replace with actual retrieval mechanism.
-const SAMPLE_COMMENTS = [
-  {
-    id: 23,
-    postId: 1,
-    postTitle: 'Post 2',
-    postTags: ['tag3', 'tag5'],
-    body: 'Never gonna give you up. Never gonna let you down.',
-    uploadDate: '1/2/2024',
-    likes: 0,
-    dislikes: 123,
-    userRating: 'dislike'
-  },
-  {
-    id: 3,
-    postId: 0,
-    postTitle: 'Post 1',
-    postTags: ['tag3', 'tag5'],
-    body: 'We\'ve known each other, for so long',
-    uploadDate: '1/2/2024',
-    likes: 2,
-    dislikes: 0,
-    userRating: null
-  },
-];
-
 const Landing = () => {
   return (
     <AnimBackground>
