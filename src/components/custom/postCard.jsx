@@ -8,6 +8,9 @@ const PostCard = ({
     body,
     uploadDate,
     views,
+    likes,
+    dislikes,
+    userRating,
     tags
 }) => {
     // TODO: Shorten very long bodies with ellipses
@@ -29,7 +32,7 @@ const PostCard = ({
                 </div>
             </div>
 
-            <RateButtons />
+            <RateButtons likes={likes} dislikes={dislikes} userRating={userRating} />
         </div>
     );
 };

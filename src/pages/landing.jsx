@@ -98,14 +98,20 @@ const Landing = () => {
               <CardList>
                 {/* TODO: Generate PostCard components based on retrived recent 
                     posts. */}
-                <PostCard 
-                    title="Post Title"
-                    author="user1432"
-                    body="A very epic description."
-                    uploadDate="1/1/2024"
-                    views={12345}
-                    tags={['tag1', 'tag2']}
-                />
+                {SAMPLE_POSTS.map(p => 
+                  <PostCard
+                    key={p.id}
+                    title={p.title}
+                    author={p.author}
+                    body={p.body}
+                    uploadDate={p.uploadDate}
+                    views={p.views}
+                    likes={p.likes}
+                    dislikes={p.dislikes}
+                    userRating={p.userRating}
+                    tags={p.tags}
+                  />
+                )}
               </CardList>
             </TabsContent>
 
@@ -113,14 +119,20 @@ const Landing = () => {
             <CardList>
                 {/* TODO: Generate PostCard components based on retrived popular 
                     posts. */}
-                <PostCard 
-                    title="Post Title"
-                    author="user1432"
-                    body="A very epic description."
-                    uploadDate="1/1/2024"
-                    views={12345}
-                    tags={['tag1', 'tag2']}
-                />
+                {SAMPLE_POSTS.map(p => 
+                  <PostCard
+                    key={p.id}
+                    title={p.title}
+                    author={p.author}
+                    body={p.body}
+                    uploadDate={p.uploadDate}
+                    views={p.views}
+                    likes={p.likes}
+                    dislikes={p.dislikes}
+                    userRating={p.userRating}
+                    tags={p.tags}
+                  />
+                )}
               </CardList>
             </TabsContent>
           </Tabs>
