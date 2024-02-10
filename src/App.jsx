@@ -9,6 +9,8 @@ import SignUp from "./pages/signUp";
 import User from "./pages/user";
 import WritePost from "./pages/writePost";
 import Test from "./pages/test";
+import Comment from "./pages/comment";
+import Post from "./pages/post";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/user" element={<User />} />
         <Route path="/writepost" element={<WritePost />} />
+        <Route path="/comment" element={<Comment />} />
+        <Route path="/post" element={<Post />} />
       </Routes>
     </div>
   );
