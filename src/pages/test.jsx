@@ -23,6 +23,12 @@ const Test = () => {
       <Button asChild>
         <Link to="/writepost">Go to Write Post Page</Link>
       </Button>
+      <Button asChild>
+        <Link to="/comment">Go to Comment Page</Link>
+      </Button>
+      <Button asChild>
+        <Link to="/post">Go to Post Page</Link>
+      </Button>
     </div>
   );
 };
