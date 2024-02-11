@@ -23,7 +23,21 @@ const CommentsPage = () => {
           <div className="grid w-full items-center gap-4 mb-4">
             <div className="flex flex-col gap-3">
               <hr style={{ width: '100%', height: '2px', backgroundColor: 'white', border: 'none' }} />
-              <textarea id="comment" placeholder="Write your comment here" rows={32} style={{backgroundColor: "black", color: "white", border: "none" }} />
+              <textarea 
+                id="comment" 
+                placeholder="Write your comment here" 
+                rows={29} 
+                style={{
+                  backgroundColor: "black", 
+                  color: "white", 
+                  border: "1px solid white",
+                  borderRadius: "10px",
+                  padding: "15px", 
+                  marginTop: "40px",
+                  marginLeft: "40px",
+                  marginRight: "40px"
+                }} 
+              />
             </div>
           </div>
         </form>
