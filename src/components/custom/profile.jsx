@@ -1,13 +1,16 @@
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
-
-// TODO: Replace with actual auth mechanism.
-const IS_LOGGED_IN = true;
+import { TempState } from '@/lib/tempState';
 
 const profile = () => {
+    const handleLogOutClick = () => {
+        TempState.set('loggedIn', false);
+        window.location.replace("/landing");
+    };
+    
     return (
         <div className='flex gap-4'>
-            {IS_LOGGED_IN ? (
+            {TempState.get('loggedIn') ? (
                 <>
                     <a href="/user" className="flex items-center gap-4">
                         <Avatar>
@@ -18,7 +21,7 @@ const profile = () => {
                         <p className="font-bold">user1234</p>
                     </a>            
 
-                    <Button>Log Out</Button>
+                    <Button onClick={handleLogOutClick}>Log Out</Button>
                 </>
             ) : (
                 <>
