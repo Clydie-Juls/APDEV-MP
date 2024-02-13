@@ -24,6 +24,9 @@ const Test = () => {
         <Link to="/writepost">Go to Write Post Page</Link>
       </Button>
       <Button asChild>
+        <Link to="/editpost">Go to Edit Post Page</Link>
+      </Button>
+      <Button asChild>
         <Link to="/comment">Go to Comment Page</Link>
       </Button>
       <Button asChild>

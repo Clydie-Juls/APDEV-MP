@@ -7,7 +7,7 @@ import Login from "./pages/login";
 import Search from "./pages/search";
 import SignUp from "./pages/signUp";
 import User from "./pages/user";
-import WritePost from "./pages/writePost";
+import PostEditor from "./pages/postEditor";
 import Test from "./pages/test";
 import Comment from "./pages/comment";
 import Post from "./pages/post";
@@ -22,7 +22,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/user" element={<User />} />
-        <Route path="/writepost" element={<WritePost />} />
+        <Route path="/writepost" element={<PostEditor isWritePost={true} />} />
+        <Route path="/editpost" element={<PostEditor isWritePost={false} />} />
         <Route path="/comment" element={<Comment />} />
         <Route path="/post" element={<Post />} />
       </Routes>
