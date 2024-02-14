@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import Tag from "./tag";
+import ButtonTag from "./buttonTag";
 
 const TagInput = () => {
   const [tags, setTags] = useState([]);
@@ -15,11 +14,18 @@ const TagInput = () => {
     }
   }
 
+  function removeTag(i) {
+    const newTag = tags.filter((tag, index) => i !== index);
+    setTags(newTag);
+  }
+
   return (
     <div>
       <div className=" flex gap-2 py-4">
         {tags.map((tag, i) => (
-          <Tag key={`Tag-input-${i}`} name={tag} />
+          <ButtonTag clickFunction={() => removeTag(i)} key={`Tag-button-${i}`}>
+            {tag}
+          </ButtonTag>
         ))}
       </div>
       <Input
