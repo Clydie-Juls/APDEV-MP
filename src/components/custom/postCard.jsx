@@ -20,7 +20,9 @@ const PostCard = ({
         <div className='px-7 py-5 grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950'>
             <div className='flex flex-col gap-2'>
                 <div className='flex items-center gap-3'>
-                    <h3 className='text-2xl font-bold'>{title}</h3>
+                    <a href="/post">
+                        <h3 className='text-2xl font-bold'>{title}</h3>
+                    </a>
                     {tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
                 <p>{body}</p>
