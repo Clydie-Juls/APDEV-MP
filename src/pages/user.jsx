@@ -1,12 +1,21 @@
+import { useState, useRef, useEffect } from 'react';
+
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import AnimBackground from '@/components/custom/animBackground';
 import CardList from '@/components/custom/cardList';
 import Header from '@/components/custom/header';
 import PostCard from '@/components/custom/postCard';
 import CommentCard from '@/components/custom/commentCard';
+import { Pencil } from 'lucide-react';
 
 // TODO: Replace with actual retrieval mechanism.
 const SAMPLE_POSTS = [
@@ -136,20 +145,48 @@ const User = () => {
 };
 
 const ProfileSide = () => {
+  const [descEditable, setDescEditable] = useState(false);
+  const descElemRef = useRef();
+
+  const handleAvatarClick = () => {
+    // TODO
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.click();
+  };
+
+  const handleEditDesc = () => {
+    setDescEditable(true);
+
+    setTimeout(() => {
+      descElemRef.current.focus();
+    }, 0);
+  };
+
+  const handleDescElemBlur = () => {
+    setDescEditable(false);
+  };
+
   return (
     <div className='min-h-100 p-5 flex flex-col items-stretch gap-5 border-2 border-zinc-500 rounded-xl bg-zinc-950'>
       <div className='flex flex-col gap-2 items-center'>
-        <Avatar className='min-h-32 w-auto'>
+        <Avatar className='relative cursor-pointer min-h-32 w-auto' onClick={handleAvatarClick}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
+            <button className='absolute inset-0 flex justify-center items-center opacity-0 hover:bg-zinc-700 hover:opacity-80'>
+              <Pencil size={30} />
+            </button>
         </Avatar>
 
         <p className="text-2xl font-bold">user1234</p>
       </div>
 
-      <p className='max-w-[40ch]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt laborum iusto eligendi provident repellendus itaque totam amet dolor molestiae maxime dolores quo odio quam voluptate, laudantium placeat quia accusantium aliquam.</p>
+      <p ref={descElemRef} className='max-w-[40ch]' contentEditable={descEditable} onBlur={handleDescElemBlur}> 
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt laborum iusto eligendi provident repellendus itaque totam amet dolor molestiae maxime dolores quo odio quam voluptate, laudantium placeat quia accusantium aliquam.
+      </p>
 
-      <div className='flex justify-center gap-3'>
+      <div className='mt-1 flex flex-col justify-center gap-3'>
+        <Button onClick={handleEditDesc}>Edit Description</Button>
         <Button>
           <a href="/editlogininfo">Edit Login Info</a>
         </Button>
