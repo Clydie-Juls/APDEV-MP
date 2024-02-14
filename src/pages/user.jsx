@@ -150,7 +150,9 @@ const ProfileSide = () => {
       <p className='max-w-[40ch]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt laborum iusto eligendi provident repellendus itaque totam amet dolor molestiae maxime dolores quo odio quam voluptate, laudantium placeat quia accusantium aliquam.</p>
 
       <div className='flex justify-center gap-3'>
-        <Button>Edit Login Info</Button>
+        <Button>
+          <a href="/editlogininfo">Edit Login Info</a>
+        </Button>
         <Button>Delete Profile</Button>
       </div>
     </div>
