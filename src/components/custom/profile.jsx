@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { TempState } from '@/lib/tempState';
+import { TempState } from '@/lib/placeholder/tempState';
 
 const profile = () => {
     const handleLogOutClick = () => {
