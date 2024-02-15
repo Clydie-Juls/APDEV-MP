@@ -40,7 +40,7 @@ const ProfileSide = ({
 
   return (
     <div 
-      className='min-w-72 min-h-100 p-5 flex flex-col items-stretch gap-5 border-2 border-zinc-500 rounded-xl bg-zinc-950'
+      className='w-[40ch] min-h-100 p-5 flex flex-col items-stretch gap-5 border-2 border-zinc-500 rounded-xl bg-zinc-950'
     >
       <div className='flex flex-col gap-2 items-center'>
         <Avatar className='relative cursor-pointer min-h-32 w-auto' onClick={handleAvatarClick}>

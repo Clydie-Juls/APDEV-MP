@@ -13,19 +13,21 @@ const CommentCard = ({
 }) => {
     return (
         <div 
-            className='px-7 py-3 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950 hover:bg-zinc-900'
+            className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950 hover:bg-zinc-900'
         >
             <a 
                 className='overflow-hidden flex flex-col gap-2 justify-center'
                 href="/post"
             >
-                <div className='flex items-center gap-3'>
-                    <h3 className='text-xl font-bold'>In {postTitle}</h3>
-                    <p className='text-sm'>Uploaded {uploadDate}</p>
+                <h3 className='text-xl font-bold'>In &quot;{postTitle}&quot;</h3>
+
+                <div className='flex gap-2'>
                     {postTags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
 
                 <p className='overflow-hidden text-ellipsis text-nowrap'>{body}</p>
+
+                <p className='text-sm'>Uploaded {uploadDate}</p>
             </a>
 
             <RateButtons likes={likes} dislikes={dislikes} userRating={userRating} />

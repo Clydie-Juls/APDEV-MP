@@ -41,7 +41,7 @@ export const Posts = [
         body: "Google's Quantum Computing division has achieved a major milestone with the demonstration of quantum supremacy. Their latest quantum processor successfully solved a complex problem in minutes that would take classical supercomputers thousands of years.",
         uploadDate: "2024-02-12",
         views: 1800,
-        likerIds: [0, 2, 4],
+        likerIds: [0, 1, 2, 4],
         dislikerIds: [3],
         tags: ["Google", "Quantum", "Breakthrough"]
     },

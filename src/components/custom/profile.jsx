@@ -12,13 +12,13 @@ const profile = () => {
         <div className='flex gap-4'>
             {TempState.get('loggedIn') ? (
                 <>
-                    <a href="/user" className="flex items-center gap-4">
+                    <a href="/user/0" className="flex items-center gap-4">
                         <Avatar>
                             <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
 
-                        <p className="font-bold">user1234</p>
+                        <p className="font-bold">user0</p>
                     </a>            
 
                     <Button onClick={handleLogOutClick}>Log Out</Button>

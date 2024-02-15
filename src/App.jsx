@@ -22,10 +22,10 @@ function App() {
         <Route path="/editlogininfo" element={<EditLoginInfo />} />
         <Route path="/user/:id" element={<User />} />
         <Route path="/writepost" element={<PostEditor isWritePost={true} />} />
-        <Route path="/editpost" element={<PostEditor isWritePost={false} />} />
+        <Route path="/editpost/:id" element={<PostEditor isWritePost={false} />} />
         <Route path="/comment" element={<Comment />} />
         <Route path="/writecomment" element={<Comment isWriteComment={true} />} />
-        <Route path="/editcomment" element={<Comment isWriteComment={false} />} />
+        <Route path="/editcomment/:id" element={<Comment isWriteComment={false} />} />
         <Route path="/reply" element={<Comment isReply={true} />} />
         <Route path="/post" element={<Post />} />
       </Routes>

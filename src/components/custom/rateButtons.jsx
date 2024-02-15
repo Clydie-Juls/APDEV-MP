@@ -9,7 +9,7 @@ const RateButtons = ({
     userRating
 }) => {
     return (
-        <div className={'flex gap-1 justify-center items-end ' + (horizontal ? 'flex-row' : 'flex-col')}>
+        <div className={'flex justify-center items-end ' + (horizontal ? 'gap-1 flex-row' : 'gap-5 flex-col')}>
             <Button className='flex gap-3 items-center border-none' variant="ghost">
                 {likes}
                 
