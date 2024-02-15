@@ -17,12 +17,15 @@ const PostCard = ({
     // TODO: Find a way to link to an author's profile via profile anchor
     // TODO: Work with actual, not string dates
     return (
-        <div className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950'>
-            <div className='overflow-hidden flex flex-col gap-2'>
+        <div 
+            className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950 hover:bg-zinc-900'
+        >
+            <a 
+                className='overflow-hidden flex flex-col gap-2' 
+                href="/post"
+            >
                 <div className='flex items-center gap-3'>
-                    <a href="/post">
-                        <h3 className='text-2xl font-bold'>{title}</h3>
-                    </a>
+                    <h3 className='text-2xl font-bold'>{title}</h3>
                     {tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
 
@@ -33,7 +36,7 @@ const PostCard = ({
                     <p className='text-sm'>Uploaded {uploadDate}</p>
                     <p className='text-sm'>{views} Views</p>
                 </div>
-            </div>
+            </a>
 
             <RateButtons likes={likes} dislikes={dislikes} userRating={userRating} />
         </div>
