@@ -1,14 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import AnimBackground from '@/components/custom/animBackground';
 import CardList from '@/components/custom/cardList';
@@ -178,6 +172,10 @@ const ProfileSide = () => {
     setDescEditable(false);
   };
 
+  const handleProfileDelete = () => {
+
+  };
+
   return (
     <div className='min-h-100 p-5 flex flex-col items-stretch gap-5 border-2 border-zinc-500 rounded-xl bg-zinc-950'>
       <div className='flex flex-col gap-2 items-center'>
@@ -201,7 +199,8 @@ const ProfileSide = () => {
         <Button>
           <a href="/editlogininfo">Edit Login Info</a>
         </Button>
-        <Button variant="destructive">Delete Profile</Button>
+
+        <Button variant="destructive" onClick={handleProfileDelete}>Delete Profile</Button>
       </div>
     </div>
   );
