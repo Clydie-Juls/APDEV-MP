@@ -21,3 +21,9 @@ export const TempPosts = {
         return Posts.find(p => p.id === id);
     }
 };
+
+export const TempComments = {
+    getFromId(id) {
+        return Comments.find(c => c.id === id);
+    }
+};
