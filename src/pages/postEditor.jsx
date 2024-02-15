@@ -26,19 +26,19 @@ const PostEditor = ({ isWritePost }) => {
         <div className="flex flex-col gap-8 items-center px-[20%] w-full ">
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="title">Title</Label>
-            {isWritePost ? 
+            {isWritePost ? (
               <Input
                 className="bg-black"
                 id="title"
                 placeholder="Bro Richie Finally Created GPT 5.0"
-              /> 
-            :
+              />
+            ) : (
               <Input
                 className="bg-black"
                 id="title"
                 value="Placeholder Post Title"
               />
-            }
+            )}
 
             <p className="text-sm text-muted-foreground">
               Write an eye-catching title that turns eyeballs into clickbait
@@ -47,27 +47,29 @@ const PostEditor = ({ isWritePost }) => {
           </div>
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
-            <TagInput />
+            <TagInput
+              initTags={isWritePost ? [] : ["Technology", "Programming"]}
+            />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
             </p>
           </div>
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="description">Description</Label>
-            {isWritePost ? 
+            {isWritePost ? (
               <Textarea
                 className="bg-black"
                 placeholder="Type your message here."
                 id="description"
               />
-            :
+            ) : (
               <Textarea
                 className="bg-black"
                 id="description"
                 value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
               />
-            }
-            
+            )}
+
             <p className="text-sm text-muted-foreground">
               Introduce your thoughts by writing your description about the
               topic.
