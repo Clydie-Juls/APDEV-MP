@@ -25,7 +25,7 @@ const PostCard = ({
                 href="/post"
             >
                 <div className='flex items-center gap-3'>
-                    <h3 className='text-2xl font-bold'>{title}</h3>
+                    <h3 className='text-xl font-bold'>{title}</h3>
                     {tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
 
