@@ -24,8 +24,9 @@ const PostCard = ({
                 className='overflow-hidden flex flex-col gap-2' 
                 href="/post"
             >
-                <div className='flex items-center gap-3'>
-                    <h3 className='text-xl font-bold'>{title}</h3>
+                <h3 className='text-xl font-bold'>{title}</h3>
+
+                <div className='flex gap-2'>
                     {tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
 

@@ -4,8 +4,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TagInput from "@/components/custom/tagInput";
+import { useParams } from 'react-router';
+import { TempPosts } from '@/lib/placeholder/mockReq';
 
 const PostEditor = ({ isWritePost }) => {
+  const { id } = useParams();
+
+  const postToEdit = TempPosts.getFromId(Number(id));
+  
   return (
     <div className="w-screen h-screen px-6 py-10 flex flex-col gap-6 items-center overflow-x-hidden">
       <img
@@ -36,7 +42,7 @@ const PostEditor = ({ isWritePost }) => {
               <Input
                 className="bg-black"
                 id="title"
-                value="Placeholder Post Title"
+                value={postToEdit.title}
               />
             )}
 
@@ -48,7 +54,7 @@ const PostEditor = ({ isWritePost }) => {
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
             <TagInput
-              initTags={isWritePost ? [] : ["Technology", "Programming"]}
+              initTags={isWritePost ? postToEdit.tags : ["Technology", "Programming"]}
             />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
@@ -66,7 +72,7 @@ const PostEditor = ({ isWritePost }) => {
               <Textarea
                 className="bg-black"
                 id="description"
-                value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                value={postToEdit.body}
               />
             )}
 
