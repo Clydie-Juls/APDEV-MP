@@ -26,6 +26,7 @@ import AnimBackground from '@/components/custom/animBackground';
 const Post = () => {
   // State to manage deletion confirmation
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [whatToDelete, setWhatToDelete] = useState('');
 
   const handleDelete = () => {
     console.log("Delete logic goes here");
@@ -103,7 +104,7 @@ const Post = () => {
                     Edit post
                   </DropdownMenuItem>
                   <DropdownMenuItem 
-                    onClick={() => setConfirmDelete(true)}
+                    onClick={() => {setConfirmDelete(true); setWhatToDelete('post');}}
                   >
                     Delete post
                   </DropdownMenuItem>
@@ -140,6 +141,12 @@ const Post = () => {
 
           <CardFooter className="flex">
             <RateButtons likes={50} dislikes={10} horizontal />
+            <div>
+              <Button variant="ghost" style={{ width: '180px' }}>
+                <Send style={{ width: '1.5rem', height: '1.5rem' }} />
+                <a href="/comment">Reply</a>
+              </Button>
+            </div>
           </CardFooter>
         </Card>
 
@@ -189,7 +196,7 @@ const Post = () => {
             </div>
           </CardContent>
 
-          <CardFooter className="flex">
+          <CardFooter className="flex gap-2">
             <RateButtons likes={50} dislikes={10} horizontal />
             <div>
               <Button variant="ghost" style={{ width: '180px' }}>
@@ -209,7 +216,7 @@ const Post = () => {
                   Edit comment
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-                  onClick={() => setConfirmDelete(true)}
+                  onClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
                 >
                   Delete comment
                 </DropdownMenuItem>
@@ -223,10 +230,10 @@ const Post = () => {
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
         <div className="bg-black text-white border border-white p-8 rounded-lg">
           <p className="text-lg font-bold mb-4">Confirm Deletion</p>
-          <p className="mb-4">Are you sure you want to delete this post/comment?</p>
+          <p className="mb-4">Are you sure you want to delete this {whatToDelete}?</p>
           <div className="flex justify-between">
-            <Button onClick={() => setConfirmDelete(false)} variant="danger">Cancel</Button>
-            <Button onClick={handleDelete} variant="danger">Delete</Button>
+            <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
+            <Button onClick={handleDelete} variant="destructive">Delete</Button>
           </div>
         </div>
       </div>
