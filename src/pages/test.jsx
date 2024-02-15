@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import React from "react";
+import TagInput from "@/components/custom/tagInput";
 
 const Test = () => {
   return (
@@ -32,6 +33,7 @@ const Test = () => {
       <Button asChild>
         <Link to="/post">Go to Post Page</Link>
       </Button>
+      <TagInput />
     </div>
   );
 };
