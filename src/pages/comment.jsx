@@ -3,8 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { PlusSquare } from 'lucide-react';
+import { useParams } from 'react-router';
+import { TempComments } from '@/lib/placeholder/mockReq';
 
 const CommentsPage = ({ isWriteComment, isReply }) => {
+  const { id } = useParams();
+  
+  const commentToEdit = TempComments.getFromId(Number(id));
+
   // Previous message as a draft
   const previousMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
@@ -31,6 +37,7 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
                 placeholder="Write your comment here" 
                 rows={29} 
                 defaultValue={isReply ? '' : (isWriteComment ? '' : previousMessage)} 
+                value={isWriteComment ? '' : commentToEdit.body}
                 style={{
                   backgroundColor: "black", 
                   color: "white", 

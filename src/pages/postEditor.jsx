@@ -54,7 +54,7 @@ const PostEditor = ({ isWritePost }) => {
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
             <TagInput
-              initTags={isWritePost ? postToEdit.tags : ["Technology", "Programming"]}
+              initTags={isWritePost ? ["Technology", "Programming"] : postToEdit.tags}
             />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
