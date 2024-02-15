@@ -151,6 +151,7 @@ const User = () => {
 
 const ProfileSide = () => {
   const [descEditable, setDescEditable] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const descElemRef = useRef();
 
   const handleAvatarClick = () => {
@@ -158,6 +159,11 @@ const ProfileSide = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.click();
+  };
+
+  const handleDelete = () => {
+    // TODO
+    setConfirmDelete(false);
   };
 
   const handleEditDesc = () => {
@@ -170,10 +176,6 @@ const ProfileSide = () => {
 
   const handleDescElemBlur = () => {
     setDescEditable(false);
-  };
-
-  const handleProfileDelete = () => {
-
   };
 
   return (
@@ -200,8 +202,21 @@ const ProfileSide = () => {
           <a href="/editlogininfo">Edit Login Info</a>
         </Button>
 
-        <Button variant="destructive" onClick={handleProfileDelete}>Delete Profile</Button>
+        <Button variant="destructive" onClick={setConfirmDelete}>Delete Profile</Button>
       </div>
+
+      {confirmDelete && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
+          <div className="bg-black text-white border border-white p-8 rounded-lg">
+            <p className="text-lg font-bold mb-4">Confirm Deletion</p>
+            <p className="mb-4">Are you sure you want to delete this post/comment?</p>
+            <div className="flex justify-between">
+              <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
+              <Button onClick={handleDelete} variant="destructive">Delete</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
