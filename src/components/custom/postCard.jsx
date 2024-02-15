@@ -16,7 +16,7 @@ const PostCard = ({
     // TODO: Shorten very long bodies with ellipses
     // TODO: Find a way to link to an author's profile via profile anchor
     // TODO: Work with actual, not string dates
-    return (
+    return (    
         <div 
             className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950 hover:bg-zinc-900'
         >
@@ -33,7 +33,7 @@ const PostCard = ({
                 <p className='overflow-hidden text-ellipsis text-nowrap'>{body}</p>
 
                 <div className='flex gap-2'>
-                    <p className='text-sm'>By <a href="">{author}</a></p>
+                    <p className='text-sm'>By {author}</p>
                     <p className='text-sm'>Uploaded {uploadDate}</p>
                     <p className='text-sm'>{views} Views</p>
                 </div>
