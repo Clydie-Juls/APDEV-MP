@@ -4,7 +4,7 @@ import { Badge } from "../ui/badge";
 const ButtonTag = ({ clickFunction, children }) => {
   return (
     <div>
-      <Badge className=" hover:bg-primary">
+      <Badge className=" hover:bg-primary my-4">
         #{children}
         <button
           onClick={clickFunction}

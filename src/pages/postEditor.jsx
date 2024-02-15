@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import TagInput from "@/components/custom/tagInput";
 
 const PostEditor = ({ isWritePost }) => {
   return (
@@ -38,7 +39,7 @@ const PostEditor = ({ isWritePost }) => {
           </div>
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
-            <Input className="bg-black" id="tags" placeholder="shadcn" />
+            <TagInput />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
             </p>
