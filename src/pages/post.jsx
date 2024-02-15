@@ -87,7 +87,7 @@ const Post = () => {
             <div>
               <Button variant="ghost" style={{ width: '180px' }}>
                 <Send style={{ width: '1.5rem', height: '1.5rem' }} />
-                <a href="/comment">Add a comment</a>
+                <a href="/writecomment">Add a comment</a>
               </Button>
             </div>
             <div>
@@ -194,7 +194,7 @@ const Post = () => {
             <div>
               <Button variant="ghost" style={{ width: '180px' }}>
                 <Send style={{ width: '1.5rem', height: '1.5rem' }} />
-                <a href="/comment">Reply</a>
+                <a href="/writecomment">Reply</a>
               </Button>
             </div>
             <DropdownMenu>
