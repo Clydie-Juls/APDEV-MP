@@ -26,6 +26,7 @@ function App() {
         <Route path="/comment" element={<Comment />} />
         <Route path="/writecomment" element={<Comment isWriteComment={true} />} />
         <Route path="/editcomment" element={<Comment isWriteComment={false} />} />
+        <Route path="/reply" element={<Comment isReply={true} />} />
         <Route path="/post" element={<Post />} />
       </Routes>
     </div>
