@@ -29,6 +29,7 @@ const Post = () => {
     <AnimBackground className="h-screen bg-background flex flex-col">
       <Header />
 
+     <div className="px-16 py-5">
       <PostHeader 
         title={"Wow"} 
         profile={"https://github.com/shadcn.png"} 
@@ -68,7 +69,7 @@ const Post = () => {
           </div>
         </div>
       )}
-
+    </div>
       {/* Pagination */}
       <Pagination className="mt-4">
         <PaginationContent>
