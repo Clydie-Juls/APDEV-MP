@@ -5,7 +5,7 @@ import { TempState } from '@/lib/tempState';
 const profile = () => {
     const handleLogOutClick = () => {
         TempState.set('loggedIn', false);
-        window.location.replace("/landing");
+        window.location.replace("/");
     };
     
     return (

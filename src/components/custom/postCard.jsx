@@ -17,13 +17,16 @@ const PostCard = ({
     // TODO: Find a way to link to an author's profile via profile anchor
     // TODO: Work with actual, not string dates
     return (
-        <div className='px-7 py-5 grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950'>
-            <div className='flex flex-col gap-2'>
+        <div className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-zinc-500 rounded-xl bg-zinc-950'>
+            <div className='overflow-hidden flex flex-col gap-2'>
                 <div className='flex items-center gap-3'>
-                    <h3 className='text-2xl font-bold'>{title}</h3>
+                    <a href="/post">
+                        <h3 className='text-2xl font-bold'>{title}</h3>
+                    </a>
                     {tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
-                <p>{body}</p>
+
+                <p className='overflow-hidden text-ellipsis text-nowrap'>{body}</p>
 
                 <div className='flex gap-2'>
                     <p className='text-sm'>By <a href="">{author}</a></p>

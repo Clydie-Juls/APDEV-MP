@@ -18,7 +18,7 @@ import { TempState } from '@/lib/tempState';
 export function LoginForm() {
   const handleLogInClick = () => {
     TempState.set('loggedIn', true);
-    window.location.replace("/landing");
+    window.location.replace("/");
   };
   
   return (

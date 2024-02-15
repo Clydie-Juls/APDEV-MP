@@ -1,5 +1,7 @@
 if (!sessionStorage.getItem('tempState')) {
-    sessionStorage.setItem('tempState', JSON.stringify({}));
+    sessionStorage.setItem('tempState', JSON.stringify({
+        isLoggedIn: true
+    }));
 }
 
 const actualTempState = JSON.parse(sessionStorage.getItem('tempState'));
