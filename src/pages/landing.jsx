@@ -12,7 +12,7 @@ const SAMPLE_POSTS_1 = [
     id: 0,
     title: 'Post 1',
     author: 'user1',
-    body: 'body1',
+    body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui consequatur nulla nisi animi quaerat quae. Laudantium perspiciatis veniam nam temporibus blanditiis id magni sed odit saepe reprehenderit, cum excepturi. Dolores?',
     uploadDate: '1/1/2024',
     views: 12345,
     likes: 123,

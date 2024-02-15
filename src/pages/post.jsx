@@ -1,6 +1,5 @@
-import React from 'react';
 import Header from '@/components/custom/header';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -8,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThumbsUp, ThumbsDown, MessageCircle, Send, MoreVertical } from 'lucide-react';
+import { MessageCircle, Send, MoreVertical } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import Tag from '@/components/custom/tag';
 import {
@@ -20,6 +19,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import RateButtons from '@/components/custom/rateButtons';
 import AnimBackground from '@/components/custom/animBackground';
 
 const Post = () => {
@@ -74,12 +74,7 @@ const Post = () => {
           </CardContent>
 
           <CardFooter className="flex justify-start gap-5">
-            <div className="flex items-center">
-                <Button variant="ghost" style={{ border: 'none' }}><ThumbsUp /></Button>
-                <span>50</span>
-                <Button variant="ghost" style={{ border: 'none' }}><ThumbsDown /></Button>
-                <span>10</span>
-            </div>
+            <RateButtons likes={50} dislikes={10} horizontal />
             <div>
                 <Button variant="ghost" style={{ width: '180px' }}>
                     <Send style={{ width: '1.5rem', height: '1.5rem' }} />
@@ -93,7 +88,11 @@ const Post = () => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Edit post</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => window.location.replace('/editpost')}
+                  >
+                    Edit post
+                  </DropdownMenuItem>
                   <DropdownMenuItem>Delete post</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -127,12 +126,7 @@ const Post = () => {
           </CardContent>
 
           <CardFooter className="flex">
-            <div className="flex items-center">
-                <Button variant="ghost" style={{ border: 'none' }}><ThumbsUp /></Button>
-                <span>50</span>
-                <Button variant="ghost" style={{ border: 'none' }}><ThumbsDown /></Button>
-                <span>10</span>
-            </div>
+            <RateButtons likes={50} dislikes={10} horizontal />
           </CardFooter>
         </Card>
 
@@ -184,16 +178,7 @@ const Post = () => {
           </CardContent>
 
           <CardFooter className="flex">
-              <div className="flex items-center">
-              <Button variant="ghost" style={{ border: 'none' }}>
-                  <ThumbsUp />
-              </Button>
-              <span>50</span>
-              <Button variant="ghost" style={{ border: 'none' }}>
-                  <ThumbsDown />
-              </Button>
-              <span>10</span>
-              </div>
+            <RateButtons likes={50} dislikes={10} horizontal />
 
               <DropdownMenu>
                 <DropdownMenuTrigger variant="ghost" className="ml-[15px]">

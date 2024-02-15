@@ -81,6 +81,17 @@ const SAMPLE_COMMENTS = [
     dislikes: 0,
     userRating: null
   },
+  {
+    id: 3,
+    postId: 0,
+    postTitle: 'Post 1',
+    postTags: ['tag3', 'tag5'],
+    body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse libero ullam optio, enim assumenda vel amet iure nihil eveniet unde maiores culpa ab aspernatur, laudantium adipisci temporibus fugiat officiis omnis.',
+    uploadDate: '1/1/2024',
+    likes: 2,
+    dislikes: 0,
+    userRating: null
+  },
 ];
 
 const User = () => {
@@ -190,7 +201,7 @@ const ProfileSide = () => {
         <Button>
           <a href="/editlogininfo">Edit Login Info</a>
         </Button>
-        <Button>Delete Profile</Button>
+        <Button variant="destructive">Delete Profile</Button>
       </div>
     </div>
   );

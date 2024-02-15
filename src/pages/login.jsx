@@ -1,12 +1,10 @@
 import AnimBackground from "@/components/custom/animBackground";
 import { LoginForm } from "@/components/custom/loginForm";
-import { Button } from "@/components/ui/button";
-import React from "react";
 
 const Login = () => {
   return (
     <div>
-      <AnimBackground>
+      <AnimBackground className="flex items-center justify-center">
         <LoginForm />
       </AnimBackground>
     </div>

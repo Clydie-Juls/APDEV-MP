@@ -1,8 +1,6 @@
-import React from "react";
-
-const AnimBackground = ({ children }) => {
+const AnimBackground = ({ className, children }) => {
   return (
-    <div className=" w-screen h-screen relative grid">
+    <div className={className + " relative min-h-screen"}>
       <img
         className=" w-full h-full object-cover absolute -z-10 brightness-[0.08]"
         src="/images/animBackground.gif"
