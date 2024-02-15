@@ -3,9 +3,9 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import ButtonTag from "./buttonTag";
 
-const TagInput = () => {
-  let [tags, setTags] = useState([]);
-  let [input, setInput] = useState("");
+const TagInput = ({ initTags }) => {
+  const [tags, setTags] = useState(initTags ? initTags : []);
+  const [input, setInput] = useState("");
 
   function addTag(e) {
     if (e.keyCode === 13) {

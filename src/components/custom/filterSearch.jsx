@@ -19,7 +19,7 @@ export function FilterSearch() {
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Filter Search</h4>
             <p className="text-sm text-muted-foreground">
-              Never gonna give you up.
+              Quickly filter searches for specific posts.
             </p>
           </div>
           <div className="grid gap-2">
