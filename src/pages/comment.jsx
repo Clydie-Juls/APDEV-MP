@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { PlusSquare } from 'lucide-react';
 
-const CommentsPage = ({ isWriteComment }) => {
+const CommentsPage = ({ isWriteComment, isReply }) => {
   // Previous message as a draft
   const previousMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
@@ -15,7 +15,7 @@ const CommentsPage = ({ isWriteComment }) => {
           <Button variant="ghost" onClick={() => window.location.replace('/post')}><ArrowLeft /></Button>
         </div>
         <div style={{ flex: '2.5' }}>
-          <CardTitle className="text-4xl">{isWriteComment ? "Add a Comment" : "Edit Comment"}</CardTitle>
+          <CardTitle className="text-4xl">{isReply ? "Reply" : (isWriteComment ? "Add a Comment" : "Edit Comment")}</CardTitle>
         </div>
         <div style={{ flex: '7', justifyContent: 'flex-end', display: 'flex' }}>
           <Button variant="ghost" style={{ border: 'none', color: '#5E51FF', fontSize: '1.5rem' }}>Post</Button>
@@ -30,7 +30,7 @@ const CommentsPage = ({ isWriteComment }) => {
                 id="comment" 
                 placeholder="Write your comment here" 
                 rows={29} 
-                defaultValue={isWriteComment ? '' : previousMessage} 
+                defaultValue={isReply ? '' : (isWriteComment ? '' : previousMessage)} 
                 style={{
                   backgroundColor: "black", 
                   color: "white", 
