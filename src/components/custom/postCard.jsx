@@ -3,6 +3,7 @@ import Tag from './tag';
 
 // TODO: Complete all props.
 const PostCard = ({ 
+    id,
     title, 
     author,
     body,
