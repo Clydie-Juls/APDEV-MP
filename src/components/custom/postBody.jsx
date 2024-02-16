@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-const PostBody = ({ tags, paragraph }) => {
+const PostBody = ({ id, tags, paragraph }) => {
   return (
     <Card className="mb-2">
       <CardHeader className="space-y-0 flex flex-row gap-6">
@@ -59,7 +59,7 @@ const PostBody = ({ tags, paragraph }) => {
 
             <DropdownMenuContent>
               <DropdownMenuItem
-                onSelect={() => window.location.replace("/editpost")}
+                onSelect={() => window.location.replace(`/editpost/${id}`)}
               >
                 Edit post
               </DropdownMenuItem>

@@ -41,7 +41,7 @@ const Post = () => {
           profile={poster.picture}
           userName={name}
         />
-        <PostBody tags={post.tags} paragraph={post.body} />
+        <PostBody id={post.id} tags={post.tags} paragraph={post.body} />
 
         {/* Normal Comment */}
         <CommentBody
