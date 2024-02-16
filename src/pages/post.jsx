@@ -73,6 +73,7 @@ const Post = () => {
           } else {
             return (
               <CommentBody
+                id={c.id}
                 key={c.id}
                 posterId={c.commenterId}
                 profile={commenter.picture}
