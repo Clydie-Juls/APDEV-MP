@@ -1,29 +1,33 @@
-import { Comments } from './comments';
-import { Posts } from './posts';
-import { Users } from './users';
+import { Comments } from "./comments";
+import { Posts } from "./posts";
+import { Users } from "./users";
 
 export const TempUsers = {
-    getInfoFromId(id) {
-        return Users.find(u => u.id === id);
-    },
+  getInfoFromId(id) {
+    return Users.find((u) => u.id === id);
+  },
 
-    getPostsFromId(id) {
-        return Posts.filter(p => p.posterId === id);
-    },
+  getPostsFromId(id) {
+    return Posts.filter((p) => p.posterId === id);
+  },
 
-    getCommentsFromId(id) {
-        return Comments.filter(c => c.commenterId === id);
-    }
+  getCommentsFromId(id) {
+    return Comments.filter((c) => c.commenterId === id);
+  },
 };
 
 export const TempPosts = {
-    getFromId(id) {
-        return Posts.find(p => p.id === id);
-    }
+  getFromId(id) {
+    return Posts.find((p) => p.id === id);
+  },
 };
 
 export const TempComments = {
-    getFromId(id) {
-        return Comments.find(c => c.id === id);
-    }
+  getFromId(id) {
+    return Comments.find((c) => c.id === id);
+  },
+
+  getCommentsFromPost(id) {
+    return Comments.find((c) => c.postId === id);
+  },
 };
