@@ -16,7 +16,7 @@ const Landing = () => {
         <Header />
 
         <main>
-          <Tabs defaultValue="recent" className="px-16 py-5">
+          <Tabs defaultValue="recent" className="px-16 py-5 mt-2">
             <div className="mb-4 flex justify-between">
               <div className="flex items-center gap-3">
                 <TabsList>

@@ -19,7 +19,7 @@ const PostEditor = ({ isWritePost }) => {
         src="/images/star-bg.png"
         alt="cube background image"
       />
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 w-full sticky top-0 bg-black">
         <h1 className=" text-4xl font-bold">
           {isWritePost ? "Write A Post" : "Edit your Post"}
         </h1>
