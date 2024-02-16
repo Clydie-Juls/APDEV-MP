@@ -39,33 +39,46 @@ const Post = () => {
         <PostHeader
           title={post.title}
           profile={poster.picture}
-          userName={name}
-        />
-        <PostBody tags={post.tags} paragraph={post.body} />
-
-        {/* Normal Comment */}
-        <CommentBody
-          posterId={poster.id}
-          profile={"https://github.com/shadcn.png"}
           userName={poster.name}
-          paragraph={"Test"}
-          isReply={false}
-          isOwner={false}
         />
+        <PostBody numComments={comments.length} tags={post.tags} paragraph={post.body} />
 
-        {/* Nested Comment */}
-        <CommentBody
-          profile={"https://github.com/shadcn.png"}
-          nestedProfile={
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxdV8cuxP4Q5cg_x2ofSk6thIgUUlxMnuqIM6z4OPSvl-k4GA6UUS6GM5JXP_cTU2FvQI&usqp=CAU"
-          }
-          userName={poster.name}
-          nestedUserName={"Rick"}
-          paragraph={"Nice"}
-          nestedParagraph={"Nice"}
-          isReply={true}
-          isOwner={true}
-        />
+        {comments.map(c => {
+          const commenter = TempUsers.getInfoFromId(c.commenterId);
+          const isReply = c.commentRepliedToId !== null;
+
+          if (isReply) {
+            const commentRepliedTo = TempComments.getFromId(c.commentRepliedToId);
+            const commentRepliedToCommenter = TempUsers.getInfoFromId(commentRepliedTo.commenterId);
+
+            return (
+              <CommentBody
+                key={c.id}
+                posterId={c.commenterId}
+                profile={commenter.picture}
+                userName={commenter.name}
+                paragraph={c.body}
+                isOwner={c.commenterId === 0}
+                isReply={isReply}
+                nestedUserName={commentRepliedToCommenter.name}
+                nestedProfile={commentRepliedToCommenter.picture}
+                nestedParagraph={commentRepliedTo.body}
+              />
+            );
+          } else {
+            return (
+              <CommentBody
+                key={c.id}
+                posterId={c.commenterId}
+                profile={commenter.picture}
+                userName={commenter.name}
+                paragraph={c.body}
+                isOwner={c.commenterId === 0}
+                isReply={isReply}
+              />
+            );
+          }        
+        })}
 
         {/* Confirmation prompt */}
         {confirmDelete && (
@@ -89,25 +102,26 @@ const Post = () => {
             </div>
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              {/* Make shown posts link based (item no. as param). */}
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
-      {/* Pagination */}
-      <Pagination className="mt-4">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            {/* Make shown posts link based (item no. as param). */}
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </AnimBackground>
   );
 };

@@ -17,9 +17,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-const PostBody = ({ tags, paragraph }) => {
+const PostBody = ({ numComments, tags, paragraph }) => {
   return (
-    <Card className="mb-2">
+    <Card className="mb-14">
       <CardHeader className="space-y-0 flex flex-row gap-6">
         <div className="flex gap-2">
           {tags && tags.map((tag, i) => <Tag key={`${tag}-${i}`} name={tag} />)}
@@ -27,7 +27,7 @@ const PostBody = ({ tags, paragraph }) => {
 
         <div className="flex gap-2">
           <MessageCircle style={{ width: "1.5rem", height: "1.5rem" }} />
-          <span>10</span>
+          <span>{numComments}</span>
         </div>
       </CardHeader>
 
