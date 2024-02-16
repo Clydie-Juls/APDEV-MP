@@ -39,21 +39,9 @@ const Post = () => {
         <PostHeader
           title={post.title}
           profile={poster.picture}
-          userName={name}
-        />
-        <PostBody id={post.id} tags={post.tags} paragraph={post.body} />
-
-        {/* Normal Comment */}
-        <CommentBody
-          posterId={poster.id}
-          profile={"https://github.com/shadcn.png"}
           userName={poster.name}
         />
-        <PostBody
-          numComments={comments.length}
-          tags={post.tags}
-          paragraph={post.body}
-        />
+        <PostBody id={post.id} tags={post.tags} paragraph={post.body} />
 
         {comments.map((c) => {
           const commenter = TempUsers.getInfoFromId(c.commenterId);
