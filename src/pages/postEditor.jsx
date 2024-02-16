@@ -4,14 +4,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TagInput from "@/components/custom/tagInput";
-import { useParams } from 'react-router';
-import { TempPosts } from '@/lib/placeholder/mockReq';
+import { useParams } from "react-router";
+import { TempPosts } from "@/lib/placeholder/mockReq";
 
 const PostEditor = ({ isWritePost }) => {
-  const { id } = useParams();
+  const { id } = isWritePost ? useParams() : { id: null };
 
   const postToEdit = TempPosts.getFromId(Number(id));
-  
+
   return (
     <div className="w-screen h-screen px-6 py-10 flex flex-col gap-6 items-center overflow-x-hidden">
       <img
@@ -39,11 +39,7 @@ const PostEditor = ({ isWritePost }) => {
                 placeholder="Bro Richie Finally Created GPT 5.0"
               />
             ) : (
-              <Input
-                className="bg-black"
-                id="title"
-                value={postToEdit.title}
-              />
+              <Input className="bg-black" id="title" value={postToEdit.title} />
             )}
 
             <p className="text-sm text-muted-foreground">
@@ -54,7 +50,9 @@ const PostEditor = ({ isWritePost }) => {
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
             <TagInput
-              initTags={isWritePost ? ["Technology", "Programming"] : postToEdit.tags}
+              initTags={
+                isWritePost ? ["Technology", "Programming"] : postToEdit.tags
+              }
             />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
