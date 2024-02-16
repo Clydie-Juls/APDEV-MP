@@ -38,7 +38,7 @@ const User = () => {
               <TabsTrigger value='comments'>Comments</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="posts">
+            <TabsContent value="posts" className="mt-3">
               <CardList>
                 {posts.map(p => 
                   <PostCard

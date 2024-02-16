@@ -10,8 +10,6 @@ import {
   } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router-dom";
 
 const EditLoginInfo = () => {
   return (
@@ -39,8 +37,8 @@ const EditLoginInfo = () => {
                 </form>
             </CardContent>
             <CardFooter className="flex flex-col gap-6">
-                <Button className="w-full">
-                    <a href="/user">Save Changes</a>
+                <Button className="w-full" onClick={() => window.location.replace('/user/0')}>
+                    Save Changes
                 </Button>
             </CardFooter>
         </Card>

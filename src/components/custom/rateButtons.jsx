@@ -10,19 +10,19 @@ const RateButtons = ({
 }) => {
     return (
         <div className={'flex justify-center items-end ' + (horizontal ? 'gap-1 flex-row' : 'gap-5 flex-col')}>
-            <Button className='flex gap-3 items-center border-none' variant="ghost">
+            <Button className='flex gap-3 items-center border-none text-zinc-400' variant="ghost">
                 {likes}
                 
                 <ThumbsUp 
-                    fill={userRating === 'like' ? '#99C28A' : ''}
-                    stroke={userRating === 'like' ? '#99C28A' : '#bbb'}
+                    fill={userRating === 'like' ? '#fff' : ''}
+                    stroke="#fff"
                 />
             </Button>
-            <Button className='flex gap-3 items-center border-none' variant="ghost">
+            <Button className='flex gap-3 items-center border-none text-zinc-400' variant="ghost">
                 {dislikes}
                 <ThumbsDown 
-                    fill={userRating === 'dislike' ? '#f87171' : ''} 
-                    stroke={userRating === 'dislike' ? '#f87171' : '#bbb'}
+                    fill={userRating === 'dislike' ? '#fff' : ''} 
+                    stroke="#fff"
                 />
             </Button>
         </div>

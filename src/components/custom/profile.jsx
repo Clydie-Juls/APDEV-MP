@@ -9,7 +9,7 @@ const profile = () => {
     };
     
     return (
-        <div className='flex gap-4'>
+        <div className='flex gap-4 items-center'>
             {TempState.get('loggedIn') ? (
                 <>
                     <a href="/user/0" className="flex items-center gap-4">
