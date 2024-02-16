@@ -14,6 +14,7 @@ import AnimBackground from '@/components/custom/animBackground';
 import PostBody from '@/components/custom/postBody';
 import CommentBody from '@/components/custom/commentBody';
 import PostHeader from '@/components/custom/postHeader';
+import { TempUsers, TempPosts, TempComments } from '@/lib/placeholder/mockReq';
 
 const Post = () => {
   // State to manage deletion confirmation
@@ -24,24 +25,33 @@ const Post = () => {
     // Reset confirmDelete state
     setConfirmDelete(false);
   };
+  
+  const { posterId, id } = TempPosts.getInfoFromId(Number(id));
+  const posts = TempUsers.getPostsFromId(Number(id));
+  const { name, description, picture } = TempUsers.getInfoFromId(Number(posterId));
+  const comments = TempComments.getCommentsFromPost(Number(id));
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
       <Header />
 
      <div className="px-16 py-5">
-      <PostHeader 
-        title={"Wow"} 
-        profile={"https://github.com/shadcn.png"} 
-        userName={"Morty"}/>
-      
+     <PostHeader 
+          title={posts.title} 
+          profile={picture} 
+          userName={name}
+        />
       <PostBody 
-        paragraph={"Lorem Ipsum"}/>
+          tag1={posts.tags[0]} 
+          tag2={posts.tags[1]} 
+          paragraph={posts.body}
+      />
 
       {/* Normal Comment */}
       <CommentBody 
         profile={"https://github.com/shadcn.png"} 
-        userName={"Morty"} paragraph={"Test"} 
+        userName={"Morty"} 
+        paragraph={"Test"} 
         isReply={false} 
         isOwner={false}/>
 
