@@ -36,7 +36,7 @@ function App() {
           path="/editcomment/:id"
           element={<Comment isWriteComment={false} />}
         />
-        <Route path="/reply" element={<Comment isReply={true} />} />
+        <Route path="/reply" element={<Comment isWriteComment={true} isReply={true} />} />
         <Route path="/post/:id" element={<Post />} />
         <Route path="/searchpage" element={<SearchPage />} />
       </Routes>
