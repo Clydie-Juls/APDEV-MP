@@ -1,8 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
-import { PlusSquare } from "lucide-react";
 import { useParams } from "react-router";
 import { TempComments } from "@/lib/placeholder/mockReq";
 import { Label } from "@/components/ui/label";
@@ -26,7 +23,7 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
           {isReply ? "Reply" : (isWriteComment ? "Add a Comment" : "Edit Comment")}
         </h1>
         <p className="text-muted-foreground">
-          Share your tech-tacular post that peaks the community`s interest
+          Share your insightful comment that peaks the community`s interest
         </p>
         <Separator />
       </div>
