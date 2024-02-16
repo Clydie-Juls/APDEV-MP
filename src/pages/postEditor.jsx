@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import { TempPosts } from "@/lib/placeholder/mockReq";
 
 const PostEditor = ({ isWritePost }) => {
-  const { id } = useParams();
+  const { id } = isWritePost ? useParams() : { id: null };
 
   const postToEdit = TempPosts.getFromId(Number(id));
 

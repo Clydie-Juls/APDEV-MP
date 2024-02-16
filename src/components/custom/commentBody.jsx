@@ -45,7 +45,7 @@ const CommentBody = ({
             <CardHeader className="p-0 space-y-0 flex flex-row">
               <div className="flex items-center gap-4">
                 Replying to
-                <a href="/user" className="flex items-center gap-2">
+                <a className="flex items-center gap-2">
                   <Avatar>
                     <AvatarImage src={nestedProfile} />
                     <AvatarFallback>CN</AvatarFallback>

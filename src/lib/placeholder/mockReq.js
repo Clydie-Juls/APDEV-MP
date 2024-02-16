@@ -28,6 +28,6 @@ export const TempComments = {
   },
 
   getCommentsFromPost(id) {
-    return Comments.find((c) => c.postId === id);
+    return Comments.filter((c) => c.postId === id);
   },
 };
