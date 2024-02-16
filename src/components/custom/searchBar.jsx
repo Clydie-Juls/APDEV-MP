@@ -8,7 +8,7 @@ const SearchBar = () => {
   return (
     <div className="flex gap-4">
       <Input type="text" placeholder="Search Posts" />
-      <Button>
+      <Button onClick={() => window.location.replace('/searchpage')}>
         <Search />
       </Button>
       <FilterSearch />
