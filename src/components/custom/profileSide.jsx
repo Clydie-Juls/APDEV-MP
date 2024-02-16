@@ -75,7 +75,7 @@ const ProfileSide = ({
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
           <div className="bg-black text-white border border-white p-8 rounded-lg">
             <p className="text-lg font-bold mb-4">Confirm Deletion</p>
-            <p className="mb-4">Are you sure you want to delete this post/comment?</p>
+            <p className="mb-4">Are you sure you want to delete your profile?</p>
             <div className="flex justify-between">
               <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
               <Button onClick={handleDelete} variant="destructive">Delete</Button>

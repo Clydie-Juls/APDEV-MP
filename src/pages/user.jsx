@@ -22,7 +22,7 @@ const User = () => {
 
   return (
     <AnimBackground>
-      <div className="w-full h-full grid grid-rows-[auto_1fr]">
+      <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
         <Header />
 
         <main className="px-16 py-5 grid grid-cols-[auto_1fr] gap-5">
