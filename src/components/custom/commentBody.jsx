@@ -77,7 +77,7 @@ const CommentBody = ({
             onClick={() => window.location.replace("/reply")}
           >
             <Send style={{ width: "1.5rem", height: "1.5rem" }} />
-            <a href="/writecomment">Reply</a>
+            <a href="/reply">Reply</a>
           </Button>
         </div>
         {isOwner ? (
