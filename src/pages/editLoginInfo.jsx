@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 const EditLoginInfo = () => {
   return (
     <div>
-      <AnimBackground>
+      <AnimBackground className="flex items-center justify-center">
         <Card className="w-[420px] self-center justify-self-center">
             <CardHeader>
                 <CardTitle className=" text-4xl">Edit Login Info</CardTitle>
