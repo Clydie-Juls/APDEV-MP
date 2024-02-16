@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Landing from "./pages/landing";
 import Login from "./pages/login";
-import Search from "./pages/search";
 import SignUp from "./pages/signUp";
 import User from "./pages/user";
 import PostEditor from "./pages/postEditor";
