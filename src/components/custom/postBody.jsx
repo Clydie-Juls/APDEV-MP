@@ -17,11 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-<<<<<<< HEAD
-const PostBody = ({ id, tags, paragraph }) => {
-=======
-const PostBody = ({ numComments, tags, paragraph }) => {
->>>>>>> 5f91e7fe0dae0fd9c2fccfc1b05aab36d22186e1
+const PostBody = ({ id, numComments, tags, paragraph }) => {
   return (
     <Card className="mb-14">
       <CardHeader className="space-y-0 flex flex-row gap-6">
