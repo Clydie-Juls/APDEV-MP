@@ -14,7 +14,6 @@ import {
 import { Send, MoreVertical } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import RateButtons from "@/components/custom/rateButtons";
-import { Link } from "react-router-dom";
 
 const CommentBody = ({
   id,
@@ -27,6 +26,7 @@ const CommentBody = ({
   nestedParagraph,
   isReply,
   isOwner,
+  onDeleteBtnClick
 }) => {
   console.log(id);
   return (
@@ -92,7 +92,7 @@ const CommentBody = ({
                 >
                   Edit comment
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setConfirmDelete(true)}>
+                <DropdownMenuItem onClick={onDeleteBtnClick}>
                   Delete comment
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-const PostBody = ({ id, numComments, tags, paragraph }) => {
+const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => {
   return (
     <Card className="mb-14">
       <CardHeader className="space-y-0 flex flex-row gap-6">
@@ -63,7 +63,7 @@ const PostBody = ({ id, numComments, tags, paragraph }) => {
               >
                 Edit post
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setConfirmDelete(true)}>
+              <DropdownMenuItem onClick={onDeleteButtonClick}>
                 Delete post
               </DropdownMenuItem>
             </DropdownMenuContent>

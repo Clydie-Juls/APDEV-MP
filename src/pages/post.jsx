@@ -20,6 +20,8 @@ import { useParams } from "react-router";
 const Post = () => {
   // State to manage deletion confirmation
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [whatToDelete, setWhatToDelete] = useState();
+
   const { id } = useParams();
   const handleDelete = () => {
     console.log("Delete logic goes here");
@@ -41,7 +43,12 @@ const Post = () => {
           profile={poster.picture}
           userName={poster.name}
         />
-        <PostBody id={post.id} tags={post.tags} paragraph={post.body} />
+        <PostBody 
+          id={post.id} 
+          tags={post.tags} 
+          paragraph={post.body} 
+          onDeleteButtonClick={() => { setConfirmDelete(true); setWhatToDelete('post'); }}
+        />
 
         {comments.map((c) => {
           const commenter = TempUsers.getInfoFromId(c.commenterId);
@@ -65,6 +72,7 @@ const Post = () => {
                 paragraph={c.body}
                 isOwner={c.commenterId === 0}
                 isReply={isReply}
+                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
                 nestedUserName={commentRepliedToCommenter.name}
                 nestedProfile={commentRepliedToCommenter.picture}
                 nestedParagraph={commentRepliedTo.body}
@@ -81,6 +89,7 @@ const Post = () => {
                 paragraph={c.body}
                 isOwner={c.commenterId === 0}
                 isReply={isReply}
+                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
               />
             );
           }
@@ -92,7 +101,7 @@ const Post = () => {
             <div className="bg-black text-white border border-white p-8 rounded-lg">
               <p className="text-lg font-bold mb-4">Confirm Deletion</p>
               <p className="mb-4">
-                Are you sure you want to delete this post/comment?
+                Are you sure you want to delete this {whatToDelete}?
               </p>
               <div className="flex justify-between">
                 <Button
