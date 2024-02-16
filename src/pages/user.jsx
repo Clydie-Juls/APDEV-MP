@@ -1,15 +1,15 @@
-import { useParams } from 'react-router';
+import { useParams } from "react-router";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import AnimBackground from '@/components/custom/animBackground';
-import CardList from '@/components/custom/cardList';
-import Header from '@/components/custom/header';
-import PostCard from '@/components/custom/postCard';
-import CommentCard from '@/components/custom/commentCard';
-import ProfileSide from '@/components/custom/profileSide';
+import AnimBackground from "@/components/custom/animBackground";
+import CardList from "@/components/custom/cardList";
+import Header from "@/components/custom/header";
+import PostCard from "@/components/custom/postCard";
+import CommentCard from "@/components/custom/commentCard";
+import ProfileSide from "@/components/custom/profileSide";
 
-import { TempPosts, TempUsers } from '@/lib/placeholder/mockReq';
+import { TempPosts, TempUsers } from "@/lib/placeholder/mockReq";
 
 const User = () => {
   const { id } = useParams();
@@ -25,23 +25,24 @@ const User = () => {
       <div className="w-full h-full grid grid-rows-[auto_1fr]">
         <Header />
 
-        <main className='px-16 py-5 grid grid-cols-[auto_1fr] gap-5'>
-          <ProfileSide 
+        <main className="px-16 py-5 grid grid-cols-[auto_1fr] gap-5">
+          <ProfileSide
             name={name}
             description={description}
             picture={picture}
           />
 
-          <Tabs defaultValue='posts'>
+          <Tabs defaultValue="posts">
             <TabsList>
-              <TabsTrigger value='posts'>Posts</TabsTrigger>
-              <TabsTrigger value='comments'>Comments</TabsTrigger>
+              <TabsTrigger value="posts">Posts</TabsTrigger>
+              <TabsTrigger value="comments">Comments</TabsTrigger>
             </TabsList>
 
             <TabsContent value="posts" className="mt-3">
               <CardList>
-                {posts.map(p => 
+                {posts.map((p) => (
                   <PostCard
+                    id={p.id}
                     key={p.id}
                     title={p.title}
                     author={TempUsers.getInfoFromId(p.posterId).name}
@@ -50,16 +51,16 @@ const User = () => {
                     views={p.views}
                     likes={p.likerIds.length}
                     dislikes={p.dislikerIds.length}
-                    userRating={p.likerIds.includes(0) ? 'like' : 'dislike'}
+                    userRating={p.likerIds.includes(0) ? "like" : "dislike"}
                     tags={p.tags}
                   />
-                )}
+                ))}
               </CardList>
             </TabsContent>
 
             <TabsContent value="comments">
               <CardList>
-                {comments.map(c => 
+                {comments.map((c) => (
                   <CommentCard
                     key={c.id}
                     postTitle={TempPosts.getFromId(c.postId).title}
@@ -68,9 +69,9 @@ const User = () => {
                     uploadDate={c.uploadDate}
                     likes={c.likerIds.length}
                     dislikes={c.dislikerIds.length}
-                    userRating={c.likerIds.includes(0) ? 'like' : 'dislike'}
+                    userRating={c.likerIds.includes(0) ? "like" : "dislike"}
                   />
-                )}
+                ))}
               </CardList>
             </TabsContent>
           </Tabs>

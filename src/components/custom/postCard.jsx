@@ -22,7 +22,7 @@ const PostCard = ({
         >
             <a 
                 className='overflow-hidden flex flex-col gap-2' 
-                href="/post"
+                href={`/post/${id}`}
             >
                 <h3 className='text-xl font-bold'>{title}</h3>
 

@@ -8,7 +8,7 @@ import SignUp from "./pages/signUp";
 import User from "./pages/user";
 import PostEditor from "./pages/postEditor";
 import Comment from "./pages/comment";
-import EditLoginInfo from './pages/editLoginInfo';
+import EditLoginInfo from "./pages/editLoginInfo";
 import Post from "./pages/post";
 
 function App() {
@@ -22,12 +22,21 @@ function App() {
         <Route path="/editlogininfo" element={<EditLoginInfo />} />
         <Route path="/user/:id" element={<User />} />
         <Route path="/writepost" element={<PostEditor isWritePost={true} />} />
-        <Route path="/editpost/:id" element={<PostEditor isWritePost={false} />} />
+        <Route
+          path="/editpost/:id"
+          element={<PostEditor isWritePost={false} />}
+        />
         <Route path="/comment" element={<Comment />} />
-        <Route path="/writecomment" element={<Comment isWriteComment={true} />} />
-        <Route path="/editcomment/:id" element={<Comment isWriteComment={false} />} />
+        <Route
+          path="/writecomment"
+          element={<Comment isWriteComment={true} />}
+        />
+        <Route
+          path="/editcomment/:id"
+          element={<Comment isWriteComment={false} />}
+        />
         <Route path="/reply" element={<Comment isReply={true} />} />
-        <Route path="/post" element={<Post />} />
+        <Route path="/post/:id" element={<Post />} />
       </Routes>
     </div>
   );
