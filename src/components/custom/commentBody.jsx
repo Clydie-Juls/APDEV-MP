@@ -26,7 +26,7 @@ const CommentBody = ({
   nestedParagraph,
   isReply,
   isOwner,
-  onDeleteBtnClick
+  onDeleteBtnClick,
 }) => {
   console.log(id);
   return (
@@ -74,7 +74,7 @@ const CommentBody = ({
           <Button
             variant="ghost"
             style={{ width: "100px" }}
-            onClick={() => window.location.replace("/reply")}
+            onClick={() => window.location.replace(`/editcomment/${id}`)}
           >
             <Send style={{ width: "1.5rem", height: "1.5rem" }} />
             <a href="/writecomment">Reply</a>
