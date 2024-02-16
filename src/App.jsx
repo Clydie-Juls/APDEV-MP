@@ -10,6 +10,7 @@ import PostEditor from "./pages/postEditor";
 import Comment from "./pages/comment";
 import EditLoginInfo from "./pages/editLoginInfo";
 import Post from "./pages/post";
+import SearchPage from "./pages/searchPage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         />
         <Route path="/reply" element={<Comment isReply={true} />} />
         <Route path="/post/:id" element={<Post />} />
+        <Route path="/searchpage" element={<SearchPage />} />
       </Routes>
     </div>
   );
