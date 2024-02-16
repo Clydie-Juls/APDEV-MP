@@ -47,18 +47,6 @@ export function FilterSearch() {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label>Date Modified</Label>
-              <Tabs
-                defaultValue="account"
-                className="w-[200px] col-span-2 px-2"
-              >
-                <TabsList className="w-full">
-                  <TabsTrigger value="account">Oldest</TabsTrigger>
-                  <TabsTrigger value="password">Newest</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
             <div className="flex flex-col gap-4 mt-6">
               <Label>Tags</Label>
               <TagInput />
