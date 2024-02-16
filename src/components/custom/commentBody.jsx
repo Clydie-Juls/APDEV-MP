@@ -63,25 +63,25 @@ const CommentBody = ({
         ) : null}
 
         {/* Reply */}
-        <div className="mt-6 grid w-full items-center">
+        <div className="mt-2 grid w-full items-center">
           <div className="flex flex-col">{paragraph}</div>
         </div>
       </CardContent>
 
-      <CardFooter className="flex">
+      <CardFooter className="flex gap-4">
         <RateButtons likes={50} dislikes={10} horizontal />
+        <div>
+          <Button
+            variant="ghost"
+            style={{ width: "100px" }}
+            onClick={() => window.location.replace("/reply")}
+          >
+            <Send style={{ width: "1.5rem", height: "1.5rem" }} />
+            <a href="/writecomment">Reply</a>
+          </Button>
+        </div>
         {isOwner ? (
           <>
-            <div>
-              <Button
-                variant="ghost"
-                style={{ width: "100px" }}
-                onClick={() => window.location.replace("/reply")}
-              >
-                <Send style={{ width: "1.5rem", height: "1.5rem" }} />
-                <a href="/reply">Reply</a>
-              </Button>
-            </div>
             <DropdownMenu>
               <DropdownMenuTrigger variant="ghost" className="ml-[15px]">
                 <MoreVertical style={{ width: "1.5rem", height: "1.5rem" }} />
