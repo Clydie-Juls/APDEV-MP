@@ -17,6 +17,7 @@ import RateButtons from "@/components/custom/rateButtons";
 import { Link } from "react-router-dom";
 
 const CommentBody = ({
+  id,
   posterId,
   profile,
   nestedProfile,
@@ -27,6 +28,7 @@ const CommentBody = ({
   isReply,
   isOwner,
 }) => {
+  console.log(id);
   return (
     <Card className="mb-2">
       <CardHeader className="flex flex-row">
@@ -86,7 +88,7 @@ const CommentBody = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  onSelect={() => window.location.replace("/editcomment")}
+                  onSelect={() => window.location.replace(`/editcomment/${id}`)}
                 >
                   Edit comment
                 </DropdownMenuItem>
