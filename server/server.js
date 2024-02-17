@@ -6,6 +6,18 @@ const apiRouter = express.Router();
 
 // middleware setup
 app.use(express.urlencoded({ extended: true }));
+// GET HTTP requests
+apiRouter.get("/user/:id", (req, res) => {
+  res.status(200).send("User sent successfully");
+});
+
+apiRouter.get("/post/:id", (req, res) => {
+  res.status(200).send("post sent successfully");
+});
+
+apiRouter.get("/search", (req, res) => {
+  res.status(200).send("searched list sent successfully");
+});
 
 // POST HTTP requests
 apiRouter.post("/login", (req, res) => {
