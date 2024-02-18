@@ -30,6 +30,7 @@ const PostSchema = new mongoose.Schema({
     default: 0,
     validate: ValidateInt,
   },
+  comments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Comment" }],
   reactions: ReactionSchema,
   tags: [TagSchema],
 });

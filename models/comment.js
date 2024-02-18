@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { ReactionSchema } from "./reaction";
+import { ReactionSchema } from "./shared/reaction";
 
-export const commentSchema = new mongoose.Schema({
+export const CommentSchema = new mongoose.Schema({
   commenterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -23,3 +23,5 @@ export const commentSchema = new mongoose.Schema({
   },
   reactions: ReactionSchema,
 });
+
+export const Comment = mongoose.model("Comment", Comment);
