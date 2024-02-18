@@ -7,11 +7,11 @@ const apiRouter = express.Router();
 // middleware setup
 app.use(express.urlencoded({ extended: true }));
 // GET HTTP requests
-apiRouter.get("/user/:id", (req, res) => {
+apiRouter.get("/users/:id", (req, res) => {
   res.status(200).send("User sent successfully");
 });
 
-apiRouter.get("/post/:id", (req, res) => {
+apiRouter.get("/posts/:id", (req, res) => {
   res.status(200).send("post sent successfully");
 });
 
@@ -36,7 +36,7 @@ apiRouter.post("/writepost", (req, res) => {
   res.status(201).send("write post successful");
 });
 
-apiRouter.post("/editpost/:id", (req, res) => {
+apiRouter.post("/editposts/:id", (req, res) => {
   res.status(201).send("edit post successful");
 });
 
@@ -44,7 +44,7 @@ apiRouter.post("/writecomment", (req, res) => {
   res.status(201).send("write comment successful");
 });
 
-apiRouter.post("/editcomment/:id", (req, res) => {
+apiRouter.post("/editcomments/:id", (req, res) => {
   res.status(201).send("edit comment successful");
 });
 
