@@ -1,6 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 
+import { User } from "models/user";
+import { Post } from "models/post";
+import { Comment } from "models/comment";
+
 const app = express();
 const port = 3000;
 const apiRouter = express.Router();
@@ -11,7 +15,19 @@ mongoose.connect("mongodb://localhost:12345/T3Db");
 app.use(express.urlencoded({ extended: true }));
 // GET HTTP requests
 apiRouter.get("/users/:id", (req, res) => {
-  res.status(200).send("User sent successfully");
+  try {
+    const { id } = req.params;
+    // user db fetch
+    const user = User.findById(id);
+    // post db fetch
+    // idk if i need to sort it
+    const posts = Post.find({ posterId: id });
+
+    res.status(200).json(JSON.stringify({ user: user, posts: posts }));
+  } catch (e) {
+    // TODO: provide more http status codes
+    res.status(404).json(JSON.stringify({ error: e.message }));
+  }
 });
 
 apiRouter.get("/posts/:id", (req, res) => {
