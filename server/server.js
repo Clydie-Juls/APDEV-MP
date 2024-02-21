@@ -31,7 +31,19 @@ apiRouter.get("/users/:id", (req, res) => {
 });
 
 apiRouter.get("/posts/:id", (req, res) => {
-  res.status(200).send("post sent successfully");
+  try {
+    const { id } = req.params;
+    // post db fetch
+    const post = Post.findById(id);
+    // post db fetch
+    // idk if i need to sort it
+    const comments = post.populate("comments");
+
+    res.status(200).json(JSON.stringify({ post: post, comments: comments }));
+  } catch (e) {
+    // TODO: provide more http status codes
+    res.status(404).json(JSON.stringify({ error: e.message }));
+  }
 });
 
 apiRouter.get("/search", (req, res) => {
