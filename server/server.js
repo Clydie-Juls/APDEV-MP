@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 
-import { User } from "../models/user";
-import { Post } from "../models/post";
-import { Comment } from "../models/comment";
+import { User } from "models/user";
+import { Post } from "models/post";
+import { Comment } from "models/comment";
 
 const app = express();
 const port = 3000;
