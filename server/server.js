@@ -56,8 +56,15 @@ apiRouter.post("/login", (req, res) => {
 });
 
 apiRouter.post("/signup", (req, res) => {
-  console.log(req.body);
-  res.status(201).send("Signup successful");
+  User.create({ 
+    username: req.body.username,
+    password: req.body.password,
+    description: '',
+    picture: null
+  });
+
+  // TODO: Auto log-in the user.
+  res.status(201).redirect('/');
 });
 
 apiRouter.post("/editlogininfo", (req, res) => {
