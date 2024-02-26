@@ -9,7 +9,7 @@ const app = express();
 const port = 3000;
 const apiRouter = express.Router();
 
-mongoose.connect("mongodb://localhost:12345/T3Db");
+mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 
 // middleware setup
 app.use(express.urlencoded({ extended: true }));
