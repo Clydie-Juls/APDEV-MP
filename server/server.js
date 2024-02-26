@@ -56,6 +56,7 @@ apiRouter.post("/login", (req, res) => {
 });
 
 apiRouter.post("/signup", (req, res) => {
+  console.log(req.body);
   res.status(201).send("Signup successful");
 });
 

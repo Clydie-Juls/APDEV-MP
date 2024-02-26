@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,9 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
 
-const SignupForm = ({ onSubmit }) => {
+const SignupForm = () => {
   return (
     <Card className="w-[420px] self-center justify-self-center">
       <CardHeader>
@@ -21,21 +22,22 @@ const SignupForm = ({ onSubmit }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form id="signupForm" method="post" action="/api/signup">
           <div className="grid w-full items-center gap-4 mb-4">
             <div className="flex flex-col gap-3">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="e.g. John Doe" />
+              <Input id="username" name="username" placeholder="e.g. John Doe" />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="password">Password</Label>
-              <Input type="password" id="password" placeholder="********" />
+              <Input type="password" id="password" name="password" placeholder="********" />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="conf-password">Confirm Password</Label>
               <Input
                 type="password"
                 id="conf-password"
+                name="conf-password"
                 placeholder="********"
               />
             </div>
@@ -43,7 +45,7 @@ const SignupForm = ({ onSubmit }) => {
         </form>
       </CardContent>
       <CardFooter className="flex flex-col gap-6">
-        <Button className=" w-full" onClick={onSubmit}>Sign Up</Button>
+        <Button className=" w-full" form="signupForm">Sign Up</Button>
         <p className=" text-muted-foreground mt-6 text-sm">
           Already have an account?{" "}
           <Link to="/login" className=" text-indigo-500">
