@@ -28,7 +28,7 @@ const PostEditor = ({ isWritePost }) => {
         </p>
         <Separator />
       </div>
-      <form className="w-full">
+      <form id="postEditorForm" className="w-full" method="post" action="/api/writepost">
         <div className="flex flex-col gap-8 items-center px-[20%] w-full ">
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="title">Title</Label>
@@ -36,10 +36,11 @@ const PostEditor = ({ isWritePost }) => {
               <Input
                 className="bg-black"
                 id="title"
+                name="title"
                 placeholder="Bro Richie Finally Created GPT 5.0"
               />
             ) : (
-              <Input className="bg-black" id="title" value={postToEdit.title} />
+              <Input className="bg-black" id="title" name="title" value={postToEdit.title} />
             )}
 
             <p className="text-sm text-muted-foreground">
@@ -65,11 +66,13 @@ const PostEditor = ({ isWritePost }) => {
                 className="bg-black"
                 placeholder="Type your message here."
                 id="description"
+                name="body"
               />
             ) : (
               <Textarea
                 className="bg-black"
                 id="description"
+                name="body"
                 value={postToEdit.body}
               />
             )}
@@ -80,9 +83,7 @@ const PostEditor = ({ isWritePost }) => {
             </p>
           </div>
 
-          <Button className="px-9">
-            <a href="/post">Submit</a>
-          </Button>
+          <Button className="px-9" form="postEditorForm">Submit</Button>
         </div>
       </form>
     </div>

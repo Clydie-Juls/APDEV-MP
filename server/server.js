@@ -46,8 +46,20 @@ apiRouter.get("/posts/:id", (req, res) => {
   }
 });
 
-apiRouter.get("/search", (req, res) => {
-  res.status(200).send("searched list sent successfully");
+// /search?q=magic&t=a,b,c&do=asc&po=asc
+apiRouter.get("/search", async (req, res) => {
+  const query = req.query.q || '';
+  const tags = req.query.t || [];
+  
+  const dateOrder = req.query.do || 'asc';
+  const popularityOrder = req.query.po || 'asc';
+  
+  const posts = await Post.find({
+    'title': { '$regex': query, '$options': 'i' }
+  });
+
+  // TODO
+  res.status(200).json(posts);
 });
 
 // POST HTTP requests
@@ -71,8 +83,24 @@ apiRouter.post("/editlogininfo", (req, res) => {
   res.status(201).send("edit login info successful");
 });
 
-apiRouter.post("/writepost", (req, res) => {
-  res.status(201).send("write post successful");
+apiRouter.post("/writepost", async (req, res) => {
+  // TODO
+  const poster = await User.findOne();
+
+  Post.create({
+    title: req.body.title,
+    posterId: poster._id,
+    body: req.body.body,
+    comments: [],
+    reactions: {
+      likerIds: [],
+      dislikerIds: []
+    },
+    tags: []
+  });
+  
+  // TODO: Redirect user to the page of their post
+  res.status(201).redirect('/');
 });
 
 apiRouter.post("/editposts/:id", (req, res) => {
