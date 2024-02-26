@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ReactionSchema } from "./shared/reaction";
+import { ReactionSchema } from "./shared/reaction.js";
 
 export const CommentSchema = new mongoose.Schema({
   commenterId: {

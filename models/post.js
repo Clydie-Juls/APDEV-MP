@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { ValidateInt } from "./validators/intValidator";
-import { TagSchema } from "./shared/tag";
-import { ReactionSchema } from "./shared/reaction";
+import { ValidateInt } from "./validators/intValidator.js";
+import { TagSchema } from "./shared/tag.js";
+import { ReactionSchema } from "./shared/reaction.js";
 
 const PostSchema = new mongoose.Schema({
   title: {
