@@ -15,7 +15,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 // middleware setup
 app.use(express.urlencoded({ extended: true }));
 // GET HTTP requests
-apiRouter.get("/users/:id", isAuth, (req, res) => {
+apiRouter.get("/users/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
     // user db fetch
@@ -23,15 +23,16 @@ apiRouter.get("/users/:id", isAuth, (req, res) => {
     // post db fetch
     // idk if i need to sort it
     const posts = Post.find({ posterId: id });
-
-    res.status(200).json(JSON.stringify({ user: user, posts: posts }));
+    const userObj = (await user).toJSON();
+    const postsObj = (await posts).toJSON();
+    res.status(200).json(JSON.stringify({ user: userObj, posts: postsObj }));
   } catch (e) {
     // TODO: provide more http status codes
     res.status(404).json(JSON.stringify({ error: e.message }));
   }
 });
 
-apiRouter.get("/posts/:id", isAuth, (req, res) => {
+apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
     // post db fetch
@@ -39,8 +40,12 @@ apiRouter.get("/posts/:id", isAuth, (req, res) => {
     // post db fetch
     // idk if i need to sort it
     const comments = post.populate("comments");
+    const postObj = (await post).toJSON();
+    const commentsObj = (await comments).toJSON();
 
-    res.status(200).json(JSON.stringify({ post: post, comments: comments }));
+    res
+      .status(200)
+      .json(JSON.stringify({ post: postObj, comments: commentsObj }));
   } catch (e) {
     // TODO: provide more http status codes
     res.status(404).json(JSON.stringify({ error: e.message }));
