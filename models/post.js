@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { ValidateInt } from "./validators/intValidator.js";
-import { TagSchema } from "./shared/tag.js";
 import { ReactionSchema } from "./shared/reaction.js";
 
 const PostSchema = new mongoose.Schema({
@@ -32,7 +31,7 @@ const PostSchema = new mongoose.Schema({
   },
   comments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Comment" }],
   reactions: ReactionSchema,
-  tags: [TagSchema],
+  tags: [String],
 });
 
 export const Post = mongoose.model("Post", PostSchema);

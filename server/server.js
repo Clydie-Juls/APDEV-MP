@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { User } from "../models/user.js";
 import { Post } from "../models/post.js";
 import { Comment } from "../models/comment.js";
-import { isAuth, username } from "middleware/auth.js";
+import { isAuth, setLoggedInUser, loggedInUsername } from '../middleware/auth.js';
 
 const app = express();
 const port = 3000;
@@ -52,25 +52,65 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   }
 });
 
-// /search?q=magic&t=a,b,c&do=asc&po=asc
+// Example: '/search?q=post%20title&t=tag1,tag2&do=asc&po=desc'
 apiRouter.get("/search", async (req, res) => {
-  const query = req.query.q || "";
-  const tags = req.query.t || [];
+  const titleQuery = req.query.q || '';
+  const tagsQuery = (req.query.t) ? req.query.t.split(',') : null;
+  
+  const dateOrder = req.query.do || 'asc';
+  const popularityOrder = req.query.po || 'asc';
 
-  const dateOrder = req.query.do || "asc";
-  const popularityOrder = req.query.po || "asc";
+  const posts = await Post.aggregate([
+    {
+      $match: {
+        title: { 
+          $regex: titleQuery, 
+          $options: 'i' 
+        },
+        ...(tagsQuery && { tags: { $all: tagsQuery } })
+      }
+    },
+    {
+      $addFields: {
+        likeCount: { $size: "$reactions.likerIds" },
+        dislikeCount: { $size: "$reactions.dislikerIds" }
+      }
+    },
+    {
+      $addFields: {
+        likeToDislikeRatio: {
+          $cond: [
+            { $eq: ["$dislikeCount", 0] }, "$likeCount",
+            { $divide: ["$likeCount", "$dislikeCount"] }
+          ]
+        }
+      },
+    },
+    {
+      $sort: {
+        title: 1,
+        uploadDate: (dateOrder === 'asc') ? 1 : -1,
+        likeToDislikeRatio: (popularityOrder === 'asc') ? 1 : -1 
+      }
+    }
+  ]);
 
-  const posts = await Post.find({
-    title: { $regex: query, $options: "i" },
-  });
-
-  // TODO
   res.status(200).json(posts);
 });
 
 // POST HTTP requests
-apiRouter.post("/login", (req, res) => {
-  res.status(201).send("Login successful");
+apiRouter.post("/login", async (req, res) => {
+  // TODO: password check
+  const { username } = req.body;
+
+  const user = await User.findOne({ username });
+
+  if (user === null) {
+    res.status(401).send('Login not successful.');
+  } else {
+    setLoggedInUser(req.body.username);
+    res.status(201).send("Login successful");
+  }
 });
 
 apiRouter.post("/signup", (req, res) => {
@@ -89,9 +129,13 @@ apiRouter.post("/editlogininfo", (req, res) => {
   res.status(201).send("edit login info successful");
 });
 
-apiRouter.post("/writepost", isAuth, async (req, res) => {
-  // TODO
-  const poster = await User.findOne();
+apiRouter.post("/writepost", async (req, res) => {
+  const poster = await User.findOne({ name: loggedInUsername });
+  
+  // TODO: Remove this
+  const li = [];
+  const di = [];
+  (await User.find()).forEach(u => ((Math.random() < 0.5) ? li.push(u._id) : di.push(u._id)));
 
   Post.create({
     title: req.body.title,
@@ -99,8 +143,10 @@ apiRouter.post("/writepost", isAuth, async (req, res) => {
     body: req.body.body,
     comments: [],
     reactions: {
-      likerIds: [],
-      dislikerIds: [],
+      // likerIds: [],
+      // dislikerIds: []
+      likerIds: li,
+      dislikerIds: di
     },
     tags: [],
   });
