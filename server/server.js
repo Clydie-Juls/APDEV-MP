@@ -5,7 +5,7 @@ import multer from 'multer';
 import { User } from "../models/user.js";
 import { Post } from "../models/post.js";
 import { Comment } from "../models/comment.js";
-import { setLoggedInUser, loggedInUsername } from '../middleware/auth.js';
+import { isAuth, setLoggedInUser, loggedInUsername } from '../middleware/auth.js';
 
 const app = express();
 const port = 3000;
@@ -18,7 +18,7 @@ app.use(multer().array());
 app.use(express.urlencoded({ extended: true }));
 
 // GET HTTP requests
-apiRouter.get("/users/:id", (req, res) => {
+apiRouter.get("/users/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
     // user db fetch
@@ -26,15 +26,16 @@ apiRouter.get("/users/:id", (req, res) => {
     // post db fetch
     // idk if i need to sort it
     const posts = Post.find({ posterId: id });
-
-    res.status(200).json(JSON.stringify({ user: user, posts: posts }));
+    const userObj = (await user).toJSON();
+    const postsObj = (await posts).toJSON();
+    res.status(200).json(JSON.stringify({ user: userObj, posts: postsObj }));
   } catch (e) {
     // TODO: provide more http status codes
     res.status(404).json(JSON.stringify({ error: e.message }));
   }
 });
 
-apiRouter.get("/posts/:id", (req, res) => {
+apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
     // post db fetch
@@ -42,8 +43,12 @@ apiRouter.get("/posts/:id", (req, res) => {
     // post db fetch
     // idk if i need to sort it
     const comments = post.populate("comments");
+    const postObj = (await post).toJSON();
+    const commentsObj = (await comments).toJSON();
 
-    res.status(200).json(JSON.stringify({ post: post, comments: comments }));
+    res
+      .status(200)
+      .json(JSON.stringify({ post: postObj, comments: commentsObj }));
   } catch (e) {
     // TODO: provide more http status codes
     res.status(404).json(JSON.stringify({ error: e.message }));
@@ -112,15 +117,15 @@ apiRouter.post("/login", async (req, res) => {
 });
 
 apiRouter.post("/signup", (req, res) => {
-  User.create({ 
+  User.create({
     username: req.body.username,
     password: req.body.password,
-    description: '',
-    picture: null
+    description: "",
+    picture: null,
   });
 
   // TODO: Auto log-in the user.
-  res.status(201).redirect('/');
+  res.status(201).redirect("/");
 });
 
 apiRouter.post("/editlogininfo", (req, res) => {
@@ -148,20 +153,20 @@ apiRouter.post("/writepost", async (req, res) => {
     },
     tags: req.body.tags
   });
-  
+
   // TODO: Redirect user to the page of their post
   res.status(201).send('/');
 });
 
-apiRouter.post("/editposts/:id", (req, res) => {
+apiRouter.post("/editposts/:id", isAuth, (req, res) => {
   res.status(201).send("edit post successful");
 });
 
-apiRouter.post("/writecomment", (req, res) => {
+apiRouter.post("/writecomment", isAuth, (req, res) => {
   res.status(201).send("write comment successful");
 });
 
-apiRouter.post("/editcomments/:id", (req, res) => {
+apiRouter.post("/editcomments/:id", isAuth, (req, res) => {
   res.status(201).send("edit comment successful");
 });
 
