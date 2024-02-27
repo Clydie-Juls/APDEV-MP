@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import multer from 'multer';
 
 import { User } from "../models/user.js";
 import { Post } from "../models/post.js";
@@ -13,7 +14,9 @@ const apiRouter = express.Router();
 mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 
 // middleware setup
+app.use(multer().array());
 app.use(express.urlencoded({ extended: true }));
+
 // GET HTTP requests
 apiRouter.get("/users/:id", (req, res) => {
   try {
@@ -143,11 +146,11 @@ apiRouter.post("/writepost", async (req, res) => {
       likerIds: li,
       dislikerIds: di
     },
-    tags: []
+    tags: req.body.tags
   });
   
   // TODO: Redirect user to the page of their post
-  res.status(201).redirect('/');
+  res.status(201).send('/');
 });
 
 apiRouter.post("/editposts/:id", (req, res) => {

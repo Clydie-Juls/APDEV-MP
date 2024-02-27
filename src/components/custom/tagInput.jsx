@@ -1,27 +1,30 @@
-import React from "react";
-import { useState } from "react";
-import { Input } from "../ui/input";
-import ButtonTag from "./buttonTag";
+import { useEffect, useState } from "react";
 
-const TagInput = ({ initTags }) => {
-  const [tags, setTags] = useState(initTags ? initTags : []);
+import ButtonTag from "./buttonTag";
+import { Input } from "../ui/input";
+
+const TagInput = ({ tags, onChange }) => {
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    setInput("");
+  }, [tags]);
 
   function addTag(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
       if (input.length > 0) {
         const newTags = [...tags, input];
-        setTags(newTags);
-        setInput("");
+        onChange(newTags);
       }
     }
   }
 
   function removeTag(e, i) {
     e.preventDefault();
-    const newTag = tags.filter((tag, index) => i !== index);
-    setTags(newTag);
+
+    const newTags = tags.filter((tag, index) => i !== index);
+    onChange(newTags);
   }
 
   return (
