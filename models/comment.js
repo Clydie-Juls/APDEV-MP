@@ -7,6 +7,10 @@ export const CommentSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  postId: {
+    type: mongoose.Schema.Types.ObjectId,
+    defalut: null
+  },
   commentRepliedToId: {
     type: mongoose.Schema.Types.ObjectId, // Could also just be an int
     default: null,

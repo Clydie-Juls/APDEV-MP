@@ -56,7 +56,7 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
 });
 
 // Example: '/search?q=post%20title&t=tag1,tag2&do=asc&po=desc'
-apiRouter.get("/search", async (req, res) => {
+apiRouter.get("/posts/search", async (req, res) => {
   const titleQuery = req.query.q || '';
   const tagsQuery = (req.query.t) ? req.query.t.split(',') : null;
   
@@ -101,8 +101,10 @@ apiRouter.get("/search", async (req, res) => {
   res.status(200).json(posts);
 });
 
-// POST HTTP requests
-apiRouter.post("/login", async (req, res) => {
+
+// POST and PUT HTTP requests
+
+apiRouter.post("/account/login", async (req, res) => {
   // TODO: password check
   const { username } = req.body;
 
@@ -116,7 +118,7 @@ apiRouter.post("/login", async (req, res) => {
   }
 });
 
-apiRouter.post("/signup", (req, res) => {
+apiRouter.post("/account/signup", (req, res) => {
   User.create({
     username: req.body.username,
     password: req.body.password,
@@ -128,7 +130,7 @@ apiRouter.post("/signup", (req, res) => {
   res.status(201).redirect("/");
 });
 
-apiRouter.put("/editlogininfo", isAuth, async (req, res) => {
+apiRouter.put("/account/edit", isAuth, async (req, res) => {
   const { username, password, description, picture } = req.body;
   const poster = await User.findOne({ name: loggedInUsername });
 
@@ -147,36 +149,27 @@ apiRouter.put("/editlogininfo", isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);
 });
 
-apiRouter.post("/writepost", async (req, res) => {
+apiRouter.post("/posts/write", async (req, res) => {
   const poster = await User.findOne({ name: loggedInUsername });
   
-  // TODO: Remove this
-  const li = [];
-  const di = [];
-  (await User.find()).forEach(u => ((Math.random() < 0.5) ? li.push(u._id) : di.push(u._id)));
-
-  Post.create({
+  const newPost = await Post.create({
     title: req.body.title,
     posterId: poster._id,
     body: req.body.body,
-    comments: [],
     reactions: {
-      // likerIds: [],
-      // dislikerIds: []
-      likerIds: li,
-      dislikerIds: di
+      likerIds: [],
+      dislikerIds: []
     },
     tags: req.body.tags
   });
 
-  // TODO: Redirect user to the page of their post
-  res.status(201).send('/');
+  res.status(201).send(`/post/${newPost._id}`);
 });
 
-apiRouter.put("/editpost/:id", isAuth, async (req, res) => {
+apiRouter.put("/posts/edit/:id", isAuth, async (req, res) => {
   const { id } = req.params;
 
-  Post.updateOne(
+  await Post.updateOne(
     {
       _id: id
     },
@@ -187,11 +180,10 @@ apiRouter.put("/editpost/:id", isAuth, async (req, res) => {
     }
   );
 
-  // TODO: Redirect user to the page of their post
-  res.status(201).send('/');
+  res.status(200).send(`/post/${id}`);
 });
 
-apiRouter.post('/likepost/:id', isAuth, async (req, res) => {
+apiRouter.post('/posts/like/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const liker = await User.findOne({ name: loggedInUsername });
 
@@ -208,7 +200,7 @@ apiRouter.post('/likepost/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);
 });
 
-apiRouter.post('/dislikepost/:id', isAuth, async (req, res) => {
+apiRouter.post('/posts/dislike/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const disliker = await User.findOne({ name: loggedInUsername });
   
@@ -225,7 +217,7 @@ apiRouter.post('/dislikepost/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);
 });
 
-apiRouter.post('/unreactpost/:id', isAuth, async (req, res) => {
+apiRouter.post('/posts/unreact/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const unreacter = await User.findOne({ name: loggedInUsername });
   
@@ -244,7 +236,7 @@ apiRouter.post('/unreactpost/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);
 });
 
-apiRouter.post("/writecomment", isAuth, async (req, res) => {
+apiRouter.post("/comments/write", isAuth, async (req, res) => {
   const commenter = await User.findOne({ name: loggedInUsername });
   
   const newComment = await Comment.create({
@@ -260,7 +252,7 @@ apiRouter.post("/writecomment", isAuth, async (req, res) => {
   res.status(201).json(newComment);
 });
 
-apiRouter.put("/editcomments/:id", isAuth, async (req, res) => {
+apiRouter.put("/comments/edit/:id", isAuth, async (req, res) => {
   const { id } = req.params;
 
   const editedComment = await Comment.updateOne(
@@ -275,7 +267,7 @@ apiRouter.put("/editcomments/:id", isAuth, async (req, res) => {
   res.status(200).json(editedComment);
 });
 
-apiRouter.post('/likecomment/:id', isAuth, async (req, res) => {
+apiRouter.post('/comments/like/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const liker = await User.findOne({ name: loggedInUsername });
   
@@ -294,7 +286,7 @@ apiRouter.post('/likecomment/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200); 
 });
 
-apiRouter.post('/dislikecomment/:id', isAuth, async (req, res) => {
+apiRouter.post('/comments/dislike/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const disliker = await User.findOne({ name: loggedInUsername });
   
@@ -313,7 +305,7 @@ apiRouter.post('/dislikecomment/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);  
 });
 
-apiRouter.post('/unreactcomment/:id', isAuth, async (req, res) => {
+apiRouter.post('/comments/unreact/:id', isAuth, async (req, res) => {
   const { id } = req.params;
   const unreacter = await User.findOne({ name: loggedInUsername });
   
@@ -330,6 +322,41 @@ apiRouter.post('/unreactcomment/:id', isAuth, async (req, res) => {
   );
 
   res.status(nModified === 0 ? 204 : 200);  
+});
+
+
+// DELETE HTTP Requests
+
+apiRouter.delete('/users/:id', isAuth, async (req, res) => {
+  const currUser = await User.findOne({ name: loggedInUsername });  
+
+  await User.deleteOne({ _id: currUser._id });
+  await Post.deleteMany({ posterId: currUser._id });
+  await Comment.deleteMany({ commenterId: currUser._id });
+
+  // TODO: Sign user out properly.
+  setLoggedInUser('');
+
+  res.status(200);
+});
+
+apiRouter.delete('/posts/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+
+  // TODO: Invalid post handling
+  await Post.findByIdAndDelete(id);
+  await Comment.deleteMany({ postId: id });
+
+  res.status(200);
+});
+
+apiRouter.delete('/comments/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+
+  // TODO: Invalid comment handling
+  await Comment.deleteOne({ _id: id });
+
+  res.status(200);
 });
 
 app.use("/api", apiRouter);
