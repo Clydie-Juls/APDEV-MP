@@ -176,6 +176,59 @@ apiRouter.post("/editpost/:id", isAuth, async (req, res) => {
   res.status(201).send('/');
 });
 
+apiRouter.post('/likepost/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const liker = await User.findOne({ name: loggedInUsername });
+
+  const { nModified } = await Post.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $addToSet: { 'likerIds': liker._id },
+      $pull: { 'dislikerIds': liker._id },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);
+});
+
+apiRouter.post('/dislikepost/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const disliker = await User.findOne({ name: loggedInUsername });
+  
+  const { nModified } = await Post.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $addToSet: { 'dislikerIds': disliker._id },
+      $pull: { 'likerIds': disliker._id },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);
+});
+
+apiRouter.post('/unreactpost/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const unreacter = await User.findOne({ name: loggedInUsername });
+  
+  const { nModified } = await Post.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $pull: { 
+        'likerIds': unreacter._id,
+        'dislikerIds': unreacter._id,
+      },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);
+});
+
 apiRouter.post("/writecomment", isAuth, (req, res) => {
   res.status(201).send("write comment successful");
 });
