@@ -28,11 +28,16 @@ const PostEditor = ({ isWritePost }) => {
     const formBody = new FormData(formElem);
     tags.forEach(t => formBody.append('tags[]', t));
 
-    // TODO: For editing posts
-    const postUrl = await fetch('/api/writepost', {
-      method: 'post',
-      body: formBody
-    });
+    const postUrl = (id === null) ? 
+      await fetch('/api/writepost', {
+        method: 'post',
+        body: formBody
+      })
+    :
+      await fetch(`/api/editpost/${id}`, {
+        method: 'post',
+        body: formBody
+      });
 
     location.replace(await postUrl.text());
   }

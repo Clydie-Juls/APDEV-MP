@@ -158,8 +158,22 @@ apiRouter.post("/writepost", async (req, res) => {
   res.status(201).send('/');
 });
 
-apiRouter.post("/editposts/:id", isAuth, (req, res) => {
-  res.status(201).send("edit post successful");
+apiRouter.post("/editpost/:id", isAuth, async (req, res) => {
+  const { id } = req.params;
+
+  Post.updateOne(
+    {
+      _id: id
+    },
+    {
+      title: req.body.title,
+      body: req.body.body, 
+      tags: req.body.tags 
+    }
+  );
+
+  // TODO: Redirect user to the page of their post
+  res.status(201).send('/');
 });
 
 apiRouter.post("/writecomment", isAuth, (req, res) => {
