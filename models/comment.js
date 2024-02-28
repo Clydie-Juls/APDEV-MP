@@ -19,6 +19,7 @@ export const CommentSchema = new mongoose.Schema({
   },
   uploadDate: {
     type: Date,
+    default: () => Date.now(),
     required: true,
   },
   reactions: ReactionSchema,

@@ -244,12 +244,35 @@ apiRouter.post('/unreactpost/:id', isAuth, async (req, res) => {
   res.status(nModified === 0 ? 204 : 200);
 });
 
-apiRouter.post("/writecomment", isAuth, (req, res) => {
-  res.status(201).send("write comment successful");
+apiRouter.post("/writecomment", isAuth, async (req, res) => {
+  const commenter = await User.findOne({ name: loggedInUsername });
+  
+  const newComment = await Comment.create({
+    commenterId: commenter._id,
+    commentRepliedToId: req.body.commentRepliedToId,
+    body: req.body.body,
+    reactions: {
+      likerIds: [],
+      dislikerIds: []
+    }
+  });
+
+  res.status(201).json(newComment);
 });
 
-apiRouter.put("/editcomments/:id", isAuth, (req, res) => {
-  res.status(201).send("edit comment successful");
+apiRouter.put("/editcomments/:id", isAuth, async (req, res) => {
+  const { id } = req.params;
+
+  const editedComment = await Comment.updateOne(
+    {
+      _id: id
+    },
+    {
+      body: req.body.body
+    }
+  );
+
+  res.status(200).json(editedComment);
 });
 
 apiRouter.post('/likecomment/:id', isAuth, async (req, res) => {
