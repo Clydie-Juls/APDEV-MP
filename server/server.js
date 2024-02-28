@@ -128,7 +128,7 @@ apiRouter.post("/signup", (req, res) => {
   res.status(201).redirect("/");
 });
 
-apiRouter.post("/editlogininfo", isAuth, async (req, res) => {
+apiRouter.put("/editlogininfo", isAuth, async (req, res) => {
   const { username, password, description, picture } = req.body;
   const poster = await User.findOne({ name: loggedInUsername });
 
@@ -173,7 +173,7 @@ apiRouter.post("/writepost", async (req, res) => {
   res.status(201).send('/');
 });
 
-apiRouter.post("/editpost/:id", isAuth, async (req, res) => {
+apiRouter.put("/editpost/:id", isAuth, async (req, res) => {
   const { id } = req.params;
 
   Post.updateOne(
@@ -248,7 +248,7 @@ apiRouter.post("/writecomment", isAuth, (req, res) => {
   res.status(201).send("write comment successful");
 });
 
-apiRouter.post("/editcomments/:id", isAuth, (req, res) => {
+apiRouter.put("/editcomments/:id", isAuth, (req, res) => {
   res.status(201).send("edit comment successful");
 });
 

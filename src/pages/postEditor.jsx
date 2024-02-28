@@ -35,7 +35,7 @@ const PostEditor = ({ isWritePost }) => {
       })
     :
       await fetch(`/api/editpost/${id}`, {
-        method: 'post',
+        method: 'put',
         body: formBody
       });
 
