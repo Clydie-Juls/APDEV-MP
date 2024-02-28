@@ -200,8 +200,8 @@ apiRouter.post('/likepost/:id', isAuth, async (req, res) => {
       _id: id
     },
     { 
-      $addToSet: { 'likerIds': liker._id },
-      $pull: { 'dislikerIds': liker._id },
+      $addToSet: { 'reactions.likerIds': liker._id },
+      $pull: { 'reactions.dislikerIds': liker._id },
     }
   );
 
@@ -217,8 +217,8 @@ apiRouter.post('/dislikepost/:id', isAuth, async (req, res) => {
       _id: id
     },
     { 
-      $addToSet: { 'dislikerIds': disliker._id },
-      $pull: { 'likerIds': disliker._id },
+      $addToSet: { 'reactions.dislikerIds': disliker._id },
+      $pull: { 'reactions.likerIds': disliker._id },
     }
   );
 
@@ -235,8 +235,8 @@ apiRouter.post('/unreactpost/:id', isAuth, async (req, res) => {
     },
     { 
       $pull: { 
-        'likerIds': unreacter._id,
-        'dislikerIds': unreacter._id,
+        'reactions.likerIds': unreacter._id,
+        'reactions.dislikerIds': unreacter._id,
       },
     }
   );
