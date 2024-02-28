@@ -34,7 +34,7 @@ const Landing = () => {
             <TabsContent value="recent">
               <CardList>
                 {Posts.toSorted(
-                  (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)
+                  (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate),
                 ).map((p) => (
                   <PostCard
                     key={p.id}
@@ -56,7 +56,7 @@ const Landing = () => {
             <TabsContent value="popular">
               <CardList>
                 {Posts.toSorted(
-                  (a, b) => b.likerIds.length - a.likerIds.length
+                  (a, b) => b.likerIds.length - a.likerIds.length,
                 ).map((p) => (
                   <PostCard
                     key={p.id}

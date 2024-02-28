@@ -11,14 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TempState } from '@/lib/placeholder/tempState';
+import { TempState } from "@/lib/placeholder/tempState";
 
 export function LoginForm() {
   const handleLogInClick = () => {
-    TempState.set('loggedIn', true);
+    TempState.set("loggedIn", true);
     window.location.replace("/");
   };
-  
+
   return (
     <Card className="w-[420px] self-center justify-self-center">
       <CardHeader>
@@ -51,7 +51,9 @@ export function LoginForm() {
         </form>
       </CardContent>
       <CardFooter className="flex flex-col gap-6">
-        <Button className=" w-full" onClick={handleLogInClick}>Log in</Button>
+        <Button className=" w-full" onClick={handleLogInClick}>
+          Log in
+        </Button>
         <p className=" text-muted-foreground mt-6 text-sm">
           Don`t have an account?{" "}
           <Link to="/signup" className=" text-indigo-500">

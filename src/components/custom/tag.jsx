@@ -1,9 +1,7 @@
-import { Badge } from '../ui/badge';
+import { Badge } from "../ui/badge";
 
 const Tag = ({ name }) => {
-    return (
-        <Badge>#{name}</Badge>
-    );
+  return <Badge>#{name}</Badge>;
 };
 
 export default Tag;

@@ -20,7 +20,11 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
       />
       <div className="flex flex-col gap-4 w-full sticky top-0 bg-black">
         <h1 className=" text-4xl font-bold">
-          {isReply ? "Reply" : (isWriteComment ? "Add a Comment" : "Edit Comment")}
+          {isReply
+            ? "Reply"
+            : isWriteComment
+              ? "Add a Comment"
+              : "Edit Comment"}
         </h1>
         <p className="text-muted-foreground">
           Share your insightful comment that peaks the community`s interest

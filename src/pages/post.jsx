@@ -43,11 +43,14 @@ const Post = () => {
           profile={poster.picture}
           userName={poster.name}
         />
-        <PostBody 
-          id={post.id} 
-          tags={post.tags} 
-          paragraph={post.body} 
-          onDeleteButtonClick={() => { setConfirmDelete(true); setWhatToDelete('post'); }}
+        <PostBody
+          id={post.id}
+          tags={post.tags}
+          paragraph={post.body}
+          onDeleteButtonClick={() => {
+            setConfirmDelete(true);
+            setWhatToDelete("post");
+          }}
         />
 
         {comments.map((c) => {
@@ -56,10 +59,10 @@ const Post = () => {
 
           if (isReply) {
             const commentRepliedTo = TempComments.getFromId(
-              c.commentRepliedToId
+              c.commentRepliedToId,
             );
             const commentRepliedToCommenter = TempUsers.getInfoFromId(
-              commentRepliedTo.commenterId
+              commentRepliedTo.commenterId,
             );
 
             return (
@@ -72,7 +75,10 @@ const Post = () => {
                 paragraph={c.body}
                 isOwner={c.commenterId === 0}
                 isReply={isReply}
-                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
+                onDeleteBtnClick={() => {
+                  setConfirmDelete(true);
+                  setWhatToDelete("comment");
+                }}
                 nestedUserName={commentRepliedToCommenter.name}
                 nestedProfile={commentRepliedToCommenter.picture}
                 nestedParagraph={commentRepliedTo.body}
@@ -89,7 +95,10 @@ const Post = () => {
                 paragraph={c.body}
                 isOwner={c.commenterId === 0}
                 isReply={isReply}
-                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
+                onDeleteBtnClick={() => {
+                  setConfirmDelete(true);
+                  setWhatToDelete("comment");
+                }}
               />
             );
           }
@@ -104,11 +113,7 @@ const Post = () => {
                 Are you sure you want to delete this {whatToDelete}?
               </p>
               <div className="flex justify-between">
-                <Button
-                  onClick={() => setConfirmDelete(false)}
-                >
-                  Cancel
-                </Button>
+                <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
                 <Button onClick={handleDelete} variant="destructive">
                   Delete
                 </Button>
