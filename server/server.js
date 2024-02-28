@@ -128,8 +128,23 @@ apiRouter.post("/signup", (req, res) => {
   res.status(201).redirect("/");
 });
 
-apiRouter.post("/editlogininfo", (req, res) => {
-  res.status(201).send("edit login info successful");
+apiRouter.post("/editlogininfo", isAuth, async (req, res) => {
+  const { username, password, description, picture } = req.body;
+  const poster = await User.findOne({ name: loggedInUsername });
+
+  const { nModified } = await User.updateOne(
+    {
+      _id: poster._id
+    },
+    {
+      username,
+      password,
+      description,
+      picture
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);
 });
 
 apiRouter.post("/writepost", async (req, res) => {
