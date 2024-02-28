@@ -252,6 +252,63 @@ apiRouter.put("/editcomments/:id", isAuth, (req, res) => {
   res.status(201).send("edit comment successful");
 });
 
+apiRouter.post('/likecomment/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const liker = await User.findOne({ name: loggedInUsername });
+  
+  const { nModified } = await Comment.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $pull: { 
+        $addToSet: { 'reactions.likerIds': liker._id },
+        $pull: { 'reactions.dislikerIds': liker._id },
+      },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200); 
+});
+
+apiRouter.post('/dislikecomment/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const disliker = await User.findOne({ name: loggedInUsername });
+  
+  const { nModified } = await Comment.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $pull: { 
+        $addToSet: { 'reactions.dislikerIds': disliker._id },
+        $pull: { 'reactions.likerIds': disliker._id },
+      },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);  
+});
+
+apiRouter.post('/unreactcomment/:id', isAuth, async (req, res) => {
+  const { id } = req.params;
+  const unreacter = await User.findOne({ name: loggedInUsername });
+  
+  const { nModified } = await Comment.updateOne(
+    {
+      _id: id
+    },
+    { 
+      $pull: { 
+        'reactions.likerIds': unreacter._id,
+        'reactions.dislikerIds': unreacter._id,
+      },
+    }
+  );
+
+  res.status(nModified === 0 ? 204 : 200);  
+});
+
 app.use("/api", apiRouter);
 
 app.listen(port, () => {
