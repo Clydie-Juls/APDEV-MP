@@ -6,11 +6,41 @@ import { Button } from "@/components/ui/button";
 import TagInput from "@/components/custom/tagInput";
 import { useParams } from "react-router";
 import { TempPosts } from "@/lib/placeholder/mockReq";
+import { useRef, useState } from 'react';
 
 const PostEditor = ({ isWritePost }) => {
-  const { id } = isWritePost ? useParams() : { id: null };
+  const params = useParams();
 
+  const id = isWritePost ? params : null;
   const postToEdit = TempPosts.getFromId(Number(id));
+
+  const formRef = useRef();
+  const [tags, setTags] = useState(isWritePost ? ["Technology", "Programming"] : postToEdit.tags);
+
+  function handleTagsChange(newTags) {
+    setTags(newTags);
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const formElem = formRef.current;
+    
+    const formBody = new FormData(formElem);
+    tags.forEach(t => formBody.append('tags[]', t));
+
+    const postUrl = (id === null) ? 
+      await fetch('/api/writepost', {
+        method: 'post',
+        body: formBody
+      })
+    :
+      await fetch(`/api/editpost/${id}`, {
+        method: 'put',
+        body: formBody
+      });
+
+    location.replace(await postUrl.text());
+  }
 
   return (
     <div className="w-screen h-screen px-6 py-10 flex flex-col gap-6 items-center overflow-x-hidden">
@@ -28,7 +58,7 @@ const PostEditor = ({ isWritePost }) => {
         </p>
         <Separator />
       </div>
-      <form id="postEditorForm" className="w-full" method="post" action="/api/writepost">
+      <form ref={formRef} className="w-full">
         <div className="flex flex-col gap-8 items-center px-[20%] w-full ">
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="title">Title</Label>
@@ -50,11 +80,7 @@ const PostEditor = ({ isWritePost }) => {
           </div>
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
-            <TagInput
-              initTags={
-                isWritePost ? ["Technology", "Programming"] : postToEdit.tags
-              }
-            />
+            <TagInput tags={tags} onChange={handleTagsChange} />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
             </p>
@@ -83,7 +109,7 @@ const PostEditor = ({ isWritePost }) => {
             </p>
           </div>
 
-          <Button className="px-9" form="postEditorForm">Submit</Button>
+          <Button className="px-9" onClick={handleFormSubmit}>Submit</Button>
         </div>
       </form>
     </div>
