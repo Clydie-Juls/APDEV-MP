@@ -34,7 +34,7 @@ const SignupForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="signupForm" method="post" action="/api/signup">
+        <form id="signupForm" method="post" action="/api/account/signup">
           <div className="grid w-full items-center gap-4 mb-4">
             <div className="flex flex-col gap-3">
               <Label htmlFor="username">Username</Label>
