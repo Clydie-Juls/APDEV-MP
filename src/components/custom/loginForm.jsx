@@ -22,15 +22,15 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="loginForm" method="post" action="/api/login">
+        <form id="loginForm" method="post" action="/api/account/login">
           <div className="grid w-full items-center gap-4 mb-4">
             <div className="flex flex-col gap-3">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" name="username" placeholder="e.g. John Doe" />
+              <Input id="username" name="username" placeholder="e.g. John Doe" required />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="password">Password</Label>
-              <Input type="password" id="password" name="password" placeholder="********" />
+              <Input type="password" id="password" name="password" placeholder="********" required />
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="keep-logged-in" />

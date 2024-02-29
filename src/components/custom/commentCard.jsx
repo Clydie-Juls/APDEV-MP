@@ -1,7 +1,7 @@
 import RateButtons from './rateButtons';
 import Tag from './tag';
 
-// TODO: Complete all props.
+// TODO: Make the props the same as the DB schema
 const CommentCard = ({ 
     postTitle, 
     postTags,
