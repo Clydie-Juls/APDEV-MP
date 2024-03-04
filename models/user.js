@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import fetch from "node-fetch";
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -20,6 +21,11 @@ const UserSchema = new mongoose.Schema({
   // Will implement default image later
   picture: {
     type: Buffer,
+    default: async function () {
+      const res = await fetch("https://github.com/shadcn.png");
+      const buffer = await res.arrayBuffer();
+      return buffer;
+    },
   },
 });
 
