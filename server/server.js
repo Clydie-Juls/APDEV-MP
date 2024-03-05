@@ -139,15 +139,16 @@ apiRouter.post("/account/login", async (req, res) => {
   }
 });
 
-apiRouter.post("/account/signup", (req, res) => {
+apiRouter.post("/account/signup", async (req, res) => {
   try {
-    User.create({
+    const user = await User.create({
       username: req.body.username,
       password: req.body.password,
     });
 
+    user.save();
     // TODO: Auto log-in the user.
-    res.status(201).redirect("/");
+    res.status(201).send("Sign up successful").redirect("/");
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -156,8 +157,7 @@ apiRouter.post("/account/signup", (req, res) => {
 apiRouter.put("/account/edit", isAuth, async (req, res) => {
   try {
     const { username, password, description, picture } = req.body;
-    const poster = await User.findOne({ name: loggedInUsername });
-
+    const poster = await User.findOne({ username: loggedInUsername });
     const { nModified } = await User.updateOne(
       {
         _id: poster._id,
@@ -178,7 +178,7 @@ apiRouter.put("/account/edit", isAuth, async (req, res) => {
 
 apiRouter.post("/posts/write", isAuth, async (req, res) => {
   try {
-    const poster = await User.findOne({ name: loggedInUsername });
+    const poster = await User.findOne({ username: loggedInUsername });
 
     const newPost = await Post.create({
       title: req.body.title,
@@ -232,7 +232,7 @@ apiRouter.post("/posts/like/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const liker = await User.findOne({ name: loggedInUsername });
+    const liker = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Post.updateOne(
       {
@@ -247,7 +247,7 @@ apiRouter.post("/posts/like/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot like the post." });
     } else {
-      res.status(200);
+      res.status(200).send("Like successfull");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -263,7 +263,7 @@ apiRouter.post("/posts/dislike/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const disliker = await User.findOne({ name: loggedInUsername });
+    const disliker = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Post.updateOne(
       {
@@ -278,7 +278,7 @@ apiRouter.post("/posts/dislike/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot dislike the post." });
     } else {
-      res.status(200);
+      res.status(200).send("Dislike Successful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -294,7 +294,7 @@ apiRouter.post("/posts/unreact/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const unreacter = await User.findOne({ name: loggedInUsername });
+    const unreacter = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Post.updateOne(
       {
@@ -311,7 +311,7 @@ apiRouter.post("/posts/unreact/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot unreact the post." });
     } else {
-      res.status(200);
+      res.status(200).send("Unsuccessful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -320,19 +320,20 @@ apiRouter.post("/posts/unreact/:id", isAuth, async (req, res) => {
 
 apiRouter.post("/comments/write", isAuth, async (req, res) => {
   try {
-    const commenter = await User.findOne({ name: loggedInUsername });
+    const commenter = await User.findOne({ username: loggedInUsername });
 
     const newComment = await Comment.create({
       commenterId: commenter._id,
+      postId: req.body.postId,
       commentRepliedToId: req.body.commentRepliedToId,
       body: req.body.body,
       reactions: {
         likerIds: [],
         dislikerIds: [],
       },
-    }).lean();
+    });
 
-    res.status(201).json({ comment: newComment });
+    res.status(201).json({ comment: newComment.toJSON() });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -371,7 +372,7 @@ apiRouter.post("/comments/like/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const liker = await User.findOne({ name: loggedInUsername });
+    const liker = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Comment.updateOne(
       {
@@ -388,7 +389,7 @@ apiRouter.post("/comments/like/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot like the comment." });
     } else {
-      res.status(200);
+      res.status(200).send("Comment like Successful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -404,7 +405,7 @@ apiRouter.post("/comments/dislike/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const disliker = await User.findOne({ name: loggedInUsername });
+    const disliker = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Comment.updateOne(
       {
@@ -421,7 +422,7 @@ apiRouter.post("/comments/dislike/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot dislike the comment." });
     } else {
-      res.status(200);
+      res.status(200).send("Comment dislike Successful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -437,7 +438,7 @@ apiRouter.post("/comments/unreact/:id", isAuth, async (req, res) => {
       return;
     }
 
-    const unreacter = await User.findOne({ name: loggedInUsername });
+    const unreacter = await User.findOne({ username: loggedInUsername });
 
     const { nModified } = await Comment.updateOne(
       {
@@ -454,7 +455,7 @@ apiRouter.post("/comments/unreact/:id", isAuth, async (req, res) => {
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot unreact the comment." });
     } else {
-      res.status(200);
+      res.status(200).send("Comment unreact Successful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -465,7 +466,7 @@ apiRouter.post("/comments/unreact/:id", isAuth, async (req, res) => {
 
 apiRouter.delete("/users/:id", isAuth, async (req, res) => {
   try {
-    const currUser = await User.findOne({ name: loggedInUsername });
+    const currUser = await User.findOne({ _id: req.params.id });
 
     await User.deleteOne({ _id: currUser._id });
     await Post.deleteMany({ posterId: currUser._id });
@@ -474,7 +475,7 @@ apiRouter.delete("/users/:id", isAuth, async (req, res) => {
     // TODO: Sign user out properly.
     setLoggedInUser("");
 
-    res.status(200);
+    res.status(200).send(`User ${req.params.id} deleted successfully`);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -492,7 +493,7 @@ apiRouter.delete("/posts/:id", isAuth, async (req, res) => {
     await Post.findByIdAndDelete(id);
     await Comment.deleteMany({ postId: id });
 
-    res.status(200);
+    res.status(200).send(`post ${req.params.id} deleted successfully`);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -509,7 +510,7 @@ apiRouter.delete("/comments/:id", isAuth, async (req, res) => {
 
     await Comment.deleteOne({ _id: id });
 
-    res.status(200);
+    res.status(200).send(`comment ${req.params.id} deleted successfully`);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
