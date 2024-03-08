@@ -5,6 +5,7 @@ import AnimBackground from "@/components/custom/animBackground";
 import CardList from "@/components/custom/cardList";
 import Header from "@/components/custom/header";
 import PostCard from "@/components/custom/postCard";
+import PostCardSkeleton from '@/components/custom/postCardSkeleton';
 
 const Landing = () => {
   const [recentPosts, setPosts] = useState([]);
@@ -12,39 +13,39 @@ const Landing = () => {
   const [loading, setLoading] = useState(true);
   const [loadingPopular, setLoadingPopular] = useState(true);
 
+  const fetchRecentPosts = async () => {
+    try {
+      const response = await fetch('/api/posts/recent');
+      if (!response.ok) {
+        throw new Error('Failed to fetch posts');
+      }
+      const data = await response.json();
+      console.log('Fetched posts:', data); 
+      setPosts(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchPopularPosts = async () => {
+    try {
+      const response = await fetch('/api/posts/popular');
+      if (!response.ok) {
+        throw new Error('Failed to fetch popular posts');
+      }
+      const data = await response.json();
+      console.log('Fetched popular posts:', data); 
+      setPopularPosts(data);
+      setLoadingPopular(false);
+    } catch (error) {
+      console.error('Error fetching popular posts:', error);
+      setLoadingPopular(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRecentPosts = async () => {
-      try {
-        const response = await fetch('/api/posts/recent');
-        if (!response.ok) {
-          throw new Error('Failed to fetch posts');
-        }
-        const data = await response.json();
-        console.log('Fetched posts:', data); 
-        setPosts(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-        setLoading(false);
-      }
-    };
-
-    const fetchPopularPosts = async () => {
-      try {
-        const response = await fetch('/api/posts/popular');
-        if (!response.ok) {
-          throw new Error('Failed to fetch popular posts');
-        }
-        const data = await response.json();
-        console.log('Fetched popular posts:', data); 
-        setPopularPosts(data);
-        setLoadingPopular(false);
-      } catch (error) {
-        console.error('Error fetching popular posts:', error);
-        setLoadingPopular(false);
-      }
-    };
-
     fetchRecentPosts();
     fetchPopularPosts();
   }, []);
@@ -70,7 +71,9 @@ const Landing = () => {
             <TabsContent value="recent">
               <CardList>
                 {loading ? (
-                  <p>Loading posts...</p>
+                  recentPosts.map(post => (
+                    <PostCardSkeleton key={post._id} />
+                  ))
                 ) : (
                   recentPosts.map(post => (
                     <PostCard
@@ -93,7 +96,9 @@ const Landing = () => {
             <TabsContent value="popular">
               <CardList>
                 {loadingPopular ? (
-                  <p>Loading popular posts...</p>
+                  popularPosts.map(post => (
+                    <PostCardSkeleton key={post._id} />
+                  ))
                 ) : (
                   popularPosts.map(post => (
                     <PostCard
