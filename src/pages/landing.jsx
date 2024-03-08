@@ -1,20 +1,58 @@
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import AnimBackground from "@/components/custom/animBackground";
 import CardList from "@/components/custom/cardList";
 import Header from "@/components/custom/header";
 import PostCard from "@/components/custom/postCard";
 
-import { TempUsers } from "@/lib/placeholder/mockReq";
-import { Posts } from "@/lib/placeholder/posts";
-
 const Landing = () => {
+  const [recentPosts, setPosts] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingPopular, setLoadingPopular] = useState(true);
+
+  useEffect(() => {
+    const fetchRecentPosts = async () => {
+      try {
+        const response = await fetch('/api/posts/recent');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        console.log('Fetched posts:', data); 
+        setPosts(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        setLoading(false);
+      }
+    };
+
+    const fetchPopularPosts = async () => {
+      try {
+        const response = await fetch('/api/posts/popular');
+        if (!response.ok) {
+          throw new Error('Failed to fetch popular posts');
+        }
+        const data = await response.json();
+        console.log('Fetched popular posts:', data); 
+        setPopularPosts(data);
+        setLoadingPopular(false);
+      } catch (error) {
+        console.error('Error fetching popular posts:', error);
+        setLoadingPopular(false);
+      }
+    };
+
+    fetchRecentPosts();
+    fetchPopularPosts();
+  }, []);
+
   return (
     <AnimBackground>
       <div className="w-full h-full bg-background">
         <Header />
-
         <main>
           <Tabs defaultValue="recent" className="px-16 py-5 mt-2">
             <div className="mb-4 flex justify-between">
@@ -25,52 +63,54 @@ const Landing = () => {
                 </TabsList>
                 <h2 className="text-3xl font-bold">Posts</h2>
               </div>
-
               <Button asChild>
                 <a href="/writePost">Create a Post</a>
               </Button>
             </div>
-
             <TabsContent value="recent">
               <CardList>
-                {Posts.toSorted(
-                  (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)
-                ).map((p) => (
-                  <PostCard
-                    key={p.id}
-                    id={p.id}
-                    title={p.title}
-                    author={TempUsers.getInfoFromId(p.posterId).name}
-                    body={p.body}
-                    uploadDate={p.uploadDate}
-                    views={p.views}
-                    likes={p.likerIds.length}
-                    dislikes={p.dislikerIds.length}
-                    userRating={p.likerIds.includes(0) ? "like" : "dislike"}
-                    tags={p.tags}
-                  />
-                ))}
+                {loading ? (
+                  <p>Loading posts...</p>
+                ) : (
+                  recentPosts.map(post => (
+                    <PostCard
+                      key={post._id}
+                      id={post._id}
+                      title={post.title}
+                      author={post.author}
+                      body={post.body}
+                      uploadDate={post.uploadDate}
+                      views={post.views}
+                      likes={post.likes}
+                      dislikes={post.dislikes}
+                      userRating={post.userRating}
+                      tags={post.tags}
+                    />
+                  ))
+                )}
               </CardList>
             </TabsContent>
-
             <TabsContent value="popular">
               <CardList>
-                {Posts.toSorted(
-                  (a, b) => b.likerIds.length - a.likerIds.length
-                ).map((p) => (
-                  <PostCard
-                    key={p.id}
-                    title={p.title}
-                    author={TempUsers.getInfoFromId(p.posterId).name}
-                    body={p.body}
-                    uploadDate={p.uploadDate}
-                    views={p.views}
-                    likes={p.likerIds.length}
-                    dislikes={p.dislikerIds.length}
-                    userRating={p.likerIds.includes(0) ? "like" : "dislike"}
-                    tags={p.tags}
-                  />
-                ))}
+                {loadingPopular ? (
+                  <p>Loading popular posts...</p>
+                ) : (
+                  popularPosts.map(post => (
+                    <PostCard
+                      key={post._id}
+                      id={post._id}
+                      title={post.title}
+                      author={post.author}
+                      body={post.body}
+                      uploadDate={post.uploadDate}
+                      views={post.views}
+                      likes={post.likes}
+                      dislikes={post.dislikes}
+                      userRating={post.userRating}
+                      tags={post.tags}
+                    />
+                  ))
+                )}
               </CardList>
             </TabsContent>
           </Tabs>
