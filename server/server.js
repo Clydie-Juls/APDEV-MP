@@ -6,6 +6,7 @@ import { User } from "../models/user.js";
 import { Post } from "../models/post.js";
 import { Comment } from "../models/comment.js";
 import { isAuth, setLoggedInUser, loggedInUsername } from '../middleware/auth.js';
+import bcrypt from 'bcrypt';
 
 const app = express();
 const port = 3000;
@@ -13,7 +14,23 @@ const apiRouter = express.Router();
 
 mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 
+const passwordMatches = async (password, hash) => {
+  try {
+    console.log('Input Password:', password);
+    console.log('Hash from DB:', hash);
+
+    const result = await bcrypt.compare(password, hash);
+    console.log('Password Matches:', result);
+    
+    return result;
+  } catch (error) {
+    console.error('Error comparing passwords:', error);
+    throw new Error('Error comparing passwords', hash);
+  }
+};
+
 // middleware setup
+app.use(express.json());
 app.use(multer().array());
 app.use(express.urlencoded({ extended: true }));
 
@@ -60,6 +77,30 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   
     res.status(200).json(({ post, comments }));
   } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get("/api/posts/recent", async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ uploadDate: -1 });
+    
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+});
+
+app.get("/api/posts/popular", async (req, res) => {
+  try {
+    const popularPosts = await Post.find().sort({ views: -1 }).limit(10).lean();
+
+    console.log("Fetched popular posts:", popularPosts);
+
+    res.status(200).json(popularPosts);
+  } catch (e) {
+    console.error("Error fetching popular posts:", e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -114,37 +155,53 @@ apiRouter.get("/posts/search", async (req, res) => {
   }
 });
 
-
 // POST and PUT HTTP requests
 
 apiRouter.post("/account/login", async (req, res) => {
+  console.log('Request Body:', req.body);
   try {
-    // TODO: password check
-    const { username } = req.body;
+    const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: { $regex: new RegExp(username, "i") } });
 
-    if (user === null) {
-      res.status(401).send('Login not successful.');
-    } else {
-      setLoggedInUser(req.body.username);
-      res.status(201).send("Login successful");
+    if (!user) {
+      console.log('User not found');
+      res.status(401).send('Login not successful. Invalid username or password.');
+      return;
     }
+
+    console.log('User:', user);
+
+    const hashedPassword = user.password; 
+    console.log('Hashed Password from DB:', hashedPassword);
+
+    const passwordMatch = await passwordMatches(password, hashedPassword);
+
+    if (!passwordMatch) {
+      console.log('Password does not match');
+      res.status(401).send('Login not successful. Invalid username or password.');
+      return;
+    }0
+
+    setLoggedInUser(username);
+    res.status(200).send("Login successful");
   } catch (e) {
+    console.error('Error logging in:', e);
     res.status(500).json({ error: e.message });
   }
 });
 
-apiRouter.post("/account/signup", (req, res) => {
+apiRouter.post("/account/signup", async (req, res) => {
   try {
-    User.create({
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    await User.create({
       username: req.body.username,
-      password: req.body.password,
+      password: hashedPassword,
       description: "",
       picture: null,
     });
   
-    // TODO: Auto log-in the user.
     res.status(201).redirect("/");
   } catch (e) {
     res.status(500).json({ error: e.message });
