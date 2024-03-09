@@ -55,7 +55,9 @@ export function LoginForm() {
         const errorMessage = await response.text();
         throw new Error(errorMessage || 'Login failed');
       }
-  
+      
+      window.location.replace('/');
+      
     } catch (error) {
       console.error('Error logging in:', error);
       alert(error.message || 'Error logging in. Please try again.');
