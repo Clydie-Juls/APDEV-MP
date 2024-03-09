@@ -9,7 +9,8 @@ export const CommentSchema = new mongoose.Schema({
   },
   postId: {
     type: mongoose.Schema.Types.ObjectId,
-    default: null
+    default: null,
+    required: true,
   },
   commentRepliedToId: {
     type: mongoose.Schema.Types.ObjectId, // Could also just be an int
