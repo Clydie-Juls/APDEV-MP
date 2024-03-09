@@ -11,7 +11,8 @@ const SearchBar = () => {
       <Button onClick={() => window.location.replace('/searchpage')}>
         <Search />
       </Button>
-      <FilterSearch />
+      {/* TODO */}
+      <FilterSearch tags={[]} />
     </div>
   );
 };
