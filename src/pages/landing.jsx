@@ -20,7 +20,6 @@ const Landing = () => {
         throw new Error('Failed to fetch posts');
       }
       const data = await response.json();
-      console.log('Fetched posts:', data); 
       setPosts(data);
       setLoading(false);
     } catch (error) {
@@ -36,7 +35,6 @@ const Landing = () => {
         throw new Error('Failed to fetch popular posts');
       }
       const data = await response.json();
-      console.log('Fetched popular posts:', data); 
       setPopularPosts(data);
       setLoadingPopular(false);
     } catch (error) {
