@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
-
+import bcrypt from "bcrypt";
 import { User } from "../models/user.js";
 import { Post } from "../models/post.js";
 import { Comment } from "../models/comment.js";
@@ -168,17 +168,10 @@ apiRouter.post("/account/login", async (req, res) => {
 
     const user = await User.findOne({ username: { $regex: new RegExp(username, "i") } });
 
-
     if (!user) {
       console.log('User not found');
-      res.status(401).send('Login not successful. Invalid username or password.');
-      return;
-    } else {
-      setLoggedInUser(req.body.username);
-      res.status(201).send("Login successful");
+      return res.status(401).send('Login not successful. Invalid username or password.');
     }
-
-    console.log('User:', user);
 
     const hashedPassword = user.password; 
     console.log('Hashed Password from DB:', hashedPassword);
@@ -187,15 +180,14 @@ apiRouter.post("/account/login", async (req, res) => {
 
     if (!passwordMatch) {
       console.log('Password does not match');
-      res.status(401).send('Login not successful. Invalid username or password.');
-      return;
-    }0
+      return res.status(401).send('Login not successful. Invalid username or password.');
+    }
 
     setLoggedInUser(username);
-    res.status(200).send("Login successful");
+    return res.status(200).send("Login successful");
   } catch (e) {
     console.error('Error logging in:', e);
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 });
 
