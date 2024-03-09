@@ -11,7 +11,7 @@ import { useRef, useState } from 'react';
 const PostEditor = ({ isWritePost }) => {
   const params = useParams();
 
-  const id = isWritePost ? params : null;
+  const id = isWritePost ? null : params.id;
   const postToEdit = TempPosts.getFromId(Number(id));
 
   const formRef = useRef();
@@ -29,12 +29,12 @@ const PostEditor = ({ isWritePost }) => {
     tags.forEach(t => formBody.append('tags[]', t));
 
     const postUrl = (id === null) ? 
-      await fetch('/api/writepost', {
+      await fetch('/api/posts/write', {
         method: 'post',
         body: formBody
       })
     :
-      await fetch(`/api/editpost/${id}`, {
+      await fetch(`/api/posts/edit/${id}`, {
         method: 'put',
         body: formBody
       });
