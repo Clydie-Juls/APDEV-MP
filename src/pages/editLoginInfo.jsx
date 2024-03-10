@@ -46,7 +46,7 @@ const EditLoginInfo = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    await fetch('/api/account/edit', {
+    await fetch(`/api/users/edit/${id}`, {
       method: 'put',
       headers: {
         "Content-Type": "application/json",

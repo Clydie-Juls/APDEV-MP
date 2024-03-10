@@ -160,6 +160,28 @@ apiRouter.get("/posts/search", async (req, res) => {
 });
 
 // POST and PUT HTTP requests
+apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
+  try {
+    const { username, password, description, picture } = req.body;
+
+    const { nModified } = await User.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        ...(username && { username }),
+        ...(password && { password }),
+        ...(description && { description }),
+        ...(picture && { picture }),
+      }
+    );
+
+    res.status(nModified === 0 ? 204 : 200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 
 apiRouter.post("/account/login", async (req, res) => {
   console.log('Request Body:', req.body);
@@ -203,29 +225,6 @@ apiRouter.post("/account/signup", async (req, res) => {
     user.save();
     res.status(201).redirect("/");
 
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-apiRouter.put("/account/edit", isAuth, async (req, res) => {
-  try {
-    const { username, password, description, picture } = req.body;
-    const poster = await User.findOne({ username: loggedInUsername });
-
-    const { nModified } = await User.updateOne(
-      {
-        _id: poster._id,
-      },
-      {
-        ...(username && { username }),
-        ...(password && { password }),
-        ...(description && { description }),
-        ...(picture && { picture }),
-      }
-    );
-
-    res.status(nModified === 0 ? 204 : 200);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
