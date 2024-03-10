@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import TagInput from "./tagInput";
 
-export function FilterSearch() {
+export function FilterSearch({ tags, onTagsChange }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -49,7 +49,7 @@ export function FilterSearch() {
             </div>
             <div className="flex flex-col gap-4 mt-6">
               <Label>Tags</Label>
-              <TagInput />
+              <TagInput tags={tags} onChange={onTagsChange} />
             </div>
           </div>
         </div>
