@@ -201,8 +201,7 @@ apiRouter.post("/account/signup", async (req, res) => {
     });
 
     user.save();
-    // TODO: Auto log-in the user.
-    res.status(201).send("Sign up successful").redirect("/");
+    res.status(201).redirect("/");
 
   } catch (e) {
     res.status(500).json({ error: e.message });
