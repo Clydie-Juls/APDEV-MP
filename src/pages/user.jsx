@@ -73,6 +73,10 @@ const User = () => {
     })
   }
 
+  function handleInfoEditButtonClick() {
+    location.replace(`/editlogininfo/${id}`);
+  }
+
   return (
     <AnimBackground>
       <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
@@ -91,6 +95,7 @@ const User = () => {
               onDeleteButtonClick={handleDeleteButtonClick}
               onDescriptionInput={handleDescriptionInput}
               onDescriptionSet={handleDescriptionSet}
+              onInfoEditButtonClick={handleInfoEditButtonClick}
             />
 
             <Tabs defaultValue="posts">

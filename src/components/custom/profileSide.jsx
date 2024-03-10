@@ -10,7 +10,8 @@ const ProfileSide = ({
   picture,
   onDeleteButtonClick,
   onDescriptionInput,
-  onDescriptionSet
+  onDescriptionSet,
+  onInfoEditButtonClick
 }) => {
   const descElemRef = useRef();
 
@@ -76,9 +77,7 @@ const ProfileSide = ({
 
       <div className='mt-1 flex flex-col justify-center gap-3'>
         <Button onClick={handleEditDesc}>Edit Description</Button>
-        <Button>
-          <a href="/editlogininfo">Edit Login Info</a>
-        </Button>
+        <Button onClick={onInfoEditButtonClick}>Edit Login Info</Button>
 
         <Button variant="destructive" onClick={setShowDeleteModal}>Delete Profile</Button>
       </div>
