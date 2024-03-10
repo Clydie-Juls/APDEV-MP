@@ -43,6 +43,40 @@ const User = () => {
     fetchData();
   }, [id]);
 
+  async function handleDeleteButtonClick() {
+    await fetch(`/api/users/${id}`, {
+      method: 'delete'
+    });
+    
+    location.replace('/');
+  }
+
+  function handleDescriptionInput(newDescription) {
+    setUserInfo(ui => ({
+      ...ui,
+      user: {
+        ...ui.user,
+        description: newDescription
+      }
+    }));
+  }
+
+  async function handleDescriptionSet(newDescription) {
+    await fetch(`/api/users/edit/${id}`, {
+      method: 'put',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        description: newDescription
+      })
+    })
+  }
+
+  function handleInfoEditButtonClick() {
+    location.replace(`/editlogininfo/${id}`);
+  }
+
   return (
     <AnimBackground>
       <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
@@ -58,6 +92,10 @@ const User = () => {
               name={userInfo.user.username}
               description={userInfo.user.description}
               picture={userInfo.user.picture}
+              onDeleteButtonClick={handleDeleteButtonClick}
+              onDescriptionInput={handleDescriptionInput}
+              onDescriptionSet={handleDescriptionSet}
+              onInfoEditButtonClick={handleInfoEditButtonClick}
             />
 
             <Tabs defaultValue="posts">
@@ -69,7 +107,7 @@ const User = () => {
               <TabsContent value="posts" className="mt-3">
                 <CardList>
                   {userInfo.posts.map((p) => (
-                    <PostCard key={p.id} {...p} />
+                    <PostCard key={p._id} {...p} />
                   ))}
                 </CardList>
               </TabsContent>
