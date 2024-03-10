@@ -8,6 +8,7 @@ const ProfileSide = ({
   name,
   description,
   picture,
+  onDeleteButtonClick,
   onDescriptionInput,
   onDescriptionSet
 }) => {
@@ -24,7 +25,7 @@ const ProfileSide = ({
   };
 
   const handleDelete = () => {
-    // TODO
+    onDeleteButtonClick();
     setShowDeleteModal(false);
   };
 

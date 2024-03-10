@@ -43,6 +43,14 @@ const User = () => {
     fetchData();
   }, [id]);
 
+  async function handleDeleteButtonClick() {
+    await fetch(`/api/users/${id}`, {
+      method: 'delete'
+    });
+    
+    location.replace('/');
+  }
+
   function handleDescriptionInput(newDescription) {
     setUserInfo(ui => ({
       ...ui,
@@ -80,6 +88,7 @@ const User = () => {
               name={userInfo.user.username}
               description={userInfo.user.description}
               picture={userInfo.user.picture}
+              onDeleteButtonClick={handleDeleteButtonClick}
               onDescriptionInput={handleDescriptionInput}
               onDescriptionSet={handleDescriptionSet}
             />
