@@ -38,8 +38,6 @@ export function LoginForm() {
       if (!username || !password) {
         throw new Error('Please provide both username and password.');
       }
-      
-      console.log('Form Data Before Submission:', formData); 
   
       const response = await fetch("/api/account/login", {
         method: "POST",

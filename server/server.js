@@ -68,7 +68,8 @@ apiRouter.get("/users/:id", async (req, res) => {
 apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
-
+    console.log("Received request for post with ID:", id);
+    
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "The post does not exist." });
       return;
@@ -76,7 +77,7 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
 
     // post db fetch
     const post = await Post.findById(id).lean();
-    const comments = await post.populate("comments").lean();
+    const comments = await Comment.find({ postId: id }).lean(); 
 
     res.status(200).json({ post, comments });
   } catch (e) {
@@ -98,8 +99,6 @@ app.get("/api/posts/recent", async (req, res) => {
 app.get("/api/posts/popular", async (req, res) => {
   try {
     const popularPosts = await Post.find().sort({ views: -1 }).limit(10).lean();
-
-    console.log("Fetched popular posts:", popularPosts);
 
     res.status(200).json(popularPosts);
   } catch (e) {
@@ -154,6 +153,23 @@ apiRouter.get("/posts/search", async (req, res) => {
     ]);
 
     res.status(200).json(posts);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+apiRouter.get("/posts/:id/comments", async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      res.status(404).json({ error: "The post does not exist." });
+      return;
+    }
+
+    const comments = await Comment.find({ postId }).lean();
+
+    res.status(200).json(comments);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
