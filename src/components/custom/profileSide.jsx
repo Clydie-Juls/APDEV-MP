@@ -7,7 +7,9 @@ import { Pencil } from 'lucide-react';
 const ProfileSide = ({
   name,
   description,
-  picture
+  picture,
+  onDescriptionInput,
+  onDescriptionSet
 }) => {
   const descElemRef = useRef();
 
@@ -34,8 +36,15 @@ const ProfileSide = ({
     }, 0);
   };
 
-  const handleDescElemBlur = () => {
-    setDescEditable(false);
+  const handleDescElemBlur = (e) => {
+    if (descEditable) {
+      onDescriptionSet(e.target.value);
+      setDescEditable(false);
+    }
+  };
+
+  const handleDescElemInput = (e) => {
+    onDescriptionInput(e.target.value);
   };
 
   return (
@@ -54,13 +63,15 @@ const ProfileSide = ({
         <p className="text-2xl font-bold">{name}</p>
       </div>
 
-      <p 
+      <input 
         ref={descElemRef} 
-        className='max-w-[40ch]' 
-        contentEditable={descEditable} onBlur={handleDescElemBlur}
-      > 
-        {description}
-      </p>
+        type="text"
+        className={'max-w-[40ch] bg-transparent' + (!descEditable ? ' focus:outline-none' : '')} 
+        readOnly={!descEditable}
+        value={description} 
+        onBlur={handleDescElemBlur}
+        onInput={handleDescElemInput}
+      />
 
       <div className='mt-1 flex flex-col justify-center gap-3'>
         <Button onClick={handleEditDesc}>Edit Description</Button>

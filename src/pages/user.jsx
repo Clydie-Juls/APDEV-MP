@@ -43,6 +43,28 @@ const User = () => {
     fetchData();
   }, [id]);
 
+  function handleDescriptionInput(newDescription) {
+    setUserInfo(ui => ({
+      ...ui,
+      user: {
+        ...ui.user,
+        description: newDescription
+      }
+    }));
+  }
+
+  async function handleDescriptionSet(newDescription) {
+    await fetch('/api/account/edit', {
+      method: 'put',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        description: newDescription
+      })
+    })
+  }
+
   return (
     <AnimBackground>
       <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
@@ -58,6 +80,8 @@ const User = () => {
               name={userInfo.user.username}
               description={userInfo.user.description}
               picture={userInfo.user.picture}
+              onDescriptionInput={handleDescriptionInput}
+              onDescriptionSet={handleDescriptionSet}
             />
 
             <Tabs defaultValue="posts">
