@@ -212,15 +212,16 @@ apiRouter.put("/account/edit", isAuth, async (req, res) => {
   try {
     const { username, password, description, picture } = req.body;
     const poster = await User.findOne({ username: loggedInUsername });
+
     const { nModified } = await User.updateOne(
       {
         _id: poster._id,
       },
       {
-        username,
-        password,
-        description,
-        picture,
+        ...(username && { username }),
+        ...(password && { password }),
+        ...(description && { description }),
+        ...(picture && { picture }),
       }
     );
 
