@@ -67,7 +67,7 @@ const Landing = () => {
               </Button>
             </div>
             <TabsContent value="recent">
-              <CardList>
+              <CardList displayCount={6}>
                 {loading ? (
                   recentPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
@@ -92,7 +92,7 @@ const Landing = () => {
               </CardList>
             </TabsContent>
             <TabsContent value="popular">
-              <CardList>
+              <CardList displayCount={6}>
                 {loadingPopular ? (
                   popularPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
