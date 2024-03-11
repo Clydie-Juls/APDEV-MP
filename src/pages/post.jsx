@@ -1,5 +1,5 @@
 import Header from "@/components/custom/header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,
@@ -18,82 +18,122 @@ import { TempUsers, TempPosts, TempComments } from "@/lib/placeholder/mockReq";
 import { useParams } from "react-router";
 
 const Post = () => {
-  // State to manage deletion confirmation
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [whatToDelete, setWhatToDelete] = useState();
-
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [poster, setPoster] = useState(null); 
   const { id } = useParams();
-  const handleDelete = () => {
-    console.log("Delete logic goes here");
-    // Reset confirmDelete state
-    setConfirmDelete(false);
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await fetch(`/api/posts/${id}`);
+        console.log('Response:', response);
+        if (!response.ok) {
+          throw new Error('Failed to fetch post');
+        }
+        const postData = await response.json();
+        console.log('Post data:', postData);
+        setPost(postData);
+
+        console.log('Post title:', postData.post.title);
+        console.log('Post body:', postData.post.body);
+        console.log('Post tags:', postData.post.tags);
+        
+        const posterInfo = await fetchUserById(postData.post.posterId);
+        setPoster(posterInfo);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    fetchPostData();
+  }, [id]);
+
+  const fetchUserById = async (userId) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user');
+      }
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
   };
 
-  const post = TempPosts.getFromId(Number(id));
-  const poster = TempUsers.getInfoFromId(Number(post.posterId));
-  const comments = TempComments.getCommentsFromPost(Number(post.id));
+  const handleDelete = () => {
+    setConfirmDelete(false);
+  };
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
       <Header />
 
       <div className="px-16 py-5">
-        <PostHeader
-          title={post.title}
-          profile={poster.picture}
-          userName={poster.name}
-        />
-        <PostBody 
-          id={post.id} 
-          tags={post.tags} 
-          paragraph={post.body} 
-          onDeleteButtonClick={() => { setConfirmDelete(true); setWhatToDelete('post'); }}
-        />
+        {post && poster && (
+          <>
+            <PostHeader
+              title={post.post.title}
+              profile={poster.picture}
+              userName={poster.username}
+            />
+            <PostBody 
+              id={post.post._id} 
+              tags={post.post.tags} 
+              paragraph={post.post.body} 
+              onDeleteButtonClick={() => { setConfirmDelete(true); setWhatToDelete('post'); }}
+            />
 
-        {comments.map((c) => {
-          const commenter = TempUsers.getInfoFromId(c.commenterId);
-          const isReply = c.commentRepliedToId !== null;
+            {comments.map((c) => {
+              const commenter = TempUsers.getInfoFromId(c.commenterId);
+              const isReply = c.commentRepliedToId !== null;
 
-          if (isReply) {
-            const commentRepliedTo = TempComments.getFromId(
-              c.commentRepliedToId
-            );
-            const commentRepliedToCommenter = TempUsers.getInfoFromId(
-              commentRepliedTo.commenterId
-            );
+              if (isReply) {
+                const commentRepliedTo = TempComments.getFromId(
+                  c.commentRepliedToId
+                );
+                const commentRepliedToCommenter = TempUsers.getInfoFromId(
+                  commentRepliedTo.commenterId
+                );
 
-            return (
-              <CommentBody
-                id={c.id}
-                key={c.id}
-                posterId={c.commenterId}
-                profile={commenter.picture}
-                userName={commenter.name}
-                paragraph={c.body}
-                isOwner={c.commenterId === 0}
-                isReply={isReply}
-                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
-                nestedUserName={commentRepliedToCommenter.name}
-                nestedProfile={commentRepliedToCommenter.picture}
-                nestedParagraph={commentRepliedTo.body}
-              />
-            );
-          } else {
-            return (
-              <CommentBody
-                id={c.id}
-                key={c.id}
-                posterId={c.commenterId}
-                profile={commenter.picture}
-                userName={commenter.name}
-                paragraph={c.body}
-                isOwner={c.commenterId === 0}
-                isReply={isReply}
-                onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
-              />
-            );
-          }
-        })}
+                return (
+                  <CommentBody
+                    id={c.id}
+                    key={c.id}
+                    posterId={c.commenterId}
+                    profile={commenter.picture}
+                    userName={commenter.name}
+                    paragraph={c.body}
+                    isOwner={c.commenterId === 0}
+                    isReply={isReply}
+                    onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
+                    nestedUserName={commentRepliedToCommenter.name}
+                    nestedProfile={commentRepliedToCommenter.picture}
+                    nestedParagraph={commentRepliedTo.body}
+                  />
+                );
+              } else {
+                return (
+                  <CommentBody
+                    id={c.id}
+                    key={c.id}
+                    posterId={c.commenterId}
+                    profile={commenter.picture}
+                    userName={commenter.name}
+                    paragraph={c.body}
+                    isOwner={c.commenterId === 0}
+                    isReply={isReply}
+                    onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
+                  />
+                );
+              }
+            })}
+          </>
+        )}
 
         {/* Confirmation prompt */}
         {confirmDelete && (

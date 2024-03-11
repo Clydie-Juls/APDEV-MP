@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -15,9 +15,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
 
 const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => {
+  useEffect(() => {
+    console.log("Received id:", id);
+    console.log("Received tags:", tags);
+    console.log("Received paragraph:", paragraph);
+  }, [id, tags, paragraph]);
+
   return (
     <Card className="mb-14">
       <CardHeader className="space-y-0 flex flex-row gap-6">
