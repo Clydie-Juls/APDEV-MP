@@ -105,7 +105,7 @@ const User = () => {
               </TabsList>
 
               <TabsContent value="posts" className="mt-3">
-                <CardList>
+                <CardList displayCount={4}>
                   {userInfo.posts.map((p) => (
                     <PostCard key={p._id} {...p} />
                   ))}
@@ -113,7 +113,7 @@ const User = () => {
               </TabsContent>
 
               <TabsContent value="comments">
-                <CardList>
+                <CardList displayCount={4}>
                   {userInfo.comments.map((c) => (
                     <CommentCard key={c._id} {...c} />
                   ))}

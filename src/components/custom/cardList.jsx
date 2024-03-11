@@ -1,36 +1,50 @@
+import { useMemo, useState } from 'react';
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const CardList = ({ children }) => {
+const CardList = ({ 
+    children,
+    displayCount
+}) => {
+    const [page, setPage] = useState(0);
+    const maxPages = useMemo(() => Math.ceil(children.length / displayCount), [children, displayCount]);
+
+    function gotoPrevPage() {
+        setPage(p => Math.max(0, p - 1));
+    }
+
+    function gotoNextPage() {
+        setPage(p => Math.min(p + 1, maxPages - 1));
+    }
+
+    function gotoPage(pageIndex) {
+        setPage(pageIndex);
+    }
+
     return (
         <div className='flex flex-col gap-3'>
             <div className='grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-3'>
-                {children}
+                {children.slice(page * displayCount, page * displayCount + displayCount)}
             </div>
 
-            {/* TODO: Based on the number of child posts, populate the pagination
-                numberings accordingly. */}
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
-                        <PaginationPrevious href="#" />
+                        <PaginationPrevious onClick={gotoPrevPage} />
                     </PaginationItem>
+
+                    {[...Array(maxPages)].map((_, i) =>
+                        <PaginationLink key={i} onClick={() => gotoPage(i)}>{i + 1}</PaginationLink>
+                    )}
+
                     <PaginationItem>
-                        {/* TODO: Make shown posts link based (item no. as param). */}
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
+                        <PaginationNext onClick={gotoNextPage} />
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>
