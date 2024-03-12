@@ -36,7 +36,7 @@ export function FilterSearch({ tags, onTagsChange }) {
               </Tabs>
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label>Views</Label>
+              <Label>Popularity</Label>
               <Tabs
                 defaultValue="account"
                 className="w-[200px] col-span-2 px-2"
