@@ -2,16 +2,20 @@ export let loggedInUsername;
 
 export function setLoggedInUser(name) {
   if (loggedInUsername) {
-    console.warn('Replacing an already logged in user...');
+    console.warn('Replacing an already logged-in user...');
   }
 
   loggedInUsername = name;
 }
 
 export function isAuth(req, res, next) {
-  if (loggedInUsername) {
+  if (req.originalUrl.startsWith("/api/posts")) {
     next();
   } else {
-    res.redirect("/login");
+    if (loggedInUsername) {
+      next();
+    } else {
+      res.redirect("/login");
+    }
   }
 }
