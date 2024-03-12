@@ -68,7 +68,6 @@ apiRouter.get("/users/:id", async (req, res) => {
 apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Received request for post with ID:", id);
     
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "The post does not exist." });
