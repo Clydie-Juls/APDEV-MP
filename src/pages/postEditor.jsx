@@ -18,7 +18,7 @@ const PostEditor = ({ isWritePost }) => {
   });
 
   useEffect(() => {
-    if (!id) {
+    if (!isWritePost && !id) {
       location.replace('/');
       return;
     }
