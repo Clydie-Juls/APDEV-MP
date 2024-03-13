@@ -197,6 +197,26 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
   }
 });
 
+apiRouter.get('/account/logincheck', async (req, res, next) => {
+  try {
+    if (!loggedInUsername) {
+      res.status(200).json({ isNull: true });
+      return next();
+    }
+
+    const userInfo = await User.findOne({
+      username: { $regex: new RegExp(loggedInUsername, "i") }
+    });
+
+    res.status(200).json({
+      _id: userInfo.id,
+      username: userInfo.username,
+      picture: userInfo.picture
+    });    
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 apiRouter.post("/account/login", async (req, res) => {
   console.log('Request Body:', req.body);
