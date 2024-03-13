@@ -87,17 +87,37 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
 app.get("/api/posts/recent", async (req, res) => {
   try {
     const posts = await Post.find().sort({ uploadDate: -1 });
-    
-    res.status(200).json(posts);
+
+    const formattedPosts = posts.map(post => ({
+      ...post.toObject(), 
+      uploadDate: formatDate(post.uploadDate) 
+    }));
+
+    res.status(200).json(formattedPosts);
   } catch (error) {
     console.error("Error fetching posts:", error);
     res.status(500).json({ error: "Failed to fetch posts" });
   }
 });
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 app.get("/api/posts/popular", async (req, res) => {
   try {
-    const popularPosts = await Post.find().sort({ views: -1 }).limit(10).lean();
+    const popularPosts = await Post.aggregate([
+      {
+        $addFields: {
+          totalLikes: { $size: "$likerIds" },
+          totalDislikes: { $size: "$dislikerIds" },
+        }
+      },
+      { $sort: { totalLikes: -1 } }, 
+    ]);
 
     res.status(200).json(popularPosts);
   } catch (e) {
