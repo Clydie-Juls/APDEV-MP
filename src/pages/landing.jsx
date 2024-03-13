@@ -6,12 +6,15 @@ import CardList from "@/components/custom/cardList";
 import Header from "@/components/custom/header";
 import PostCard from "@/components/custom/postCard";
 import PostCardSkeleton from '@/components/custom/postCardSkeleton';
+import { Account } from '@/lib/Account';
 
 const Landing = () => {
   const [recentPosts, setPosts] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingPopular, setLoadingPopular] = useState(true);
+
+  const [enableWritePost, setEnableWritePost] = useState(false);
 
   const fetchRecentPosts = async () => {
     try {
@@ -43,9 +46,15 @@ const Landing = () => {
     }
   };
 
+  const fetchLoginStatus = async () => {
+    setEnableWritePost(await Account.isLoggedIn());
+  };
+
   useEffect(() => {
     fetchRecentPosts();
     fetchPopularPosts();
+
+    fetchLoginStatus();
   }, []);
 
   return (
@@ -62,7 +71,7 @@ const Landing = () => {
                 </TabsList>
                 <h2 className="text-3xl font-bold">Posts</h2>
               </div>
-              <Button asChild>
+              <Button asChild={enableWritePost} disabled={!enableWritePost}>
                 <a href="/writePost">Create a Post</a>
               </Button>
             </div>
