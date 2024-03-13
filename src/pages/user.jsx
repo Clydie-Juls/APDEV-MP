@@ -9,6 +9,7 @@ import Header from "@/components/custom/header";
 import PostCard from "@/components/custom/postCard";
 import CommentCard from "@/components/custom/commentCard";
 import ProfileSide from "@/components/custom/profileSide";
+import { Account } from '@/lib/Account';
 
 const User = () => {
   const { id } = useParams();
@@ -23,6 +24,8 @@ const User = () => {
     comments: []
   });
 
+  const [showUserButtons, setShowUserButtons] = useState(false);
+  
   useEffect(() => {
     if (!id) {
       location.replace('/');
@@ -40,7 +43,17 @@ const User = () => {
       setUserInfo(await response.json());
     };
 
+    const checkLogin = async () => {
+      if (!(await Account.isLoggedIn())) {
+        return;
+      }
+      
+      const { _id } = await Account.getDetails();
+      setShowUserButtons(_id === id);
+    };
+
     fetchData();
+    checkLogin();
   }, [id]);
 
   async function handleDeleteButtonClick() {
@@ -92,6 +105,7 @@ const User = () => {
               name={userInfo.user.username}
               description={userInfo.user.description}
               picture={userInfo.user.picture}
+              showUserButtons={showUserButtons}
               onDeleteButtonClick={handleDeleteButtonClick}
               onDescriptionInput={handleDescriptionInput}
               onDescriptionSet={handleDescriptionSet}
