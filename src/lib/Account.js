@@ -8,5 +8,14 @@ export const Account = {
         const details = await response.json();
 
         return details.isNull ? null : details;
+    },
+    
+    async logout() {
+        const details = await this.getDetails();
+        const id = details.id;
+
+        await fetch(`/api/account/logout/${id}`, {
+            method: 'post'
+        });
     }
 };

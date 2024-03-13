@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Account } from '@/lib/Account';
-import { TempState } from '@/lib/placeholder/tempState';
 
 const Profile = () => {
     const [account, setAccount] = useState(null);
 
-    const handleLogOutClick = () => {
-        TempState.set('loggedIn', false);
-        window.location.replace("/");
+    const handleLogOutClick = async () => {
+        if (account === null) {
+            return;
+        }
+
+        await Account.logout();
+        location.replace('/');
+        location.reload();
     };
 
     useEffect(() => {
@@ -18,6 +22,7 @@ const Profile = () => {
             const isLoggedIn = await Account.isLoggedIn();
 
             if (!isLoggedIn) {
+                setAccount(null);
                 return;
             }
 

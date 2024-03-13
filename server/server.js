@@ -199,6 +199,8 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
 
 apiRouter.get('/account/logincheck', async (req, res, next) => {
   try {
+    console.log(loggedInUsername);
+
     if (!loggedInUsername) {
       res.status(200).json({ isNull: true });
       return next();
@@ -263,6 +265,15 @@ apiRouter.post("/account/signup", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+apiRouter.post('/account/logout/:id', async (req, res) => {
+  try {
+    setLoggedInUser(null);
+    res.status(200).send();
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }  
 });
 
 apiRouter.post("/posts/write", isAuth, async (req, res) => {
