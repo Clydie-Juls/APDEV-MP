@@ -25,6 +25,8 @@ const CommentBody = ({
   nestedUserName,
   paragraph,
   nestedParagraph,
+  likes,
+  dislikes,
   isReply,
   isOwner,
   onDeleteBtnClick,
@@ -71,7 +73,7 @@ const CommentBody = ({
       </CardContent>
 
       <CardFooter className="flex gap-4">
-        <RateButtons likes={50} dislikes={10} horizontal />
+        <RateButtons likes={likes} dislikes={dislikes} horizontal />
         <div>
           <Button
             variant="ghost"
