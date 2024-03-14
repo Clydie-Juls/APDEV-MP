@@ -14,15 +14,16 @@ import AnimBackground from "@/components/custom/animBackground";
 import PostBody from "@/components/custom/postBody";
 import CommentBody from "@/components/custom/commentBody";
 import PostHeader from "@/components/custom/postHeader";
-import { TempUsers, TempComments } from "@/lib/placeholder/mockReq";
+import { Account } from "@/lib/Account";
 import { useParams } from "react-router";
 
 const Post = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [whatToDelete, setWhatToDelete] = useState();
+  const [account, setAccount] = useState(null);
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [poster, setPoster] = useState(null); 
+  const [poster, setPoster] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -30,41 +31,67 @@ const Post = () => {
       try {
         const response = await fetch(`/api/posts/${id}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch post');
+          throw new Error("Failed to fetch post");
         }
         const postData = await response.json();
         setPost(postData);
-        
+
         const posterInfo = await fetchUserById(postData.post.posterId);
         setPoster(posterInfo);
       } catch (error) {
-        console.error('Error fetching post:', error);
+        console.error("Error fetching post:", error);
       }
     };
 
+    const fetchCommentsData = async () => {
+      try {
+        const response = await fetch(`/api/posts/${id}/comments`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch post");
+        }
+        const commentsData = await response.json();
+        setComments(commentsData);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      }
+    };
+
+    const checkLoginStatus = async () => {
+      const isLoggedIn = await Account.isLoggedIn();
+      if (!isLoggedIn) {
+        setAccount(null);
+        return;
+      }
+
+      const accountDetails = await Account.getDetails();
+      setAccount(accountDetails);
+    };
+
     fetchPostData();
+    fetchCommentsData();
+    checkLoginStatus();
   }, [id]);
 
   const fetchUserById = async (userId) => {
     try {
       const response = await fetch(`/api/users/${userId}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch user');
+        throw new Error("Failed to fetch user");
       }
       const userData = await response.json();
       return userData;
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error("Error fetching user:", error);
       return null;
     }
   };
 
   const handleDelete = async () => {
     await fetch(`/api/posts/${id}`, {
-      method: 'delete'
+      method: "delete",
     });
     setConfirmDelete(false);
-    location.replace('/');
+    location.replace("/");
   };
 
   return (
@@ -79,53 +106,57 @@ const Post = () => {
               profile={poster.picture}
               userName={poster.username}
             />
-            <PostBody 
-              id={post.post._id} 
-              tags={post.post.tags} 
-              paragraph={post.post.body} 
-              onDeleteButtonClick={() => { setConfirmDelete(true); setWhatToDelete('post'); }}
+            <PostBody
+              id={post.post._id}
+              tags={post.post.tags}
+              paragraph={post.post.body}
+              onDeleteButtonClick={() => {
+                setConfirmDelete(true);
+                setWhatToDelete("post");
+              }}
             />
 
-            {comments.map((c) => {
-              const commenter = TempUsers.getInfoFromId(c.commenterId);
-              const isReply = c.commentRepliedToId !== null;
-
+            {comments.map((comment) => {
+              const isReply = comment.commentRepliedToId;
               if (isReply) {
-                const commentRepliedTo = TempComments.getFromId(
-                  c.commentRepliedToId
-                );
-                const commentRepliedToCommenter = TempUsers.getInfoFromId(
-                  commentRepliedTo.commenterId
-                );
-
                 return (
                   <CommentBody
-                    id={c.id}
-                    key={c.id}
-                    posterId={c.commenterId}
-                    profile={commenter.picture}
-                    userName={commenter.name}
-                    paragraph={c.body}
-                    isOwner={c.commenterId === 0}
+                    id={comment._id}
+                    key={comment._id}
+                    posterId={comment.commenterId._id}
+                    profile={comment.commenterId.picture}
+                    userName={comment.commenterId.username}
+                    paragraph={comment.body}
+                    isOwner={comment.commenterId === account?._id}
                     isReply={isReply}
-                    onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
-                    nestedUserName={commentRepliedToCommenter.name}
-                    nestedProfile={commentRepliedToCommenter.picture}
-                    nestedParagraph={commentRepliedTo.body}
+                    onDeleteBtnClick={() => {
+                      setConfirmDelete(true);
+                      setWhatToDelete("comment");
+                    }}
+                    nestedUserName={
+                      comment.commentRepliedToId.commenterId.username
+                    }
+                    nestedProfile={
+                      comment.commentRepliedToId.commenterId.picture
+                    }
+                    nestedParagraph={comment.commentRepliedToId.body}
                   />
                 );
               } else {
                 return (
                   <CommentBody
-                    id={c.id}
-                    key={c.id}
-                    posterId={c.commenterId}
-                    profile={commenter.picture}
-                    userName={commenter.name}
-                    paragraph={c.body}
-                    isOwner={c.commenterId === 0}
+                    id={comment._id}
+                    key={comment._id}
+                    posterId={comment.commenterId._id}
+                    profile={comment.commenterId.picture}
+                    userName={comment.commenterId.username}
+                    paragraph={comment.body}
+                    isOwner={comment.commenterId._id === account?._id}
                     isReply={isReply}
-                    onDeleteBtnClick={() => { setConfirmDelete(true); setWhatToDelete('comment'); }}
+                    onDeleteBtnClick={() => {
+                      setConfirmDelete(true);
+                      setWhatToDelete("comment");
+                    }}
                   />
                 );
               }
@@ -142,11 +173,7 @@ const Post = () => {
                 Are you sure you want to delete this {whatToDelete}?
               </p>
               <div className="flex justify-between">
-                <Button
-                  onClick={() => setConfirmDelete(false)}
-                >
-                  Cancel
-                </Button>
+                <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
                 <Button onClick={handleDelete} variant="destructive">
                   Delete
                 </Button>

@@ -19,16 +19,16 @@ mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 
 const passwordMatches = async (password, hash) => {
   try {
-    console.log('Input Password:', password);
-    console.log('Hash from DB:', hash);
+    console.log("Input Password:", password);
+    console.log("Hash from DB:", hash);
 
     const result = await bcrypt.compare(password, hash);
-    console.log('Password Matches:', result);
-    
+    console.log("Password Matches:", result);
+
     return result;
   } catch (error) {
-    console.error('Error comparing passwords:', error);
-    throw new Error('Error comparing passwords', hash);
+    console.error("Error comparing passwords:", error);
+    throw new Error("Error comparing passwords", hash);
   }
 };
 
@@ -36,33 +36,37 @@ const passwordMatches = async (password, hash) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Images 
+// Images
 
-const upload = multer({ dest: 'server/images/' });
-app.use('/images', express.static('server/images'));
+const upload = multer({ dest: "server/images/" });
+app.use("/images", express.static("server/images"));
 
-apiRouter.post('/users/picture/:id', upload.single('file'), async (req, res) => {
-  try {
-    const pictureLink = `http://localhost:3000/images/${req.file.filename}`;
+apiRouter.post(
+  "/users/picture/:id",
+  upload.single("file"),
+  async (req, res) => {
+    try {
+      const pictureLink = `http://localhost:3000/images/${req.file.filename}`;
 
-    const { nModified } = await User.updateOne(
-      {
-        _id: req.params.id,
-      },
-      {
-        picture: pictureLink
+      const { nModified } = await User.updateOne(
+        {
+          _id: req.params.id,
+        },
+        {
+          picture: pictureLink,
+        }
+      );
+
+      if (nModified === 0) {
+        res.status(204);
+      } else {
+        res.status(200).send(pictureLink);
       }
-    );
-
-    if (nModified === 0) {
-      res.status(204);
-    } else {
-      res.status(200).send(pictureLink);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
     }
-  } catch (e) {
-    res.status(500).json({ error: e.message });
   }
-});
+);
 
 // GET HTTP requests
 apiRouter.get("/users/:id", async (req, res) => {
@@ -95,7 +99,7 @@ apiRouter.get("/users/:id", async (req, res) => {
 apiRouter.get("/posts/:id", isAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "The post does not exist." });
       return;
@@ -103,9 +107,25 @@ apiRouter.get("/posts/:id", isAuth, async (req, res) => {
 
     // post db fetch
     const post = await Post.findById(id).lean();
-    const comments = await Comment.find({ postId: id }).lean(); 
 
-    res.status(200).json({ post, comments });
+    res.status(200).json({ post });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+apiRouter.get("/comments/:id", isAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "The comment does not exist." });
+      return;
+    }
+
+    const comment = await Comment.findById(id).lean();
+
+    res.status(200).json(comment);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -115,9 +135,9 @@ app.get("/api/posts/recent", async (req, res) => {
   try {
     const posts = await Post.find().sort({ uploadDate: -1 });
 
-    const formattedPosts = posts.map(post => ({
-      ...post.toObject(), 
-      uploadDate: formatDate(post.uploadDate) 
+    const formattedPosts = posts.map((post) => ({
+      ...post.toObject(),
+      uploadDate: formatDate(post.uploadDate),
     }));
 
     res.status(200).json(formattedPosts);
@@ -129,8 +149,8 @@ app.get("/api/posts/recent", async (req, res) => {
 
 function formatDate(date) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -141,9 +161,9 @@ app.get("/api/posts/popular", async (req, res) => {
         $addFields: {
           totalLikes: { $size: "$reactions.likerIds" },
           totalDislikes: { $size: "$reactions.dislikerIds" },
-        }
+        },
       },
-      { $sort: { totalLikes: -1 } }, 
+      { $sort: { totalLikes: -1 } },
     ]);
 
     res.status(200).json(popularPosts);
@@ -204,7 +224,7 @@ apiRouter.get("/posts/search", async (req, res) => {
   }
 });
 
-apiRouter.get("/posts/:id/comments", async (req, res) => {
+apiRouter.get("/posts/:postId/comments", async (req, res) => {
   try {
     const { postId } = req.params;
 
@@ -213,8 +233,28 @@ apiRouter.get("/posts/:id/comments", async (req, res) => {
       return;
     }
 
-    const comments = await Comment.find({ postId }).lean();
-
+    const comments = await Comment.find({ postId })
+      .populate("commenterId", "username picture")
+      .populate({
+        path: "commentRepliedToId",
+        select: "body commenterId",
+        populate: {
+          path: "commenterId",
+          model: "User",
+          select: "username picture",
+        },
+      })
+      // .updateMany(
+      //   {},
+      //   {
+      //     $rename: {
+      //       commenterId: "commenter",
+      //       commentRepliedToId: "commentRepliedTo",
+      //     },
+      //   }
+      // )
+      .lean();
+    console.log(comments);
     res.status(200).json(comments);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -243,7 +283,7 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
   }
 });
 
-apiRouter.get('/account/logincheck', async (req, res, next) => {
+apiRouter.get("/account/logincheck", async (req, res, next) => {
   try {
     console.log(loggedInUsername);
 
@@ -253,45 +293,51 @@ apiRouter.get('/account/logincheck', async (req, res, next) => {
     }
 
     const userInfo = await User.findOne({
-      username: { $regex: new RegExp(loggedInUsername, "i") }
+      username: { $regex: new RegExp(loggedInUsername, "i") },
     });
 
     res.status(200).json({
       _id: userInfo.id,
       username: userInfo.username,
-      picture: userInfo.picture
-    });    
+      picture: userInfo.picture,
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
 apiRouter.post("/account/login", async (req, res) => {
-  console.log('Request Body:', req.body);
+  console.log("Request Body:", req.body);
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username: { $regex: new RegExp(username, "i") } });
+    const user = await User.findOne({
+      username: { $regex: new RegExp(username, "i") },
+    });
 
     if (!user) {
-      console.log('User not found');
-      return res.status(401).send('Login not successful. Invalid username or password.');
+      console.log("User not found");
+      return res
+        .status(401)
+        .send("Login not successful. Invalid username or password.");
     }
 
-    const hashedPassword = user.password; 
-    console.log('Hashed Password from DB:', hashedPassword);
+    const hashedPassword = user.password;
+    console.log("Hashed Password from DB:", hashedPassword);
 
     const passwordMatch = await passwordMatches(password, hashedPassword);
 
     if (!passwordMatch) {
-      console.log('Password does not match');
-      return res.status(401).send('Login not successful. Invalid username or password.');
+      console.log("Password does not match");
+      return res
+        .status(401)
+        .send("Login not successful. Invalid username or password.");
     }
 
     setLoggedInUser(username);
     return res.status(200).send("Login successful");
   } catch (e) {
-    console.error('Error logging in:', e);
+    console.error("Error logging in:", e);
     return res.status(500).json({ error: e.message });
   }
 });
@@ -307,19 +353,18 @@ apiRouter.post("/account/signup", async (req, res) => {
 
     user.save();
     res.status(201).redirect("/");
-
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-apiRouter.post('/account/logout/:id', async (req, res) => {
+apiRouter.post("/account/logout/:id", async (req, res) => {
   try {
     setLoggedInUser(null);
     res.status(200).send();
   } catch (e) {
     res.status(500).json({ error: e.message });
-  }  
+  }
 });
 
 apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {

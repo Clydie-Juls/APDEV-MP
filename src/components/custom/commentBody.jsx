@@ -28,7 +28,7 @@ const CommentBody = ({
   isOwner,
   onDeleteBtnClick,
 }) => {
-  console.log(id);
+  console.log("rop", id);
   return (
     <Card className="mb-2">
       <CardHeader className="flex flex-row">
