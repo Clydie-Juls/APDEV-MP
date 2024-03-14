@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,26 +9,26 @@ import Header from "@/components/custom/header";
 import PostCard from "@/components/custom/postCard";
 import CommentCard from "@/components/custom/commentCard";
 import ProfileSide from "@/components/custom/profileSide";
-import { Account } from '@/lib/Account';
+import { Account } from "@/lib/Account";
 
 const User = () => {
   const { id } = useParams();
 
   const [userInfo, setUserInfo] = useState({
     user: {
-      name: '',
-      description: '',
+      name: "",
+      description: "",
       picture: null,
     },
     posts: [],
-    comments: []
+    comments: [],
   });
 
   const [showUserButtons, setShowUserButtons] = useState(false);
-  
+
   useEffect(() => {
     if (!id) {
-      location.replace('/');
+      location.replace("/");
       return;
     }
 
@@ -47,7 +47,7 @@ const User = () => {
       if (!(await Account.isLoggedIn())) {
         return;
       }
-      
+
       const { _id } = await Account.getDetails();
       setShowUserButtons(_id === id);
     };
@@ -58,32 +58,32 @@ const User = () => {
 
   async function handleDeleteButtonClick() {
     await fetch(`/api/users/${id}`, {
-      method: 'delete'
+      method: "delete",
     });
-    
-    location.replace('/');
+
+    location.replace("/");
   }
 
   function handleDescriptionInput(newDescription) {
-    setUserInfo(ui => ({
+    setUserInfo((ui) => ({
       ...ui,
       user: {
         ...ui.user,
-        description: newDescription
-      }
+        description: newDescription,
+      },
     }));
   }
 
   async function handleDescriptionSet(newDescription) {
     await fetch(`/api/users/edit/${id}`, {
-      method: 'put',
+      method: "put",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        description: newDescription
-      })
-    })
+        description: newDescription,
+      }),
+    });
   }
 
   function handleInfoEditButtonClick() {
@@ -92,18 +92,18 @@ const User = () => {
 
   async function handlePictureUpload(formData) {
     const response = await fetch(`/api/users/picture/${id}`, {
-      method: 'post',
+      method: "post",
       body: formData,
     });
 
     const pictureLink = await response.text();
 
-    setUserInfo(ui => ({
+    setUserInfo((ui) => ({
       ...ui,
       user: {
         ...ui.user,
-        picture: pictureLink
-      }
+        picture: pictureLink,
+      },
     }));
   }
 
@@ -112,11 +112,11 @@ const User = () => {
       <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
         <Header />
 
-        {userInfo === null ? 
+        {userInfo === null ? (
           <main className="px-16 py-5 flex justify-center items-center">
             <p className="text-3xl">The user does not exist.</p>
           </main>
-        :
+        ) : (
           <main className="px-16 py-5 grid grid-cols-[auto_1fr] gap-5">
             <ProfileSide
               name={userInfo.user.username}
@@ -138,9 +138,9 @@ const User = () => {
 
               <TabsContent value="posts" className="mt-3">
                 <CardList displayCount={4}>
-                  {userInfo.posts.map((p) => (
-                    <PostCard key={p._id} {...p} />
-                  ))}
+                  {userInfo.posts.map((p) => {
+                    return <PostCard key={p._id} {...p} id={p._id} />;
+                  })}
                 </CardList>
               </TabsContent>
 
@@ -153,7 +153,7 @@ const User = () => {
               </TabsContent>
             </Tabs>
           </main>
-        }        
+        )}
       </div>
     </AnimBackground>
   );
