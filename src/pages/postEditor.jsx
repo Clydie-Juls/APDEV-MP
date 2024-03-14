@@ -5,20 +5,50 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TagInput from "@/components/custom/tagInput";
 import { useParams } from "react-router";
-import { TempPosts } from "@/lib/placeholder/mockReq";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const PostEditor = ({ isWritePost }) => {
-  const params = useParams();
-
-  const id = isWritePost ? params : null;
-  const postToEdit = TempPosts.getFromId(Number(id));
-
+  const { id } = useParams();
   const formRef = useRef();
-  const [tags, setTags] = useState(isWritePost ? ["Technology", "Programming"] : postToEdit.tags);
+
+  const [postInfo, setPostInfo] = useState({
+    title: '',
+    body: '',
+    tags: ["Technology", "Programming"]
+  });
+
+  useEffect(() => {
+    if (!id) {
+      location.replace('/');
+      return;
+    }
+
+    const fetchData = async () => {
+      const response = await fetch(`/api/posts/${id}`);
+
+      if (response.status === 404) {
+        setPostInfo(null);
+        return;
+      }
+
+      const { post } = await response.json();
+      setPostInfo({
+        title: post.title,
+        body: post.body,
+        tags: post.tags
+      });
+    };
+
+    if (!isWritePost) {
+      fetchData();
+    }
+  }, [id, isWritePost]);
 
   function handleTagsChange(newTags) {
-    setTags(newTags);
+    setPostInfo(pi => ({
+      ...pi,
+      tags: newTags
+    }))
   }
 
   async function handleFormSubmit(e) {
@@ -26,15 +56,15 @@ const PostEditor = ({ isWritePost }) => {
     const formElem = formRef.current;
     
     const formBody = new FormData(formElem);
-    tags.forEach(t => formBody.append('tags[]', t));
+    postInfo.tags.forEach(t => formBody.append('tags[]', t));
 
     const postUrl = (id === null) ? 
-      await fetch('/api/writepost', {
+      await fetch('/api/posts/write', {
         method: 'post',
         body: formBody
       })
     :
-      await fetch(`/api/editpost/${id}`, {
+      await fetch(`/api/posts/edit/${id}`, {
         method: 'put',
         body: formBody
       });
@@ -70,7 +100,13 @@ const PostEditor = ({ isWritePost }) => {
                 placeholder="Bro Richie Finally Created GPT 5.0"
               />
             ) : (
-              <Input className="bg-black" id="title" name="title" value={postToEdit.title} />
+              <Input 
+                className="bg-black" 
+                id="title" 
+                name="title" 
+                value={postInfo.title}
+                onInput={(e) => setPostInfo(pi => ({ ...pi, title: e.target.value }))}
+              />
             )}
 
             <p className="text-sm text-muted-foreground">
@@ -80,7 +116,7 @@ const PostEditor = ({ isWritePost }) => {
           </div>
           <div className="flex flex-col gap-3 w-full">
             <Label htmlFor="tags">Tags</Label>
-            <TagInput tags={tags} onChange={handleTagsChange} />
+            <TagInput tags={postInfo.tags} onChange={handleTagsChange} />
             <p className="text-sm text-muted-foreground">
               Add some tags to let people know what your post is about.
             </p>
@@ -99,7 +135,8 @@ const PostEditor = ({ isWritePost }) => {
                 className="bg-black"
                 id="description"
                 name="body"
-                value={postToEdit.body}
+                value={postInfo.body}
+                onInput={(e) => setPostInfo(pi => ({ ...pi, body: e.target.value }))}
               />
             )}
 
