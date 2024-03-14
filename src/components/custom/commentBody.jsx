@@ -28,8 +28,13 @@ const CommentBody = ({
   isReply,
   isOwner,
   onDeleteBtnClick,
+  likerIds,
+  dislikerIds
 }) => {
   console.log("rop", id);
+  
+  const likes = likerIds.length;
+  const dislikes = dislikerIds.length;
 
   return (
     <Card className="mb-2">
@@ -71,7 +76,7 @@ const CommentBody = ({
       </CardContent>
 
       <CardFooter className="flex gap-4">
-        <RateButtons likes={50} dislikes={10} horizontal />
+        <RateButtons likes={likes} dislikes={dislikes} horizontal />
         <div>
           <Button
             variant="ghost"

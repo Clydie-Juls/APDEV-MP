@@ -139,6 +139,8 @@ const Post = () => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
                     }}
+                    likerIds={comment.reactions.likerIds} // Pass likerIds
+                    dislikerIds={comment.reactions.dislikerIds} // Pass dislikerIds
                     nestedUserName={
                       comment.commentRepliedToId.commenterId.username
                     }
@@ -164,6 +166,8 @@ const Post = () => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
                     }}
+                    likerIds={comment.reactions.likerIds} // Pass likerIds
+                    dislikerIds={comment.reactions.dislikerIds} // Pass dislikerIds
                   />
                 );
               }
