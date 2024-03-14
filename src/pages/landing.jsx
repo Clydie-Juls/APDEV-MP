@@ -93,7 +93,6 @@ const Landing = () => {
                       author={post.author}
                       body={post.body}
                       uploadDate={post.uploadDate}
-                      views={post.views}
                       likes={post.likes}
                       dislikes={post.dislikes}
                       userRating={post.userRating}
@@ -118,7 +117,6 @@ const Landing = () => {
                       author={post.author}
                       body={post.body}
                       uploadDate={post.uploadDate}
-                      views={post.views}
                       likes={post.likes}
                       dislikes={post.dislikes}
                       userRating={post.userRating}

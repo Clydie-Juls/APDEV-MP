@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { ValidateInt } from "./validators/intValidator.js";
 import { ReactionSchema } from "./shared/reaction.js";
 
 const PostSchema = new mongoose.Schema({
@@ -23,11 +22,6 @@ const PostSchema = new mongoose.Schema({
   uploadDate: {
     type: Date,
     default: () => Date.now(),
-  },
-  views: {
-    type: Number,
-    default: 0,
-    validate: ValidateInt,
   },
   reactions: ReactionSchema,
   tags: [String],
