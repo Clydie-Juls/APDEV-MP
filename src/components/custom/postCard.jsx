@@ -17,7 +17,7 @@ const PostCard = ({
     onDislikeClick
 }) => {
     return (    
-        <div className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-border rounded-xl bg-zinc-950 hover:bg-zinc-900'>
+        <div className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] items-center border-2 border-border rounded-xl bg-zinc-950 hover:bg-zinc-900'>
             <a className='overflow-hidden flex flex-col gap-2' href={`/post/${id}`}>
                 <h3 className='text-xl font-bold'>{title}</h3>
 
