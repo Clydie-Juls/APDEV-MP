@@ -111,8 +111,8 @@ export function LoginForm() {
       </CardContent>
       <CardFooter className="flex flex-col gap-6">
         <p className="text-muted-foreground mt-6 text-sm">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-indigo-500">
+          Don&apos;t have an account?{" "}
+          <Link to="/signup" className="text-green-600">
             Sign up
           </Link>
         </p>
