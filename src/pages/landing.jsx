@@ -17,16 +17,23 @@ const Landing = () => {
     try {
       const response = await fetch('/api/posts/recent');
       if (!response.ok) {
-        throw new Error('Failed to fetch posts');
+        throw new Error('Failed to fetch recent posts');
       }
       const data = await response.json();
-      setPosts(data);
+      
+      const formattedRecentPosts = data.map(post => ({
+        ...post,
+        likes: post.likerIds.length, 
+        dislikes: post.dislikerIds.length 
+      }));
+      
+      setPosts(formattedRecentPosts);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error fetching recent posts:', error);
       setLoading(false);
     }
-  };
+  };  
 
   const fetchPopularPosts = async () => {
     try {
@@ -35,7 +42,12 @@ const Landing = () => {
         throw new Error('Failed to fetch popular posts');
       }
       const data = await response.json();
-      setPopularPosts(data);
+      const formattedPopularPosts = data.map(post => ({
+        ...post,
+        likes: post.likerIds.length, 
+        dislikes: post.dislikerIds.length 
+      }));
+      setPopularPosts(formattedPopularPosts);
       setLoadingPopular(false);
     } catch (error) {
       console.error('Error fetching popular posts:', error);

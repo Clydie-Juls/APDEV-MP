@@ -29,17 +29,11 @@ const Post = () => {
     const fetchPostData = async () => {
       try {
         const response = await fetch(`/api/posts/${id}`);
-        console.log('Response:', response);
         if (!response.ok) {
           throw new Error('Failed to fetch post');
         }
         const postData = await response.json();
-        console.log('Post data:', postData);
         setPost(postData);
-
-        console.log('Post title:', postData.post.title);
-        console.log('Post body:', postData.post.body);
-        console.log('Post tags:', postData.post.tags);
         
         const posterInfo = await fetchUserById(postData.post.posterId);
         setPoster(posterInfo);
