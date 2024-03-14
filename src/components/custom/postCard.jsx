@@ -29,7 +29,7 @@ const PostCard = ({
 
                 <div className='flex gap-2'>
                     <p className='text-sm'>By {author}</p>
-                    <p className='text-sm'>Uploaded {uploadDate}</p>
+                    <p className='text-sm'>Uploaded {new Date(uploadDate).toISOString().slice(0,10)}</p>
                 </div>
             </a>
 

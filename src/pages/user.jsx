@@ -40,7 +40,14 @@ const User = () => {
         return;
       }
 
-      setUserInfo(await response.json());
+      const info = await response.json();
+      setUserInfo({
+        ...info,
+        posts: await Promise.all(info.posts.map(async p => {
+          const author = (await (await fetch(`/api/users/${p.posterId}`)).json()).user.username;
+          return { ...p, author }
+        }))
+      });
     };
 
     const checkLogin = async () => {
@@ -102,7 +109,7 @@ const User = () => {
       ...ui,
       user: {
         ...ui.user,
-        picture: pictureLink
+        picture: pictureLink,
       }
     }));
   }
@@ -139,7 +146,19 @@ const User = () => {
               <TabsContent value="posts" className="mt-3">
                 <CardList displayCount={4}>
                   {userInfo.posts.map((p) => (
-                    <PostCard key={p._id} {...p} />
+                    <PostCard 
+                      key={p._id} 
+                      id={p._id} 
+                      title={p.title} 
+                      author={p.author}
+                      body={p.body}
+                      uploadDate={p.uploadDate}
+                      likes={p.reactions.likerIds.length}
+                      dislikes={p.reactions.dislikerIds.length}
+                      userRating={''}
+                      tags={p.tags}
+                      disableReactions={true}
+                    />
                   ))}
                 </CardList>
               </TabsContent>
