@@ -34,8 +34,35 @@ const passwordMatches = async (password, hash) => {
 
 // middleware setup
 app.use(express.json());
-app.use(multer().array());
 app.use(express.urlencoded({ extended: true }));
+
+// Images 
+
+const upload = multer({ dest: 'server/images/' });
+app.use('/images', express.static('server/images'));
+
+apiRouter.post('/users/picture/:id', upload.single('file'), async (req, res) => {
+  try {
+    const pictureLink = `http://localhost:3000/images/${req.file.filename}`;
+
+    const { nModified } = await User.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        picture: pictureLink
+      }
+    );
+
+    if (nModified === 0) {
+      res.status(204);
+    } else {
+      res.status(200).send(pictureLink);
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // GET HTTP requests
 apiRouter.get("/users/:id", async (req, res) => {
@@ -197,7 +224,7 @@ apiRouter.get("/posts/:id/comments", async (req, res) => {
 // POST and PUT HTTP requests
 apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
   try {
-    const { username, password, description, picture } = req.body;
+    const { username, password, description } = req.body;
 
     const { nModified } = await User.updateOne(
       {
@@ -207,7 +234,6 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
         ...(username && { username }),
         ...(password && { password }),
         ...(description && { description }),
-        ...(picture && { picture }),
       }
     );
 
@@ -216,7 +242,6 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
 
 apiRouter.post("/account/login", async (req, res) => {
   console.log('Request Body:', req.body);
@@ -265,7 +290,7 @@ apiRouter.post("/account/signup", async (req, res) => {
   }
 });
 
-apiRouter.post("/posts/write", isAuth, async (req, res) => {
+apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {
   try {
     const poster = await User.findOne({ username: loggedInUsername });
 

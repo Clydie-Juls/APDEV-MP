@@ -11,7 +11,8 @@ const ProfileSide = ({
   onDeleteButtonClick,
   onDescriptionInput,
   onDescriptionSet,
-  onInfoEditButtonClick
+  onInfoEditButtonClick,
+  onPictureUpload
 }) => {
   const descElemRef = useRef();
 
@@ -19,11 +20,18 @@ const ProfileSide = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleAvatarClick = () => {
-    // TODO: Actually reflect the avatar change.
     const input = document.createElement('input');
     input.type = 'file';
+    input.name = 'file';
     input.click();
-  };
+
+    input.addEventListener('change', () => {
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      
+      onPictureUpload(formData);
+    });
+};
 
   const handleDelete = () => {
     onDeleteButtonClick();
@@ -51,12 +59,12 @@ const ProfileSide = ({
 
   return (
     <div 
-      className='w-[35ch] min-h-100 p-5 flex flex-col items-stretch gap-5 border-2 border-border rounded-xl bg-zinc-950'
+      className='w-[35ch] min-h-100 p-5 flex flex-col items-stretch gap-8 border-2 border-border rounded-xl bg-zinc-950'
     >
       <div className='flex flex-col gap-2 items-center'>
-        <Avatar className='relative cursor-pointer min-h-40 w-auto' onClick={handleAvatarClick}>
+        <Avatar className='relative cursor-pointer min-h-36 min-w-36 w-auto' onClick={handleAvatarClick}>
             <AvatarImage src={picture} />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback className="text-xl">{name && name[0]}</AvatarFallback>
             <button className='absolute inset-0 flex justify-center items-center opacity-0 hover:bg-zinc-700 hover:opacity-80'>
               <Pencil size={30} />
             </button>
