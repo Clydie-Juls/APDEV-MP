@@ -306,6 +306,7 @@ apiRouter.post("/account/signup", async (req, res) => {
     });
 
     user.save();
+    setLoggedInUser(req.body.username);
     res.status(201).redirect("/");
 
   } catch (e) {

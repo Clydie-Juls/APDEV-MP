@@ -57,8 +57,8 @@ const PostEditor = ({ isWritePost }) => {
     
     const formBody = new FormData(formElem);
     postInfo.tags.forEach(t => formBody.append('tags[]', t));
-
-    const postUrl = (id === null) ? 
+    
+    const postUrl = (!id) ? 
       await fetch('/api/posts/write', {
         method: 'post',
         body: formBody
@@ -68,7 +68,7 @@ const PostEditor = ({ isWritePost }) => {
         method: 'put',
         body: formBody
       });
-
+      
     location.replace(await postUrl.text());
   }
 
