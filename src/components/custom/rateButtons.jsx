@@ -38,7 +38,7 @@ const RateButtons = ({
                     <Button 
                         className='flex gap-3 items-center border-none text-zinc-400' 
                         variant="ghost"
-                        onLikeClick={onLikeClick}
+                        onClick={onLikeClick}
                     >
                         {likes}
                         
@@ -51,7 +51,7 @@ const RateButtons = ({
                     <Button 
                         className='flex gap-3 items-center border-none text-zinc-400' 
                         variant="ghost"
-                        onDislikeClick={onDislikeClick}
+                        onClick={onDislikeClick}
                     >
                         {dislikes}
 
