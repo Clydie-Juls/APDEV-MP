@@ -1,10 +1,9 @@
 import Header from "@/components/custom/header";
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -17,6 +16,8 @@ import PostHeader from "@/components/custom/postHeader";
 import { Account } from "@/lib/Account";
 import { useParams } from "react-router";
 
+const DISPLAY_COUNT = 10;
+
 const Post = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [whatToDelete, setWhatToDelete] = useState();
@@ -25,6 +26,9 @@ const Post = () => {
   const [comments, setComments] = useState([]);
   const [poster, setPoster] = useState(null);
   const { id } = useParams();
+
+  const [page, setPage] = useState(0);
+  const maxPages = useMemo(() => Math.ceil(comments.length / DISPLAY_COUNT), [comments]);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -96,6 +100,17 @@ const Post = () => {
     location.replace("/");
   };
 
+  function gotoPrevPage() {
+    setPage(p => Math.max(0, p - 1));
+  }
+
+  function gotoNextPage() {
+      setPage(p => Math.min(p + 1, maxPages - 1));
+  }
+
+  function gotoPage(pageIndex) {
+      setPage(pageIndex);
+  }
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
@@ -121,7 +136,7 @@ const Post = () => {
               }}
             />
 
-            {comments.map((comment) => {
+            {comments.slice(page * DISPLAY_COUNT, page * DISPLAY_COUNT + DISPLAY_COUNT).map((comment) => {
               const isReply = comment.commentRepliedToId;
               if (isReply) {
                 return (
@@ -189,22 +204,19 @@ const Post = () => {
           </div>
         )}
 
-        {/* Pagination */}
-        <Pagination className="mt-4">
+        <Pagination>
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              {/* Make shown posts link based (item no. as param). */}
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
+              <PaginationItem>
+                  <PaginationPrevious onClick={gotoPrevPage} />
+              </PaginationItem>
+
+              {[...Array(maxPages)].map((_, i) =>
+                  <PaginationLink key={i} onClick={() => gotoPage(i)}>{i + 1}</PaginationLink>
+              )}
+
+              <PaginationItem>
+                  <PaginationNext onClick={gotoNextPage} />
+              </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>
