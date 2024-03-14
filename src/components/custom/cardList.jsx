@@ -7,6 +7,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Account } from '@/lib/Account';
 
 const CardList = ({ 
     children,
@@ -23,7 +24,11 @@ const CardList = ({
         setPage(p => Math.min(p + 1, maxPages - 1));
     }
 
-    function gotoPage(pageIndex) {
+    async function gotoPage(pageIndex) {
+        if (await Account.isLoggedIn() && pageIndex * displayCount >= 15) {
+            location.replace('/login');
+        }
+
         setPage(pageIndex);
     }
 
