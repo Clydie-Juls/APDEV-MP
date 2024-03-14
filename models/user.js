@@ -20,15 +20,8 @@ const UserSchema = new mongoose.Schema({
   },
   // Will implement default image later
   picture: {
-    type: mongoose.Schema.Types.Buffer,
-    contentType: String,
-    // TODO: FIX IT
-    // default: async function () {
-    //   const res = await fetch("https://github.com/shadcn.png");
-    //   const buffer = await res.arrayBuffer();
-    //   const data = buffer;
-    //   return data;
-    // },
+    type: String,
+    default: 'https://github.com/shadcn.png'
   },
 });
 
