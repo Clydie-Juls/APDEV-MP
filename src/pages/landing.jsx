@@ -9,9 +9,9 @@ import PostCardSkeleton from '@/components/custom/postCardSkeleton';
 import { Account } from '@/lib/Account';
 
 const Landing = () => {
-  const [recentPosts, setPosts] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingRecent, setLoadingRecent] = useState(true);
   const [loadingPopular, setLoadingPopular] = useState(true);
 
   const [enableWritePost, setEnableWritePost] = useState(false);
@@ -24,17 +24,27 @@ const Landing = () => {
       }
       const data = await response.json();
       
-      const formattedRecentPosts = data.map(post => ({
-        ...post,
-        likes: post.likerIds.length, 
-        dislikes: post.dislikerIds.length 
+      const formattedRecentPosts = await Promise.all(data.map(async (post) => {
+        const userResponse = await fetch(`/api/users/${post.posterId}`);
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user information');
+        }
+        const userData = await userResponse.json();
+        const username = userData.user.username;
+        
+        return {
+          ...post,
+          likes: post.likerIds.length, 
+          dislikes: post.dislikerIds.length,
+          author: username 
+        };
       }));
       
-      setPosts(formattedRecentPosts);
-      setLoading(false);
+      setRecentPosts(formattedRecentPosts);
+      setLoadingRecent(false);
     } catch (error) {
       console.error('Error fetching recent posts:', error);
-      setLoading(false);
+      setLoadingRecent(false);
     }
   };  
 
@@ -45,11 +55,23 @@ const Landing = () => {
         throw new Error('Failed to fetch popular posts');
       }
       const data = await response.json();
-      const formattedPopularPosts = data.map(post => ({
-        ...post,
-        likes: post.likerIds.length, 
-        dislikes: post.dislikerIds.length 
+      
+      const formattedPopularPosts = await Promise.all(data.map(async (post) => {
+        const userResponse = await fetch(`/api/users/${post.posterId}`);
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user information');
+        }
+        const userData = await userResponse.json();
+        const username = userData.user.username;
+        
+        return {
+          ...post,
+          likes: post.likerIds.length, 
+          dislikes: post.dislikerIds.length,
+          author: username 
+        };
       }));
+      
       setPopularPosts(formattedPopularPosts);
       setLoadingPopular(false);
     } catch (error) {
@@ -88,8 +110,8 @@ const Landing = () => {
               </Button>
             </div>
             <TabsContent value="recent">
-              <CardList displayCount={6}>
-                {loading ? (
+              <CardList>
+                {loadingRecent ? (
                   recentPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
                   ))
@@ -112,7 +134,6 @@ const Landing = () => {
               </CardList>
             </TabsContent>
             <TabsContent value="popular">
-              <CardList displayCount={6}>
                 {loadingPopular ? (
                   popularPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
