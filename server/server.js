@@ -146,10 +146,15 @@ app.get("/api/posts/popular", async (req, res) => {
       { $sort: { totalLikes: -1 } }, 
     ]);
 
-    res.status(200).json(popularPosts);
-  } catch (e) {
-    console.error("Error fetching popular posts:", e);
-    res.status(500).json({ error: e.message });
+    const formattedPopularPosts = popularPosts.map(post => ({
+      ...post,
+      uploadDate: formatDate(post.uploadDate)
+    }));
+
+    res.status(200).json(formattedPopularPosts);
+  } catch (error) {
+    console.error("Error fetching popular posts:", error);
+    res.status(500).json({ error: "Failed to fetch popular posts" });
   }
 });
 
