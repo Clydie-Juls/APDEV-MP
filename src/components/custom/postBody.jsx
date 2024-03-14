@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => {
+const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick, likes, dislikes }) => {
   useEffect(() => {
     console.log("Received id:", id);
     console.log("Received tags:", tags);
@@ -45,7 +45,7 @@ const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => 
       </CardContent>
 
       <CardFooter className="flex justify-start gap-5">
-        <RateButtons likes={50} dislikes={10} horizontal />
+        <RateButtons likes={likes} dislikes={dislikes} horizontal />
         <div>
           <Button
             variant="ghost"

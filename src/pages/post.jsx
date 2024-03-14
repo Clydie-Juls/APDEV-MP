@@ -96,6 +96,7 @@ const Post = () => {
     location.replace("/");
   };
 
+
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
       <Header />
@@ -108,10 +109,12 @@ const Post = () => {
               profile={poster.user.picture}
               userName={poster.user.username}
             />
-            <PostBody
-              id={post.post._id}
-              tags={post.post.tags}
-              paragraph={post.post.body}
+            <PostBody 
+              id={post.post._id} 
+              tags={post.post.tags} 
+              paragraph={post.post.body} 
+              likes={post.post.reactions.likerIds.length}
+              dislikes={post.post.reactions.dislikerIds.length}
               onDeleteButtonClick={() => {
                 setConfirmDelete(true);
                 setWhatToDelete("post");

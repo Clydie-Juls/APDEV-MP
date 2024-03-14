@@ -11,7 +11,10 @@ const PostCard = ({
     likes,
     dislikes,
     userRating,
-    tags
+    tags,
+    disableReactions,
+    onLikeClick,
+    onDislikeClick
 }) => {
     return (    
         <div className='px-7 py-5 overflow-hidden grid grid-cols-[1fr_auto] border-2 border-border rounded-xl bg-zinc-950 hover:bg-zinc-900'>
@@ -30,7 +33,14 @@ const PostCard = ({
                 </div>
             </a>
 
-            <RateButtons likes={likes} dislikes={dislikes} userRating={userRating} />
+            <RateButtons 
+                likes={likes} 
+                dislikes={dislikes} 
+                userRating={userRating} 
+                disableReactions={disableReactions}
+                onLikeClick={onLikeClick}
+                onDislikeClick={onDislikeClick}
+            />
         </div>
     );
 };
