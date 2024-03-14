@@ -128,6 +128,7 @@ const Landing = () => {
                       dislikes={post.dislikes}
                       userRating={post.userRating}
                       tags={post.tags}
+                      disableReactions={true}
                     />
                   ))
                 )}
@@ -152,6 +153,7 @@ const Landing = () => {
                       dislikes={post.dislikes}
                       userRating={post.userRating}
                       tags={post.tags}
+                      disableReactions={true}
                     />
                   ))
                 )}

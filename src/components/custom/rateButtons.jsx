@@ -6,25 +6,62 @@ const RateButtons = ({
     likes,
     dislikes,
     horizontal,
-    userRating
+    userRating,
+    disableReactions,
+    onLikeClick,
+    onDislikeClick
 }) => {
     return (
         <div className={'flex justify-center items-end ' + (horizontal ? 'gap-1 flex-row' : 'gap-5 flex-col')}>
-            <Button className='flex gap-3 items-center border-none text-zinc-400' variant="ghost">
-                {likes}
-                
-                <ThumbsUp 
-                    fill={userRating === 'like' ? '#fff' : ''}
-                    stroke="#fff"
-                />
-            </Button>
-            <Button className='flex gap-3 items-center border-none text-zinc-400' variant="ghost">
-                {dislikes}
-                <ThumbsDown 
-                    fill={userRating === 'dislike' ? '#fff' : ''} 
-                    stroke="#fff"
-                />
-            </Button>
+            {disableReactions ? 
+                <>
+                    <div className='p-3 flex gap-3 items-center text-zinc-400'>
+                        {likes}
+                        
+                        <ThumbsUp 
+                            fill={userRating === 'like' ? '#fff' : ''}
+                            stroke="#fff"
+                        />
+                    </div>
+                    <div className='p-3 flex gap-3 items-center text-zinc-400'>
+                        {dislikes}
+
+                        <ThumbsDown 
+                            fill={userRating === 'dislike' ? '#fff' : ''} 
+                            stroke="#fff"
+                        />
+                    </div>
+                </>
+
+            :
+                <>
+                    <Button 
+                        className='flex gap-3 items-center border-none text-zinc-400' 
+                        variant="ghost"
+                        onLikeClick={onLikeClick}
+                    >
+                        {likes}
+                        
+                        <ThumbsUp 
+                            fill={userRating === 'like' ? '#fff' : ''}
+                            stroke="#fff"
+                        />
+                    </Button>
+
+                    <Button 
+                        className='flex gap-3 items-center border-none text-zinc-400' 
+                        variant="ghost"
+                        onDislikeClick={onDislikeClick}
+                    >
+                        {dislikes}
+
+                        <ThumbsDown 
+                            fill={userRating === 'dislike' ? '#fff' : ''} 
+                            stroke="#fff"
+                        />
+                    </Button>
+                </>
+            }
         </div>
     );
 };
