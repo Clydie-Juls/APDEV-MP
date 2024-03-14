@@ -139,8 +139,8 @@ app.get("/api/posts/popular", async (req, res) => {
     const popularPosts = await Post.aggregate([
       {
         $addFields: {
-          totalLikes: { $size: "$likerIds" },
-          totalDislikes: { $size: "$dislikerIds" },
+          totalLikes: { $size: "$reactions.likerIds" },
+          totalDislikes: { $size: "$reactions.dislikerIds" },
         }
       },
       { $sort: { totalLikes: -1 } }, 

@@ -24,20 +24,10 @@ const Landing = () => {
       }
       const data = await response.json();
       
-      const formattedRecentPosts = await Promise.all(data.map(async (post) => {
-        const userResponse = await fetch(`/api/users/${post.posterId}`);
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user information');
-        }
-        const userData = await userResponse.json();
-        const username = userData.user.username;
-        
-        return {
-          ...post,
-          likes: post.likerIds.length, 
-          dislikes: post.dislikerIds.length,
-          author: username 
-        };
+      const formattedRecentPosts = data.map(post => ({
+        ...post,
+        likes: post.reactions.likerIds.length, 
+        dislikes: post.reactions.dislikerIds.length 
       }));
       
       setRecentPosts(formattedRecentPosts);
@@ -55,21 +45,10 @@ const Landing = () => {
         throw new Error('Failed to fetch popular posts');
       }
       const data = await response.json();
-      
-      const formattedPopularPosts = await Promise.all(data.map(async (post) => {
-        const userResponse = await fetch(`/api/users/${post.posterId}`);
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user information');
-        }
-        const userData = await userResponse.json();
-        const username = userData.user.username;
-        
-        return {
-          ...post,
-          likes: post.likerIds.length, 
-          dislikes: post.dislikerIds.length,
-          author: username 
-        };
+      const formattedPopularPosts = data.map(post => ({
+        ...post,
+        likes: post.reactions.likerIds.length, 
+        dislikes: post.reactions.dislikerIds.length 
       }));
       
       setPopularPosts(formattedPopularPosts);
@@ -110,7 +89,7 @@ const Landing = () => {
               </Button>
             </div>
             <TabsContent value="recent">
-              <CardList>
+              <CardList displayCount={6}>
                 {loadingRecent ? (
                   recentPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
@@ -134,6 +113,7 @@ const Landing = () => {
               </CardList>
             </TabsContent>
             <TabsContent value="popular">
+              <CardList displayCount={6}>
                 {loadingPopular ? (
                   popularPosts.map(post => (
                     <PostCardSkeleton key={post._id} />
