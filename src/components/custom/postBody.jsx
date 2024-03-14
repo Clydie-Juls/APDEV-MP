@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => {
+const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick, likes, dislikes }) => {
   useEffect(() => {
     console.log("Received id:", id);
     console.log("Received tags:", tags);
@@ -45,15 +45,15 @@ const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick }) => 
       </CardContent>
 
       <CardFooter className="flex justify-start gap-5">
-        <RateButtons likes={50} dislikes={10} horizontal />
+        <RateButtons likes={likes} dislikes={dislikes} horizontal />
         <div>
           <Button
             variant="ghost"
             style={{ width: "180px" }}
-            onClick={() => window.location.replace("/writecomment")}
+            onClick={() => location.replace(`/writecomment/${id}`)}
           >
             <Send style={{ width: "1.5rem", height: "1.5rem" }} />
-            <a href="/writecomment">Add a comment</a>
+            Add a comment
           </Button>
         </div>
         <div>

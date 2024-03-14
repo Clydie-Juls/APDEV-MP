@@ -1,6 +1,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const PostHeader = ({title, profile, userName}) => {
+  console.log(profile);
+
   return (
     <div className="my-4 max-w-[100vw] flex flex-col gap-3">
     <div className='mb-4 flex items-end gap-6'>
@@ -10,7 +12,7 @@ const PostHeader = ({title, profile, userName}) => {
         <a href="/user/0" className='flex items-center gap-2'>
           <Avatar>
             <AvatarImage src={profile} />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>{userName[0]}</AvatarFallback>
           </Avatar>
           {userName}
         </a>

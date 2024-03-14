@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 
 const CommentsPage = ({ isWriteComment, isReply }) => {
-  const { id } = useParams();
+  const { id, commentRepliedToId } = useParams();
   const [comment, setComment] = useState(null);
   const [formData, setFormData] = useState({
     body: "",
@@ -59,8 +59,9 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
           },
           // Might make id to be the id of the poster or idk
           body: JSON.stringify({
-            body: e.target.body.innerHTML,
+            body: e.target.body.value,
             postId: id,
+            ...(isReply ? { commentRepliedToId } : {})
           }),
         });
 
@@ -82,13 +83,13 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
 
         console.log("Response:", response);
 
-        if (!response.ok) {
+        if (!response.ok) { 
           const errorMessage = await response.text();
           throw new Error(errorMessage || "Login failed");
         }
       }
       console.warn("Yes");
-      window.location.replace("/");
+      window.location.replace(`/post/${id}`);
     } catch (error) {
       console.error("Error logging in:", error);
       alert(error.message || "Error logging in. Please try again.");
@@ -119,7 +120,6 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
         className="w-full"
         method={isWriteComment ? "POST" : "PUT"}
         onSubmit={handleSubmit}
-        ac
       >
         <div className="flex flex-col gap-8 items-center px-[10%] w-full ">
           <div className="flex flex-col gap-3 w-full py-8">
@@ -131,6 +131,7 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
                 className="bg-black"
                 placeholder="Type your message here."
                 id="description"
+                name="body"
                 required
               />
             ) : (

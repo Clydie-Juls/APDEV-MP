@@ -74,17 +74,19 @@ const Post = () => {
 
   const fetchUserById = async (userId) => {
     try {
+      console.log('Fetching user with ID:', userId);
       const response = await fetch(`/api/users/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch user");
       }
       const userData = await response.json();
+      console.log('User fetched successfully:', userData); 
       return userData;
     } catch (error) {
       console.error("Error fetching user:", error);
       return null;
     }
-  };
+  };  
 
   const handleDelete = async () => {
     await fetch(`/api/posts/${id}`, {
@@ -93,6 +95,7 @@ const Post = () => {
     setConfirmDelete(false);
     location.replace("/");
   };
+
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
@@ -103,13 +106,15 @@ const Post = () => {
           <>
             <PostHeader
               title={post.post.title}
-              profile={poster.picture}
-              userName={poster.username}
+              profile={poster.user.picture}
+              userName={poster.user.username}
             />
-            <PostBody
-              id={post.post._id}
-              tags={post.post.tags}
-              paragraph={post.post.body}
+            <PostBody 
+              id={post.post._id} 
+              tags={post.post.tags} 
+              paragraph={post.post.body} 
+              likes={post.post.reactions.likerIds.length}
+              dislikes={post.post.reactions.dislikerIds.length}
               onDeleteButtonClick={() => {
                 setConfirmDelete(true);
                 setWhatToDelete("post");
@@ -123,6 +128,7 @@ const Post = () => {
                   <CommentBody
                     id={comment._id}
                     key={comment._id}
+                    postId={comment.postId}
                     posterId={comment.commenterId._id}
                     profile={comment.commenterId.picture}
                     userName={comment.commenterId.username}
@@ -149,6 +155,7 @@ const Post = () => {
                   <CommentBody
                     id={comment._id}
                     key={comment._id}
+                    postId={comment.postId}
                     posterId={comment.commenterId._id}
                     profile={comment.commenterId.picture}
                     userName={comment.commenterId.username}

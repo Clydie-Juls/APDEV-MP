@@ -3,13 +3,10 @@ import Tag from './tag';
 
 // TODO: Make the props the same as the DB schema
 const CommentCard = ({ 
-    postTitle, 
-    postTags,
+    post,
     body,
     uploadDate,
-    likes,
-    dislikes,
-    userRating
+    reactions,
 }) => {
     return (
         <div 
@@ -17,20 +14,20 @@ const CommentCard = ({
         >
             <a 
                 className='overflow-hidden flex flex-col gap-2 justify-center'
-                href="/post"
+                href={`/post/${post._id}`}
             >
-                <h3 className='text-xl font-bold'>In &quot;{postTitle}&quot;</h3>
+                <h3 className='text-xl font-bold'>In &quot;{post.title}&quot;</h3>
 
                 <div className='flex gap-2'>
-                    {postTags.map((name, i) => <Tag key={i} name={name} />)}
+                    {post.tags.map((name, i) => <Tag key={i} name={name} />)}
                 </div>
 
                 <p className='overflow-hidden text-ellipsis text-nowrap text-zinc-400'>{body}</p>
 
-                <p className='text-sm'>Uploaded {uploadDate}</p>
+                <p className='text-sm'>Uploaded {new Date(uploadDate).toISOString().slice(0,10)}</p>
             </a>
 
-            <RateButtons likes={likes} dislikes={dislikes} userRating={userRating} />
+            <RateButtons likes={reactions.likerIds.length} dislikes={reactions.dislikerIds.length} userRating={''} />
         </div>
     );
 };

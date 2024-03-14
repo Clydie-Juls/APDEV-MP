@@ -78,13 +78,15 @@ apiRouter.get("/users/:id", async (req, res) => {
       return;
     }
 
-    // user db fetch
     const user = await User.findById(id).lean();
-
-    // post db fetch
-    // idk if i need to sort it
     const posts = await Post.find({ posterId: id }).lean();
-    const comments = await Comment.find({ postId: id }).lean();
+    let comments = await Comment.find({ commenterId: id }).lean();
+
+    // add post object to each comment
+    comments = await Promise.all(comments.map(async (comment) => {
+      const post = await Post.findById(comment.postId).lean();
+      return { ...comment, post };
+    }));
 
     res.status(200).json({
       user,
@@ -166,10 +168,15 @@ app.get("/api/posts/popular", async (req, res) => {
       { $sort: { totalLikes: -1 } },
     ]);
 
-    res.status(200).json(popularPosts);
-  } catch (e) {
-    console.error("Error fetching popular posts:", e);
-    res.status(500).json({ error: e.message });
+    const formattedPopularPosts = popularPosts.map(post => ({
+      ...post,
+      uploadDate: formatDate(post.uploadDate)
+    }));
+
+    res.status(200).json(formattedPopularPosts);
+  } catch (error) {
+    console.error("Error fetching popular posts:", error);
+    res.status(500).json({ error: "Failed to fetch popular posts" });
   }
 });
 
@@ -285,8 +292,6 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
 
 apiRouter.get("/account/logincheck", async (req, res, next) => {
   try {
-    console.log(loggedInUsername);
-
     if (!loggedInUsername) {
       res.status(200).json({ isNull: true });
       return next();
@@ -352,6 +357,7 @@ apiRouter.post("/account/signup", async (req, res) => {
     });
 
     user.save();
+    setLoggedInUser(req.body.username);
     res.status(201).redirect("/");
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -513,10 +519,12 @@ apiRouter.post("/comments/write", isAuth, async (req, res) => {
   try {
     const commenter = await User.findOne({ username: loggedInUsername });
 
+    console.log(req.body);
+
     const newComment = await Comment.create({
       commenterId: commenter._id,
       postId: req.body.postId,
-      commentRepliedToId: req.body.commentRepliedToId,
+      commentRepliedToId: req.body.commentRepliedToId ?? null,
       body: req.body.body,
       reactions: {
         likerIds: [],

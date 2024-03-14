@@ -64,11 +64,11 @@ const ProfileSide = ({
     >
       <div className='flex flex-col gap-2 items-center'>
         <Avatar 
-          className={'relative min-h-40 w-auto' + (showUserButtons && ' cursor-pointer')}
+          className={'relative min-h-40 min-w-40 ' + (showUserButtons && ' cursor-pointer')}
           onClick={showUserButtons ? handleAvatarClick : undefined}
         >
             <AvatarImage src={picture} />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>{name && name[0]}</AvatarFallback>
 
             {showUserButtons && 
               <button 

@@ -24,10 +24,20 @@ const Landing = () => {
       }
       const data = await response.json();
       
-      const formattedRecentPosts = data.map(post => ({
-        ...post,
-        likes: post.reactions.likerIds.length, 
-        dislikes: post.reactions.dislikerIds.length 
+      const formattedRecentPosts = await Promise.all(data.map(async (post) => {
+        const userResponse = await fetch(`/api/users/${post.posterId}`);
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user information');
+        }
+        const userData = await userResponse.json();
+        const username = userData.user.username;
+        
+        return {
+          ...post,
+          likes: post.reactions.likerIds.length, 
+          dislikes: post.reactions.dislikerIds.length,
+          author: username 
+        };
       }));
       
       setRecentPosts(formattedRecentPosts);
@@ -36,7 +46,7 @@ const Landing = () => {
       console.error('Error fetching recent posts:', error);
       setLoadingRecent(false);
     }
-  };  
+  }; 
 
   const fetchPopularPosts = async () => {
     try {
@@ -45,10 +55,21 @@ const Landing = () => {
         throw new Error('Failed to fetch popular posts');
       }
       const data = await response.json();
-      const formattedPopularPosts = data.map(post => ({
-        ...post,
-        likes: post.reactions.likerIds.length, 
-        dislikes: post.reactions.dislikerIds.length 
+      
+      const formattedPopularPosts = await Promise.all(data.map(async (post) => {
+        const userResponse = await fetch(`/api/users/${post.posterId}`);
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user information');
+        }
+        const userData = await userResponse.json();
+        const username = userData.user.username;
+        
+        return {
+          ...post,
+          likes: post.reactions.likerIds.length, 
+          dislikes: post.reactions.dislikerIds.length,
+          author: username 
+        };
       }));
       
       setPopularPosts(formattedPopularPosts);
@@ -107,6 +128,7 @@ const Landing = () => {
                       dislikes={post.dislikes}
                       userRating={post.userRating}
                       tags={post.tags}
+                      disableReactions={true}
                     />
                   ))
                 )}
@@ -131,6 +153,7 @@ const Landing = () => {
                       dislikes={post.dislikes}
                       userRating={post.userRating}
                       tags={post.tags}
+                      disableReactions={true}
                     />
                   ))
                 )}

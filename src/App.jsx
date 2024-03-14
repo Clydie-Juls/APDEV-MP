@@ -28,7 +28,7 @@ function App() {
         />
         <Route path="/comment" element={<Comment />} />
         <Route
-          path="/writecomment"
+          path="/writecomment/:id"
           element={<Comment isWriteComment={true} />}
         />
         <Route
@@ -36,7 +36,7 @@ function App() {
           element={<Comment isWriteComment={false} />}
         />
         <Route
-          path="/reply"
+          path="/reply/:id/:commentRepliedToId"
           element={<Comment isWriteComment={true} isReply={true} />}
         />
         <Route path="/post/:id" element={<Post />} />
