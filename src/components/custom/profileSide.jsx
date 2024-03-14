@@ -7,7 +7,11 @@ import { Pencil } from 'lucide-react';
 const ProfileSide = ({
   name,
   description,
-  picture
+  picture,
+  onDeleteButtonClick,
+  onDescriptionInput,
+  onDescriptionSet,
+  onInfoEditButtonClick
 }) => {
   const descElemRef = useRef();
 
@@ -22,7 +26,7 @@ const ProfileSide = ({
   };
 
   const handleDelete = () => {
-    // TODO
+    onDeleteButtonClick();
     setShowDeleteModal(false);
   };
 
@@ -34,8 +38,15 @@ const ProfileSide = ({
     }, 0);
   };
 
-  const handleDescElemBlur = () => {
-    setDescEditable(false);
+  const handleDescElemBlur = (e) => {
+    if (descEditable) {
+      onDescriptionSet(e.target.value);
+      setDescEditable(false);
+    }
+  };
+
+  const handleDescElemInput = (e) => {
+    onDescriptionInput(e.target.value);
   };
 
   return (
@@ -54,19 +65,19 @@ const ProfileSide = ({
         <p className="text-2xl font-bold">{name}</p>
       </div>
 
-      <p 
+      <input 
         ref={descElemRef} 
-        className='max-w-[40ch]' 
-        contentEditable={descEditable} onBlur={handleDescElemBlur}
-      > 
-        {description}
-      </p>
+        type="text"
+        className={'max-w-[40ch] bg-transparent' + (!descEditable ? ' focus:outline-none' : '')} 
+        readOnly={!descEditable}
+        value={description} 
+        onBlur={handleDescElemBlur}
+        onInput={handleDescElemInput}
+      />
 
       <div className='mt-1 flex flex-col justify-center gap-3'>
         <Button onClick={handleEditDesc}>Edit Description</Button>
-        <Button>
-          <a href="/editlogininfo">Edit Login Info</a>
-        </Button>
+        <Button onClick={onInfoEditButtonClick}>Edit Login Info</Button>
 
         <Button variant="destructive" onClick={setShowDeleteModal}>Delete Profile</Button>
       </div>

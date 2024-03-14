@@ -14,7 +14,7 @@ import AnimBackground from "@/components/custom/animBackground";
 import PostBody from "@/components/custom/postBody";
 import CommentBody from "@/components/custom/commentBody";
 import PostHeader from "@/components/custom/postHeader";
-import { TempUsers, TempPosts, TempComments } from "@/lib/placeholder/mockReq";
+import { TempUsers, TempComments } from "@/lib/placeholder/mockReq";
 import { useParams } from "react-router";
 
 const Post = () => {
@@ -59,8 +59,12 @@ const Post = () => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    await fetch(`/api/posts/${id}`, {
+      method: 'delete'
+    });
     setConfirmDelete(false);
+    location.replace('/');
   };
 
   return (
