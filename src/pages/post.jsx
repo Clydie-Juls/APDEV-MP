@@ -140,6 +140,8 @@ const Post = () => {
                       comment.commentRepliedToId.commenterId.picture
                     }
                     nestedParagraph={comment.commentRepliedToId.body}
+                    likes={comment.reactions.likerIds.length}
+                    dislikes={comment.reactions.dislikerIds.length}
                   />
                 );
               } else {
@@ -157,6 +159,8 @@ const Post = () => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
                     }}
+                    likes={comment.reactions.likerIds.length}
+                    dislikes={comment.reactions.dislikerIds.length}
                   />
                 );
               }
