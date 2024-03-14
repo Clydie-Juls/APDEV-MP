@@ -290,8 +290,6 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
 
 apiRouter.get("/account/logincheck", async (req, res, next) => {
   try {
-    console.log(loggedInUsername);
-
     if (!loggedInUsername) {
       res.status(200).json({ isNull: true });
       return next();
