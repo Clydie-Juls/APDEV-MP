@@ -243,6 +243,29 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
   }
 });
 
+apiRouter.get('/account/logincheck', async (req, res, next) => {
+  try {
+    console.log(loggedInUsername);
+
+    if (!loggedInUsername) {
+      res.status(200).json({ isNull: true });
+      return next();
+    }
+
+    const userInfo = await User.findOne({
+      username: { $regex: new RegExp(loggedInUsername, "i") }
+    });
+
+    res.status(200).json({
+      _id: userInfo.id,
+      username: userInfo.username,
+      picture: userInfo.picture
+    });    
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 apiRouter.post("/account/login", async (req, res) => {
   console.log('Request Body:', req.body);
   try {
@@ -288,6 +311,15 @@ apiRouter.post("/account/signup", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+apiRouter.post('/account/logout/:id', async (req, res) => {
+  try {
+    setLoggedInUser(null);
+    res.status(200).send();
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }  
 });
 
 apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {
