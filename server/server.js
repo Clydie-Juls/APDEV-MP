@@ -78,13 +78,15 @@ apiRouter.get("/users/:id", async (req, res) => {
       return;
     }
 
-    // user db fetch
     const user = await User.findById(id).lean();
-
-    // post db fetch
-    // idk if i need to sort it
     const posts = await Post.find({ posterId: id }).lean();
-    const comments = await Comment.find({ postId: id }).lean();
+    let comments = await Comment.find({ commenterId: id }).lean();
+
+    // add post object to each comment
+    comments = await Promise.all(comments.map(async (comment) => {
+      const post = await Post.findById(comment.postId).lean();
+      return { ...comment, post };
+    }));
 
     res.status(200).json({
       user,
@@ -517,10 +519,12 @@ apiRouter.post("/comments/write", isAuth, async (req, res) => {
   try {
     const commenter = await User.findOne({ username: loggedInUsername });
 
+    console.log(req.body);
+
     const newComment = await Comment.create({
       commenterId: commenter._id,
       postId: req.body.postId,
-      commentRepliedToId: req.body.commentRepliedToId,
+      commentRepliedToId: req.body.commentRepliedToId ?? null,
       body: req.body.body,
       reactions: {
         likerIds: [],

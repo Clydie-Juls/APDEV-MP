@@ -1,4 +1,4 @@
-export let loggedInUsername = "user0";
+export let loggedInUsername = "";
 
 export function setLoggedInUser(name) {
   if (loggedInUsername) {

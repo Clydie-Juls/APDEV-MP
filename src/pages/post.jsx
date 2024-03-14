@@ -128,6 +128,7 @@ const Post = () => {
                   <CommentBody
                     id={comment._id}
                     key={comment._id}
+                    postId={comment.postId}
                     posterId={comment.commenterId._id}
                     profile={comment.commenterId.picture}
                     userName={comment.commenterId.username}
@@ -152,6 +153,7 @@ const Post = () => {
                   <CommentBody
                     id={comment._id}
                     key={comment._id}
+                    postId={comment.postId}
                     posterId={comment.commenterId._id}
                     profile={comment.commenterId.picture}
                     userName={comment.commenterId.username}

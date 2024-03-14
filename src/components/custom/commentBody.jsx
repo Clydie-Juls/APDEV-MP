@@ -18,6 +18,7 @@ import RateButtons from "@/components/custom/rateButtons";
 const CommentBody = ({
   id,
   posterId,
+  postId,
   profile,
   nestedProfile,
   userName,
@@ -29,6 +30,7 @@ const CommentBody = ({
   onDeleteBtnClick,
 }) => {
   console.log("rop", id);
+
   return (
     <Card className="mb-2">
       <CardHeader className="flex flex-row">
@@ -74,10 +76,10 @@ const CommentBody = ({
           <Button
             variant="ghost"
             style={{ width: "100px" }}
-            onClick={() => window.location.replace(`/editcomment/${id}`)}
+            onClick={() => window.location.replace(`/reply/${postId}/${id}`)}
           >
             <Send style={{ width: "1.5rem", height: "1.5rem" }} />
-            <a href="/reply">Reply</a>
+            Reply
           </Button>
         </div>
         {isOwner ? (

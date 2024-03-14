@@ -50,10 +50,10 @@ const PostBody = ({ id, numComments, tags, paragraph, onDeleteButtonClick, likes
           <Button
             variant="ghost"
             style={{ width: "180px" }}
-            onClick={() => window.location.replace("/writecomment")}
+            onClick={() => location.replace(`/writecomment/${id}`)}
           >
             <Send style={{ width: "1.5rem", height: "1.5rem" }} />
-            <a href="/writecomment">Add a comment</a>
+            Add a comment
           </Button>
         </div>
         <div>
