@@ -64,7 +64,7 @@ const SignupForm = () => {
 
         <p className=" text-muted-foreground mt-6 text-sm">
           Already have an account?{" "}
-          <Link to="/login" className=" text-indigo-500">
+          <Link to="/login" className="text-green-600">
             Log in
           </Link>
         </p>

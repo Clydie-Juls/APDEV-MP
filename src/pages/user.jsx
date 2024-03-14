@@ -90,6 +90,23 @@ const User = () => {
     location.replace(`/editlogininfo/${id}`);
   }
 
+  async function handlePictureUpload(formData) {
+    const response = await fetch(`/api/users/picture/${id}`, {
+      method: 'post',
+      body: formData,
+    });
+
+    const pictureLink = await response.text();
+
+    setUserInfo(ui => ({
+      ...ui,
+      user: {
+        ...ui.user,
+        picture: pictureLink
+      }
+    }));
+  }
+
   return (
     <AnimBackground>
       <div className="w-full h-full grid grid-rows-[auto_1fr] min-h-screen">
@@ -110,6 +127,7 @@ const User = () => {
               onDescriptionInput={handleDescriptionInput}
               onDescriptionSet={handleDescriptionSet}
               onInfoEditButtonClick={handleInfoEditButtonClick}
+              onPictureUpload={handlePictureUpload}
             />
 
             <Tabs defaultValue="posts">

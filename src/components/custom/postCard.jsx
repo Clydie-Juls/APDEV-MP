@@ -8,7 +8,6 @@ const PostCard = ({
     author,
     body,
     uploadDate,
-    views,
     likes,
     dislikes,
     userRating,
@@ -28,7 +27,6 @@ const PostCard = ({
                 <div className='flex gap-2'>
                     <p className='text-sm'>By {author}</p>
                     <p className='text-sm'>Uploaded {uploadDate}</p>
-                    <p className='text-sm'>{views} Views</p>
                 </div>
             </a>
 
