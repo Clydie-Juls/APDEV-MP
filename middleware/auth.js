@@ -1,8 +1,8 @@
-export let loggedInUsername;
+export let loggedInUsername = "user0";
 
 export function setLoggedInUser(name) {
   if (loggedInUsername) {
-    console.warn('Replacing an already logged-in user...');
+    console.warn("Replacing an already logged-in user...");
   }
 
   loggedInUsername = name;

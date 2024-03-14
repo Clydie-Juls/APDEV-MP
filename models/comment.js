@@ -11,11 +11,12 @@ export const CommentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: null,
     required: true,
+    ref: "posts",
   },
   commentRepliedToId: {
     type: mongoose.Schema.Types.ObjectId, // Could also just be an int
     default: null,
-    // ref: 'Comment' // Not sure since comment is more of a subtype than a model
+    ref: "Comment",
   },
   body: {
     type: String,
