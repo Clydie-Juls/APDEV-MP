@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '@/components/custom/header';
 import AnimBackground from '@/components/custom/animBackground';
 import PostCard from '@/components/custom/postCard';
 import SearchHeader from '@/components/custom/searchHeader';
-import { TempUsers } from '@/lib/placeholder/mockReq';
-import { Posts } from '@/lib/placeholder/posts';
 import {
   Pagination,
   PaginationContent,
@@ -46,6 +44,10 @@ const SearchPage = () => {
     }
   };
 
+  useEffect(() => {
+    alert('Sorry, to be implemented!');
+  }, []);
+
   return (
     <AnimBackground>
       <div className="w-full h-full bg-background">
@@ -53,14 +55,14 @@ const SearchPage = () => {
           <SearchHeader datePosted={'Oldest'} views={'Lowest'} searchResultsCount={'2'} tag1={'Internet'} tag2={'Delivery'} tag3={'Amazon'} />
           
         <div className="flex flex-col gap-2 px-16 py-5">
-        {sortPosts(filterPosts(Posts, ["Internet", "Delivery", "Amazon"])).map(p => {
+        {sortPosts(filterPosts([], ["Internet", "Delivery", "Amazon"])).map(p => {
                   console.log("Post:", p); 
                   return (
                     <PostCard
                       id={p.id} 
                       key={p.id}
                       title={p.title}
-                      author={TempUsers.getInfoFromId(p.posterId).name}
+                      author={'temp'}
                       body={p.body}
                       uploadDate={p.uploadDate}
                       views={p.views}

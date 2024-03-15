@@ -32,10 +32,15 @@ const Landing = () => {
         const userData = await userResponse.json();
         const username = userData.user.username;
         
+        const account = await Account.getDetails();
+
         return {
           ...post,
           likes: post.reactions.likerIds.length, 
           dislikes: post.reactions.dislikerIds.length,
+          ...(account ? 
+            ({ userRating: post.reactions.likerIds.includes(account._id) ? 'like' : post.reactions.dislikerIds.includes(account._id) ? 'dislike' : '' })
+            : ({})),
           author: username 
         };
       }));
@@ -64,10 +69,15 @@ const Landing = () => {
         const userData = await userResponse.json();
         const username = userData.user.username;
         
+        const account = await Account.getDetails();
+
         return {
           ...post,
           likes: post.reactions.likerIds.length, 
           dislikes: post.reactions.dislikerIds.length,
+          ...(account ? 
+            ({ userRating: post.reactions.likerIds.includes(account._id) ? 'like' : post.reactions.dislikerIds.includes(account._id) ? 'dislike' : '' })
+            : ({})),
           author: username 
         };
       }));

@@ -311,9 +311,7 @@ apiRouter.post("/account/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({
-      username: { $regex: new RegExp(username, "i") },
-    });
+    const user = await User.findOne({ username });
 
     if (!user) {
       return res
@@ -423,16 +421,32 @@ apiRouter.post("/posts/like/:id", isAuth, async (req, res) => {
     }
 
     const liker = await User.findOne({ username: loggedInUsername });
-
-    const { nModified } = await Post.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $addToSet: { "reactions.likerIds": liker._id },
-        $pull: { "reactions.dislikerIds": liker._id },
-      }
-    );
+    const isIncluded = await Post.findOne({
+      _id: id,
+      "reactions.likerIds": liker._id,
+    });
+    
+    const { nModified } = !isIncluded
+      ? await Post.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $addToSet: { "reactions.likerIds": liker._id },
+            $pull: { "reactions.dislikerIds": liker._id },
+          }
+        )
+      : await Post.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $pull: {
+              "reactions.likerIds": liker._id,
+              "reactions.dislikerIds": liker._id,
+            },
+          }
+        );
 
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot like the post." });
@@ -454,16 +468,32 @@ apiRouter.post("/posts/dislike/:id", isAuth, async (req, res) => {
     }
 
     const disliker = await User.findOne({ username: loggedInUsername });
+    const isIncluded = await Post.findOne({
+      _id: id,
+      "reactions.dislikerIds": disliker._id,
+    });
 
-    const { nModified } = await Post.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $addToSet: { "reactions.dislikerIds": disliker._id },
-        $pull: { "reactions.likerIds": disliker._id },
-      }
-    );
+    const { nModified } = !isIncluded
+      ? await Post.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $addToSet: { "reactions.dislikerIds": disliker._id },
+            $pull: { "reactions.likerIds": disliker._id },
+          }
+        )
+      : await Post.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $pull: {
+              "reactions.likerIds": disliker._id,
+              "reactions.dislikerIds": disliker._id,
+            },
+          }
+        );
 
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot dislike the post." });

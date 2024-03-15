@@ -128,7 +128,37 @@ const Post = () => {
     setPage(pageIndex);
   }
 
-  const onLikeClick = async (id) => {
+  const onPostLikeClick = async () => {
+    const response = await fetch(`/api/posts/like/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Like failed");
+    }
+    console.log("Liked");
+    setRateButtonTrigger(!rateButtonTrigger);
+  };
+
+  const onPostDislikeClick = async () => {
+    const response = await fetch(`/api/posts/dislike/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Like failed");
+    }
+    console.log("Liked");
+    setRateButtonTrigger(!rateButtonTrigger);
+  };
+
+  const onCommentLikeClick = async (id) => {
     const response = await fetch(`/api/comments/like/${id}`, {
       method: "POST",
       headers: {
@@ -143,7 +173,7 @@ const Post = () => {
     setRateButtonTrigger(!rateButtonTrigger);
   };
 
-  const onDislikeClick = async (id) => {
+  const onCommentDislikeClick = async (id) => {
     const response = await fetch(`/api/comments/dislike/${id}`, {
       method: "POST",
       headers: {
@@ -173,11 +203,14 @@ const Post = () => {
             />
             <PostBody 
               id={post.post._id} 
+              accountId={account?._id}
               tags={post.post.tags} 
               paragraph={post.post.body} 
               numComments={comments.length}
-              likes={post.post.reactions.likerIds.length}
-              dislikes={post.post.reactions.dislikerIds.length}
+              likerIds={post.post.reactions.likerIds}
+              dislikerIds={post.post.reactions.dislikerIds}
+              onLikeClick={onPostLikeClick}
+              onDislikeClick={onPostDislikeClick}
               onDeleteButtonClick={() => {
                 setConfirmDelete(true);
                 setWhatToDelete("post");
@@ -215,8 +248,8 @@ const Post = () => {
                       nestedParagraph={comment.commentRepliedToId.body}
                       likes={comment.reactions.likerIds}
                       dislikes={comment.reactions.dislikerIds}
-                      onLikeClick={() => onLikeClick(comment._id)}
-                      onDislikeClick={() => onDislikeClick(comment._id)}
+                      onLikeClick={() => onCommentLikeClick(comment._id)}
+                      onDislikeClick={() => onCommentDislikeClick(comment._id)}
                     />
                   );
                 } else {
@@ -239,8 +272,8 @@ const Post = () => {
                       }}
                       likes={comment.reactions.likerIds}
                       dislikes={comment.reactions.dislikerIds}
-                      onLikeClick={() => onLikeClick(comment._id)}
-                      onDislikeClick={() => onDislikeClick(comment._id)}
+                      onLikeClick={() => onCommentLikeClick(comment._id)}
+                      onDislikeClick={() => onCommentDislikeClick(comment._id)}
                     />
                   );
                 }

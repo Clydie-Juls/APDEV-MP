@@ -7,6 +7,7 @@ const CommentCard = ({
     body,
     uploadDate,
     reactions,
+    userRating,
     disableReactions
 }) => {
     return (
@@ -32,7 +33,7 @@ const CommentCard = ({
                 disableReactions={disableReactions}
                 likes={reactions.likerIds.length} 
                 dislikes={reactions.dislikerIds.length} 
-                userRating={''} 
+                userRating={userRating} 
             />
         </div>
     );

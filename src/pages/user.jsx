@@ -155,7 +155,7 @@ const User = () => {
                       uploadDate={p.uploadDate}
                       likes={p.reactions.likerIds.length}
                       dislikes={p.reactions.dislikerIds.length}
-                      userRating={''}
+                      userRating={(showUserButtons && p.reactions.likerIds.includes(id)) ? 'like' : (showUserButtons && p.reactions.dislikerIds.includes(id)) ? 'dislike' : ''}
                       tags={p.tags}
                       disableReactions={true}
                     />
@@ -166,7 +166,12 @@ const User = () => {
               <TabsContent value="comments">
                 <CardList displayCount={4}>
                   {userInfo.comments.map((c) => (
-                    <CommentCard key={c._id} {...c} disableReactions={true} />
+                    <CommentCard 
+                      key={c._id} 
+                      {...c} 
+                      userRating={(showUserButtons && c.reactions.likerIds.includes(id)) ? 'like' : (showUserButtons && c.reactions.dislikerIds.includes(id)) ? 'dislike' : ''}
+                      disableReactions={true} 
+                    />
                   ))}
                 </CardList>
               </TabsContent>
