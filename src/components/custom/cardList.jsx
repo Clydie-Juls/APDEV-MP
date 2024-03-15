@@ -38,21 +38,23 @@ const CardList = ({
                 {children.slice(page * displayCount, page * displayCount + displayCount)}
             </div>
 
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious onClick={gotoPrevPage} />
-                    </PaginationItem>
+            {maxPages > 1 && (
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious onClick={gotoPrevPage} />
+                        </PaginationItem>
 
-                    {[...Array(maxPages)].map((_, i) =>
-                        <PaginationLink key={i} onClick={() => gotoPage(i)}>{i + 1}</PaginationLink>
-                    )}
+                        {[...Array(maxPages)].map((_, i) =>
+                            <PaginationLink key={i} onClick={() => gotoPage(i)}>{i + 1}</PaginationLink>
+                        )}
 
-                    <PaginationItem>
-                        <PaginationNext onClick={gotoNextPage} />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+                        <PaginationItem>
+                            <PaginationNext onClick={gotoNextPage} />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            )}
         </div>
     );
 };
