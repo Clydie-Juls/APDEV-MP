@@ -167,6 +167,7 @@ const Post = () => {
           <>
             <PostHeader
               title={post.post.title}
+              posterId={poster.user._id}
               profile={poster.user.picture}
               userName={poster.user.username}
             />

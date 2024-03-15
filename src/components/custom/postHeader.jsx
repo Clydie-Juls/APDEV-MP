@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
-const PostHeader = ({title, profile, userName}) => {
+const PostHeader = ({posterId, title, profile, userName}) => {
   console.log(profile);
 
   return (
@@ -9,7 +9,7 @@ const PostHeader = ({title, profile, userName}) => {
       <h2 className="text-4xl font-bold">{title}</h2>
       <p className='flex items-center gap-4'>
         By 
-        <a href="/user/0" className='flex items-center gap-2'>
+        <a href={`/user/${posterId}`} className='flex items-center gap-2'>
           <Avatar>
             <AvatarImage src={profile} />
             <AvatarFallback>{userName[0]}</AvatarFallback>
