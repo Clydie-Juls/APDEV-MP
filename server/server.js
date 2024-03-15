@@ -83,10 +83,12 @@ apiRouter.get("/users/:id", async (req, res) => {
     let comments = await Comment.find({ commenterId: id }).lean();
 
     // add post object to each comment
-    comments = await Promise.all(comments.map(async (comment) => {
-      const post = await Post.findById(comment.postId).lean();
-      return { ...comment, post };
-    }));
+    comments = await Promise.all(
+      comments.map(async (comment) => {
+        const post = await Post.findById(comment.postId).lean();
+        return { ...comment, post };
+      })
+    );
 
     res.status(200).json({
       user,
@@ -168,9 +170,9 @@ app.get("/api/posts/popular", async (req, res) => {
       { $sort: { totalLikes: -1 } },
     ]);
 
-    const formattedPopularPosts = popularPosts.map(post => ({
+    const formattedPopularPosts = popularPosts.map((post) => ({
       ...post,
-      uploadDate: formatDate(post.uploadDate)
+      uploadDate: formatDate(post.uploadDate),
     }));
 
     res.status(200).json(formattedPopularPosts);
@@ -572,18 +574,32 @@ apiRouter.post("/comments/like/:id", isAuth, async (req, res) => {
     }
 
     const liker = await User.findOne({ username: loggedInUsername });
-
-    const { nModified } = await Comment.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $pull: {
-          $addToSet: { "reactions.likerIds": liker._id },
-          $pull: { "reactions.dislikerIds": liker._id },
-        },
-      }
-    );
+    const isIncluded = await Comment.findOne({
+      _id: id,
+      "reactions.likerIds": liker._id,
+    });
+    console.log("GEGEGGEG", isIncluded);
+    const { nModified } = !isIncluded
+      ? await Comment.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $addToSet: { "reactions.likerIds": liker._id },
+            $pull: { "reactions.dislikerIds": liker._id },
+          }
+        )
+      : await Comment.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $pull: {
+              "reactions.likerIds": liker._id,
+              "reactions.dislikerIds": liker._id,
+            },
+          }
+        );
 
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot like the comment." });
@@ -605,56 +621,39 @@ apiRouter.post("/comments/dislike/:id", isAuth, async (req, res) => {
     }
 
     const disliker = await User.findOne({ username: loggedInUsername });
+    console.log("Dislike", disliker);
+    const isIncluded = await Comment.findOne({
+      _id: id,
+      "reactions.dislikerIds": disliker._id,
+    });
+    const { nModified } = !isIncluded
+      ? await Comment.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $addToSet: { "reactions.dislikerIds": disliker._id },
+            $pull: { "reactions.likerIds": disliker._id },
+          }
+        )
+      : await Comment.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $pull: {
+              "reactions.likerIds": disliker._id,
+              "reactions.dislikerIds": disliker._id,
+            },
+          }
+        );
 
-    const { nModified } = await Comment.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $pull: {
-          $addToSet: { "reactions.dislikerIds": disliker._id },
-          $pull: { "reactions.likerIds": disliker._id },
-        },
-      }
-    );
+    console.log("DDDDDD", nModified);
 
     if (nModified === 0) {
       res.status(204).json({ error: "Cannot dislike the comment." });
     } else {
       res.status(200).send("Comment dislike Successful");
-    }
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-apiRouter.post("/comments/unreact/:id", isAuth, async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ error: "The comment does not exist." });
-      return;
-    }
-
-    const unreacter = await User.findOne({ username: loggedInUsername });
-
-    const { nModified } = await Comment.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $pull: {
-          "reactions.likerIds": unreacter._id,
-          "reactions.dislikerIds": unreacter._id,
-        },
-      }
-    );
-
-    if (nModified === 0) {
-      res.status(204).json({ error: "Cannot unreact the comment." });
-    } else {
-      res.status(200).send("Comment unreact Successful");
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
