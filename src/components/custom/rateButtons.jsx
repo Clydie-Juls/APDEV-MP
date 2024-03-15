@@ -1,5 +1,6 @@
-import { ThumbsDown, ThumbsUp } from 'lucide-react';
-import { Button } from '../ui/button';
+import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
 
 // TODO: Like and dislike props
 const RateButtons = ({
@@ -11,6 +12,30 @@ const RateButtons = ({
     onLikeClick,
     onDislikeClick
 }) => {
+  //LOL AKALA KO GET method POST pala. Will fix if may time
+
+  //   useEffect(() => {
+  //     const fetchLikes = async () => {
+  //       const response = await fetch(`/api/comments/like/${commentId}`);
+  //       if (!response.ok) {
+  //         const errorMessage = await response.text();
+  //         throw new Error(errorMessage || "Fetch likes failed");
+  //       }
+
+  //       const likes = await response.json();
+  //       setLikes()
+  //     };
+
+  //     const fetchDislikes = async () => {
+  //         const response = await fetch(`/api/comments/dislike/${commentId}`);
+  //         if (!response.ok) {
+  //           const errorMessage = await response.text();
+  //           throw new Error(errorMessage || "Fetch dislikes failed");
+  //         }
+
+  //         const dislikes = await response.json();
+  //       };
+  //   }, []);
     return (
         <div className={'flex justify-center items-end ' + (horizontal ? 'gap-1 flex-row' : 'gap-5 flex-col')}>
             {disableReactions ? 

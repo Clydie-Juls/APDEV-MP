@@ -25,12 +25,20 @@ const CommentBody = ({
   nestedUserName,
   paragraph,
   nestedParagraph,
+  likes,
+  dislikes,
   isReply,
   isOwner,
+  ownerId,
   onDeleteBtnClick,
 }) => {
-  console.log("rop", id);
-
+  console.log("likes", likes);
+  const rating = likes.includes(ownerId)
+    ? "like"
+    : dislikes.includes(ownerId)
+    ? "dislike"
+    : "";
+  console.log(rating);
   return (
     <Card className="mb-2">
       <CardHeader className="flex flex-row">
@@ -71,7 +79,12 @@ const CommentBody = ({
       </CardContent>
 
       <CardFooter className="flex gap-4">
-        <RateButtons likes={50} dislikes={10} horizontal />
+        <RateButtons
+          likes={likes.length}
+          dislikes={dislikes.length}
+          horizontal
+          userRating={rating}
+        />
         <div>
           <Button
             variant="ghost"

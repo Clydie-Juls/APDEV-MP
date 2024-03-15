@@ -78,19 +78,19 @@ const Post = () => {
 
   const fetchUserById = async (userId) => {
     try {
-      console.log('Fetching user with ID:', userId);
+      console.log("Fetching user with ID:", userId);
       const response = await fetch(`/api/users/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch user");
       }
       const userData = await response.json();
-      console.log('User fetched successfully:', userData); 
+      console.log("User fetched successfully:", userData);
       return userData;
     } catch (error) {
       console.error("Error fetching user:", error);
       return null;
     }
-  };  
+  };
 
   const handleDelete = async () => {
     await fetch(`/api/posts/${id}`, {
@@ -150,6 +150,7 @@ const Post = () => {
                     userName={comment.commenterId.username}
                     paragraph={comment.body}
                     isOwner={comment.commenterId === account?._id}
+                    ownerId={account?._id}
                     isReply={isReply}
                     onDeleteBtnClick={() => {
                       setConfirmDelete(true);
@@ -162,6 +163,8 @@ const Post = () => {
                       comment.commentRepliedToId.commenterId.picture
                     }
                     nestedParagraph={comment.commentRepliedToId.body}
+                    likes={comment.reactions.likerIds}
+                    dislikes={comment.reactions.dislikerIds}
                   />
                 );
               } else {
@@ -175,11 +178,14 @@ const Post = () => {
                     userName={comment.commenterId.username}
                     paragraph={comment.body}
                     isOwner={comment.commenterId._id === account?._id}
+                    ownerId={account?._id}
                     isReply={isReply}
                     onDeleteBtnClick={() => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
                     }}
+                    likes={comment.reactions.likerIds}
+                    dislikes={comment.reactions.dislikerIds}
                   />
                 );
               }
