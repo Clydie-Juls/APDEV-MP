@@ -26,6 +26,7 @@ const Post = () => {
   const [comments, setComments] = useState([]);
   const [poster, setPoster] = useState(null);
   const { id } = useParams();
+  const [idOfCommentToDelete, setIdOfCommentToDelete] = useState(null);
 
   const [page, setPage] = useState(0);
   const maxPages = useMemo(() => Math.ceil(comments.length / DISPLAY_COUNT), [comments]);
@@ -93,11 +94,22 @@ const Post = () => {
   };
 
   const handleDelete = async () => {
-    await fetch(`/api/posts/${id}`, {
-      method: "delete",
-    });
-    setConfirmDelete(false);
-    location.replace("/");
+    if (whatToDelete === 'post') {
+      await fetch(`/api/posts/${id}`, {
+        method: "delete",
+      });
+
+      setConfirmDelete(false);
+      location.replace(`/`);
+    } else {
+      await fetch(`/api/comments/${idOfCommentToDelete}`, {
+        method: "delete",
+      });
+      setIdOfCommentToDelete(null);
+
+      setConfirmDelete(false);
+      location.replace(`/post/${id}`);
+    }
   };
 
   function gotoPrevPage() {
@@ -149,12 +161,13 @@ const Post = () => {
                     profile={comment.commenterId.picture}
                     userName={comment.commenterId.username}
                     paragraph={comment.body}
-                    isOwner={comment.commenterId === account?._id}
+                    isOwner={comment.commenterId._id === account?._id}
                     ownerId={account?._id}
                     isReply={isReply}
                     onDeleteBtnClick={() => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
+                      setIdOfCommentToDelete(comment._id);
                     }}
                     nestedUserName={
                       comment.commentRepliedToId.commenterId.username
@@ -183,6 +196,7 @@ const Post = () => {
                     onDeleteBtnClick={() => {
                       setConfirmDelete(true);
                       setWhatToDelete("comment");
+                      setIdOfCommentToDelete(comment._id);
                     }}
                     likes={comment.reactions.likerIds}
                     dislikes={comment.reactions.dislikerIds}

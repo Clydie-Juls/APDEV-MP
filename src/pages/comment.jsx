@@ -52,6 +52,9 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
     e.preventDefault();
     try {
       if (isWriteComment) {
+        console.log(e.target.body.value);
+
+
         const response = await fetch("/api/comments/write", {
           method: "POST",
           headers: {
@@ -65,12 +68,15 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
           }),
         });
 
+
         console.log("Response:", response);
 
         if (!response.ok) {
           const errorMessage = await response.text();
           throw new Error(errorMessage || "Login failed");
         }
+
+      window.location.replace(`/post/${id}`);
       } else {
         console.log("Youp");
         const response = await fetch(`/api/comments/edit/${id}`, {
@@ -87,9 +93,10 @@ const CommentsPage = ({ isWriteComment, isReply }) => {
           const errorMessage = await response.text();
           throw new Error(errorMessage || "Login failed");
         }
+
+      window.location.replace(`/post/${comment.postId}`);
       }
       console.warn("Yes");
-      window.location.replace(`/post/${id}`);
     } catch (error) {
       console.error("Error logging in:", error);
       alert(error.message || "Error logging in. Please try again.");

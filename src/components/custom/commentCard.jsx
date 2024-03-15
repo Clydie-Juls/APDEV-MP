@@ -7,6 +7,7 @@ const CommentCard = ({
     body,
     uploadDate,
     reactions,
+    disableReactions
 }) => {
     return (
         <div 
@@ -27,7 +28,12 @@ const CommentCard = ({
                 <p className='text-sm'>Uploaded {new Date(uploadDate).toISOString().slice(0,10)}</p>
             </a>
 
-            <RateButtons likes={reactions.likerIds.length} dislikes={reactions.dislikerIds.length} userRating={''} />
+            <RateButtons 
+                disableReactions={disableReactions}
+                likes={reactions.likerIds.length} 
+                dislikes={reactions.dislikerIds.length} 
+                userRating={''} 
+            />
         </div>
     );
 };

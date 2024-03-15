@@ -68,7 +68,7 @@ const PostEditor = ({ isWritePost }) => {
         method: 'put',
         body: formBody
       });
-      
+    
     location.replace(await postUrl.text());
   }
 

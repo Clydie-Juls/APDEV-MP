@@ -19,12 +19,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/T3Db");
 
 const passwordMatches = async (password, hash) => {
   try {
-    console.log("Input Password:", password);
-    console.log("Hash from DB:", hash);
-
     const result = await bcrypt.compare(password, hash);
-    console.log("Password Matches:", result);
-
     return result;
   } catch (error) {
     console.error("Error comparing passwords:", error);
@@ -261,7 +256,6 @@ apiRouter.get("/posts/:postId/comments", async (req, res) => {
       //   }
       // )
       .lean();
-    console.log(comments);
     res.status(200).json(comments);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -284,7 +278,7 @@ apiRouter.put("/users/edit/:id", isAuth, async (req, res) => {
       }
     );
 
-    res.status(nModified === 0 ? 204 : 200);
+    res.status(nModified === 0 ? 204 : 200).send();
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -312,7 +306,6 @@ apiRouter.get("/account/logincheck", async (req, res, next) => {
 });
 
 apiRouter.post("/account/login", async (req, res) => {
-  console.log("Request Body:", req.body);
   try {
     const { username, password } = req.body;
 
@@ -321,14 +314,12 @@ apiRouter.post("/account/login", async (req, res) => {
     });
 
     if (!user) {
-      console.log("User not found");
       return res
         .status(401)
         .send("Login not successful. Invalid username or password.");
     }
 
     const hashedPassword = user.password;
-    console.log("Hashed Password from DB:", hashedPassword);
 
     const passwordMatch = await passwordMatches(password, hashedPassword);
 
@@ -375,7 +366,7 @@ apiRouter.post("/account/logout/:id", async (req, res) => {
 
 apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {
   try {
-    const poster = await User.findOne({ username: loggedInUsername });
+    const poster = await User.findOne({ username: { $regex: new RegExp(loggedInUsername, "i") } });
 
     const newPost = await Post.create({
       title: req.body.title,
@@ -394,7 +385,7 @@ apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {
   }
 });
 
-apiRouter.put("/posts/edit/:id", isAuth, async (req, res) => {
+apiRouter.put("/posts/edit/:id", [isAuth, multer().array()], async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -517,9 +508,7 @@ apiRouter.post("/posts/unreact/:id", isAuth, async (req, res) => {
 
 apiRouter.post("/comments/write", isAuth, async (req, res) => {
   try {
-    const commenter = await User.findOne({ username: loggedInUsername });
-
-    console.log(req.body);
+    const commenter = await User.findOne({ username: { $regex: new RegExp(loggedInUsername, "i") } });
 
     const newComment = await Comment.create({
       commenterId: commenter._id,
