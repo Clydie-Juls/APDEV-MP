@@ -128,6 +128,7 @@ const Post = () => {
               id={post.post._id} 
               tags={post.post.tags} 
               paragraph={post.post.body} 
+              numComments={comments.length}
               likes={post.post.reactions.likerIds.length}
               dislikes={post.post.reactions.dislikerIds.length}
               onDeleteButtonClick={() => {
