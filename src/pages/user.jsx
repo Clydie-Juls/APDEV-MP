@@ -166,7 +166,7 @@ const User = () => {
               <TabsContent value="comments">
                 <CardList displayCount={4}>
                   {userInfo.comments.map((c) => (
-                    <CommentCard key={c._id} {...c} />
+                    <CommentCard key={c._id} {...c} disableReactions={true} />
                   ))}
                 </CardList>
               </TabsContent>

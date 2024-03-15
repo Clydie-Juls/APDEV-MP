@@ -82,10 +82,10 @@ const ProfileSide = ({
         <p className="text-2xl font-bold">{name}</p>
       </div>
 
-      <input 
+      <textarea 
         ref={descElemRef} 
         type="text"
-        className={'max-w-[40ch] bg-transparent' + (!descEditable ? ' focus:outline-none' : '')} 
+        className={'resize-none max-w-[40ch] bg-transparent' + (!descEditable ? ' focus:outline-none' : '')} 
         readOnly={!descEditable}
         value={description} 
         onBlur={handleDescElemBlur}
