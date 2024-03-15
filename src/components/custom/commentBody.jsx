@@ -31,6 +31,8 @@ const CommentBody = ({
   isOwner,
   ownerId,
   onDeleteBtnClick,
+  onLikeClick,
+  onDislikeClick,
 }) => {
   console.log("likes", likes);
   const rating = likes.includes(ownerId)
@@ -38,7 +40,7 @@ const CommentBody = ({
     : dislikes.includes(ownerId)
     ? "dislike"
     : "";
-  console.log(rating);
+
   return (
     <Card className="mb-2">
       <CardHeader className="flex flex-row">
@@ -84,6 +86,8 @@ const CommentBody = ({
           dislikes={dislikes.length}
           horizontal
           userRating={rating}
+          onLikeClick={onLikeClick}
+          onDislikeClick={onDislikeClick}
         />
         <div>
           <Button

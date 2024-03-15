@@ -26,10 +26,14 @@ const Post = () => {
   const [comments, setComments] = useState([]);
   const [poster, setPoster] = useState(null);
   const { id } = useParams();
-  const [idOfCommentToDelete, setIdOfCommentToDelete] = useState(null);
+  const [idOfCommentToDelete, setIdOfCommentToDelete] = useState(null)
+  const [rateButtonTrigger, setRateButtonTrigger] = useState(false);
 
   const [page, setPage] = useState(0);
-  const maxPages = useMemo(() => Math.ceil(comments.length / DISPLAY_COUNT), [comments]);
+  const maxPages = useMemo(
+    () => Math.ceil(comments.length / DISPLAY_COUNT),
+    [comments]
+  );
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -75,7 +79,7 @@ const Post = () => {
     fetchPostData();
     fetchCommentsData();
     checkLoginStatus();
-  }, [id]);
+  }, [id, rateButtonTrigger]);
 
   const fetchUserById = async (userId) => {
     try {
@@ -113,16 +117,46 @@ const Post = () => {
   };
 
   function gotoPrevPage() {
-    setPage(p => Math.max(0, p - 1));
+    setPage((p) => Math.max(0, p - 1));
   }
 
   function gotoNextPage() {
-      setPage(p => Math.min(p + 1, maxPages - 1));
+    setPage((p) => Math.min(p + 1, maxPages - 1));
   }
 
   function gotoPage(pageIndex) {
-      setPage(pageIndex);
+    setPage(pageIndex);
   }
+
+  const onLikeClick = async (id) => {
+    const response = await fetch(`/api/comments/like/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Like failed");
+    }
+    console.log("Liked");
+    setRateButtonTrigger(!rateButtonTrigger);
+  };
+
+  const onDislikeClick = async (id) => {
+    const response = await fetch(`/api/comments/dislike/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Dislike failed");
+    }
+    console.log("Disliked");
+    setRateButtonTrigger(!rateButtonTrigger);
+  };
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
@@ -149,61 +183,67 @@ const Post = () => {
               }}
             />
 
-            {comments.slice(page * DISPLAY_COUNT, page * DISPLAY_COUNT + DISPLAY_COUNT).map((comment) => {
-              const isReply = comment.commentRepliedToId;
-              if (isReply) {
-                return (
-                  <CommentBody
-                    id={comment._id}
-                    key={comment._id}
-                    postId={comment.postId}
-                    posterId={comment.commenterId._id}
-                    profile={comment.commenterId.picture}
-                    userName={comment.commenterId.username}
-                    paragraph={comment.body}
-                    isOwner={comment.commenterId._id === account?._id}
-                    ownerId={account?._id}
-                    isReply={isReply}
-                    onDeleteBtnClick={() => {
-                      setConfirmDelete(true);
-                      setWhatToDelete("comment");
-                      setIdOfCommentToDelete(comment._id);
-                    }}
-                    nestedUserName={
-                      comment.commentRepliedToId.commenterId.username
-                    }
-                    nestedProfile={
-                      comment.commentRepliedToId.commenterId.picture
-                    }
-                    nestedParagraph={comment.commentRepliedToId.body}
-                    likes={comment.reactions.likerIds}
-                    dislikes={comment.reactions.dislikerIds}
-                  />
-                );
-              } else {
-                return (
-                  <CommentBody
-                    id={comment._id}
-                    key={comment._id}
-                    postId={comment.postId}
-                    posterId={comment.commenterId._id}
-                    profile={comment.commenterId.picture}
-                    userName={comment.commenterId.username}
-                    paragraph={comment.body}
-                    isOwner={comment.commenterId._id === account?._id}
-                    ownerId={account?._id}
-                    isReply={isReply}
-                    onDeleteBtnClick={() => {
-                      setConfirmDelete(true);
-                      setWhatToDelete("comment");
-                      setIdOfCommentToDelete(comment._id);
-                    }}
-                    likes={comment.reactions.likerIds}
-                    dislikes={comment.reactions.dislikerIds}
-                  />
-                );
-              }
-            })}
+            {comments
+              .slice(page * DISPLAY_COUNT, page * DISPLAY_COUNT + DISPLAY_COUNT)
+              .map((comment) => {
+                const isReply = comment.commentRepliedToId;
+                if (isReply) {
+                  return (
+                    <CommentBody
+                      id={comment._id}
+                      key={comment._id}
+                      postId={comment.postId}
+                      posterId={comment.commenterId._id}
+                      profile={comment.commenterId.picture}
+                      userName={comment.commenterId.username}
+                      paragraph={comment.body}
+                      isOwner={comment.commenterId._id === account?._id}
+                      ownerId={account?._id}
+                      isReply={isReply}
+                      onDeleteBtnClick={() => {
+                        setConfirmDelete(true);
+                        setWhatToDelete("comment");
+                        setIdOfCommentToDelete(comment._id);
+                      }}
+                      nestedUserName={
+                        comment.commentRepliedToId.commenterId.username
+                      }
+                      nestedProfile={
+                        comment.commentRepliedToId.commenterId.picture
+                      }
+                      nestedParagraph={comment.commentRepliedToId.body}
+                      likes={comment.reactions.likerIds}
+                      dislikes={comment.reactions.dislikerIds}
+                      onLikeClick={() => onLikeClick(comment._id)}
+                      onDislikeClick={() => onDislikeClick(comment._id)}
+                    />
+                  );
+                } else {
+                  return (
+                    <CommentBody
+                      id={comment._id}
+                      key={comment._id}
+                      postId={comment.postId}
+                      posterId={comment.commenterId._id}
+                      profile={comment.commenterId.picture}
+                      userName={comment.commenterId.username}
+                      paragraph={comment.body}
+                      isOwner={comment.commenterId._id === account?._id}
+                      ownerId={account?._id}
+                      isReply={isReply}
+                      onDeleteBtnClick={() => {
+                        setConfirmDelete(true);
+                        setWhatToDelete("comment");
+                        setIdOfCommentToDelete(comment._id);
+                      }}
+                      likes={comment.reactions.likerIds}
+                      dislikes={comment.reactions.dislikerIds}
+                      onLikeClick={() => onLikeClick(comment._id)}
+                      onDislikeClick={() => onDislikeClick(comment._id)}
+                    />
+                  );
+                }
+              })}
           </>
         )}
 
@@ -227,17 +267,19 @@ const Post = () => {
 
         <Pagination>
           <PaginationContent>
-              <PaginationItem>
-                  <PaginationPrevious onClick={gotoPrevPage} />
-              </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious onClick={gotoPrevPage} />
+            </PaginationItem>
 
-              {[...Array(maxPages)].map((_, i) =>
-                  <PaginationLink key={i} onClick={() => gotoPage(i)}>{i + 1}</PaginationLink>
-              )}
+            {[...Array(maxPages)].map((_, i) => (
+              <PaginationLink key={i} onClick={() => gotoPage(i)}>
+                {i + 1}
+              </PaginationLink>
+            ))}
 
-              <PaginationItem>
-                  <PaginationNext onClick={gotoNextPage} />
-              </PaginationItem>
+            <PaginationItem>
+              <PaginationNext onClick={gotoNextPage} />
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>
