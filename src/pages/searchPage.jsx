@@ -16,8 +16,11 @@ import {
 const SearchPage = () => {
   const [sortBy, setSortBy] = useState("recent");
   const [datePosted, setDatePosted] = useState("Oldest");
+	const [popularity, setPopularity] = useState("Lowest");
+	const [searchQuery, setSearchQuery] = useState("");
   const [searchRes, setSearchRes] = useState([]);
   const [searchButtonTrigger, setSearchButtonTrigger] = useState(false);
+	const [searchTags, setSearchTags] = useState([]);
 
   const handleSortChange = (value) => {
     setSortBy(value);
@@ -29,7 +32,7 @@ const SearchPage = () => {
     const filteredPosts = posts.filter(post => {
       return tags.some(tag => post.tags.includes(tag));
     });
-    
+		
     console.log("Filtered Posts:", filteredPosts);
     
     return filteredPosts;
@@ -50,16 +53,23 @@ const SearchPage = () => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        
-        const response = await fetch(`/api/posts/search`);
-        console.log("SEARCH PAGE: ",response);
+        let quer = "?q=";
+				quer += searchQuery;
+				quer += "&t";
+				for (let i=0; i<searchTags.length; i++) {
+					
+				}
+        const response = await fetch(`/api/search` + quer);
+				
         if (!response.ok) {
           throw new Error("Failed to fetch results");
         }
         const searchData = await response.json();
-        setSearchRes(searchData);
+				const filteredPosts = filterPosts(searchData, ["Internet", "Delivery", "Amazon"]);
+        setSearchRes(filteredPosts);
+				
 
-        console.log("Obtained search results");
+        console.log("Obtained search results", searchRes);
         
       } 
       catch (error) {
@@ -75,10 +85,10 @@ const SearchPage = () => {
     <AnimBackground>
       <div className="w-full h-full bg-background">
         <Header />
-          <SearchHeader datePosted={'Oldest'} searchResultsCount={'2'} tag1={'Internet'} tag2={'Delivery'} tag3={'Amazon'} />
+          <SearchHeader datePosted={'Oldest'} searchResultsCount={searchRes.length} tag1={'Internet'} tag2={'Delivery'} tag3={'Amazon'} />
           
         <div className="flex flex-col gap-2 px-16 py-5">
-        {sortPosts(filterPosts([], ["Internet", "Delivery", "Amazon"])).map(p => {
+        {sortPosts(searchRes).map(p => {
                   console.log("Post:", p); 
                   return (
                     <PostCard
@@ -89,9 +99,9 @@ const SearchPage = () => {
                       body={p.body}
                       uploadDate={p.uploadDate}
                       views={p.views}
-                      likes={p.likerIds.length}
-                      dislikes={p.dislikerIds.length}
-                      userRating={p.likerIds.includes(0) ? 'like' : 'dislike'}
+                      likes={p.reactions.likerIds.length}
+                      dislikes={p.reactions.dislikerIds.length}
+                      userRating={p.reactions.likerIds.includes(0) ? 'like' : 'dislike'}
                       tags={p.tags}
                     />
                   );
