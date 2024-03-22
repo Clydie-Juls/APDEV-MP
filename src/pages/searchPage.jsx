@@ -15,6 +15,9 @@ import {
 
 const SearchPage = () => {
   const [sortBy, setSortBy] = useState("recent");
+  const [datePosted, setDatePosted] = useState("Oldest");
+  const [searchRes, setSearchRes] = useState([]);
+  const [searchButtonTrigger, setSearchButtonTrigger] = useState(false);
 
   const handleSortChange = (value) => {
     setSortBy(value);
@@ -45,14 +48,34 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    alert('Sorry, to be implemented!');
-  }, []);
+    const fetchSearchResults = async () => {
+      try {
+        
+        const response = await fetch(`/api/posts/search`);
+        console.log("SEARCH PAGE: ",response);
+        if (!response.ok) {
+          throw new Error("Failed to fetch results");
+        }
+        const searchData = await response.json();
+        setSearchRes(searchData);
+
+        console.log("Obtained search results");
+        
+      } 
+      catch (error) {
+        console.error("Error fetching results:", error);
+      }
+
+    };
+
+    fetchSearchResults();
+  }, [searchButtonTrigger]);
 
   return (
     <AnimBackground>
       <div className="w-full h-full bg-background">
         <Header />
-          <SearchHeader datePosted={'Oldest'} views={'Lowest'} searchResultsCount={'2'} tag1={'Internet'} tag2={'Delivery'} tag3={'Amazon'} />
+          <SearchHeader datePosted={'Oldest'} searchResultsCount={'2'} tag1={'Internet'} tag2={'Delivery'} tag3={'Amazon'} />
           
         <div className="flex flex-col gap-2 px-16 py-5">
         {sortPosts(filterPosts([], ["Internet", "Delivery", "Amazon"])).map(p => {
