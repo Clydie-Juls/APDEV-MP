@@ -178,14 +178,14 @@ app.get("/api/posts/popular", async (req, res) => {
 });
 
 // Example: '/search?q=post%20title&t=tag1,tag2&do=asc&po=desc'
-apiRouter.get("/posts/search", async (req, res) => {
+apiRouter.get("/search", async (req, res) => {
   try {
     const titleQuery = req.query.q || "";
     const tagsQuery = req.query.t ? req.query.t.split(",") : null;
 
     const dateOrder = req.query.do || "asc";
     const popularityOrder = req.query.po || "asc";
-
+    
     const posts = await Post.aggregate([
       {
         $match: {
@@ -221,7 +221,7 @@ apiRouter.get("/posts/search", async (req, res) => {
         },
       },
     ]);
-
+    
     res.status(200).json(posts);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -242,6 +242,7 @@ apiRouter.get("/posts/:postId/comments", async (req, res) => {
       .populate({
         path: "commentRepliedToId",
         select: "body commenterId",
+				transform: (doc, id) => doc == null ? {_id: id} : doc,
         populate: {
           path: "commenterId",
           model: "User",
@@ -258,6 +259,8 @@ apiRouter.get("/posts/:postId/comments", async (req, res) => {
       //   }
       // )
       .lean();
+		
+		console.log("Comment", comments);
     res.status(200).json(comments);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -377,7 +380,7 @@ apiRouter.post("/posts/write", [isAuth, multer().array()], async (req, res) => {
         dislikerIds: [],
       },
       tags: req.body.tags,
-    });
+    })
 
     res.status(201).send(`/post/${newPost._id}`);
   } catch (e) {
