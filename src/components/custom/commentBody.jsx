@@ -15,6 +15,10 @@ import { Send, MoreVertical } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import RateButtons from "@/components/custom/rateButtons";
 
+/*import mongoose from "mongoose";
+mongoose.connect("mongodb://127.0.0.1/27017/T3Db");
+import { Comment } from "../../../models/comment.js";*/
+
 const CommentBody = ({
   id,
   posterId,
@@ -25,6 +29,7 @@ const CommentBody = ({
   nestedUserName,
   paragraph,
   nestedParagraph,
+	parentCommentDeleted,
   likes,
   dislikes,
   isReply,
@@ -40,6 +45,7 @@ const CommentBody = ({
     : dislikes.includes(ownerId)
     ? "dislike"
     : "";
+	
 
   return (
     <Card className="mb-2">
@@ -55,23 +61,31 @@ const CommentBody = ({
 
       <CardContent>
         {isReply ? (
-          <Card className="p-4">
-            <CardHeader className="p-0 space-y-0 flex flex-row">
-              <div className="flex items-center gap-4">
-                Replying to
-                <a className="flex items-center gap-2">
-                  <Avatar>
-                    <AvatarImage src={nestedProfile} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  {nestedUserName}
-                </a>
-              </div>
-            </CardHeader>
-            <CardContent className="p-0 mt-2 text-zinc-400 text-ellipsis text-nowrap overflow-hidden">
-              {nestedParagraph}
-            </CardContent>
-          </Card>
+					parentCommentDeleted ? (
+						<Card className="p-4">
+							<CardContent className="p-0 pl-5 mt-0 text-zinc-400 text-ellipsis text-nowrap overflow-hidden">
+								{nestedParagraph}
+							</CardContent>
+						</Card>
+					) : (
+						<Card className="p-4">
+							<CardHeader className="p-0 space-y-0 flex flex-row">
+								<div className="flex items-center gap-4">
+									Replying to
+									<a className="flex items-center gap-2">
+										<Avatar>
+											<AvatarImage src={nestedProfile} />
+												<AvatarFallback>CN</AvatarFallback>
+										</Avatar>
+										{nestedUserName}
+									</a>
+								</div>
+							</CardHeader>
+							<CardContent className="p-0 mt-2 text-zinc-400 text-ellipsis text-nowrap overflow-hidden">
+								{nestedParagraph}
+							</CardContent>
+						</Card>
+					)
         ) : null}
 
         {/* Reply */}
