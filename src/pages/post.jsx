@@ -187,6 +187,7 @@ const Post = () => {
     console.log("Disliked");
     setRateButtonTrigger(!rateButtonTrigger);
   };
+	
 
   return (
     <AnimBackground className="h-screen bg-background flex flex-col">
@@ -221,37 +222,78 @@ const Post = () => {
               .slice(page * DISPLAY_COUNT, page * DISPLAY_COUNT + DISPLAY_COUNT)
               .map((comment) => {
                 const isReply = comment.commentRepliedToId;
+						 		
                 if (isReply) {
-                  return (
-                    <CommentBody
-                      id={comment._id}
-                      key={comment._id}
-                      postId={comment.postId}
-                      posterId={comment.commenterId._id}
-                      profile={comment.commenterId.picture}
-                      userName={comment.commenterId.username}
-                      paragraph={comment.body}
-                      isOwner={comment.commenterId._id === account?._id}
-                      ownerId={account?._id}
-                      isReply={isReply}
-                      onDeleteBtnClick={() => {
-                        setConfirmDelete(true);
-                        setWhatToDelete("comment");
-                        setIdOfCommentToDelete(comment._id);
-                      }}
-                      nestedUserName={
-                        comment.commentRepliedToId.commenterId.username
-                      }
-                      nestedProfile={
-                        comment.commentRepliedToId.commenterId.picture
-                      }
-                      nestedParagraph={comment.commentRepliedToId.body}
-                      likes={comment.reactions.likerIds}
-                      dislikes={comment.reactions.dislikerIds}
-                      onLikeClick={() => onCommentLikeClick(comment._id)}
-                      onDislikeClick={() => onCommentDislikeClick(comment._id)}
-                    />
-                  );
+						 			let parentCommentDeleted = false;
+						 			if (isReply.body == undefined || isReply.body == null ) {
+						 				if (isReply.body != "") {
+						 					parentCommentDeleted = true;
+						 				}
+									} // Rudimentary implementation; will return false positives if not called for the intended purpose, may behave differently with dependency versions not identical to ones in "package.json"
+						 			if (parentCommentDeleted) {
+										return (
+											<CommentBody
+												id={comment._id}
+												key={comment._id}
+												postId={comment.postId}
+												posterId={comment.commenterId._id}
+												profile={comment.commenterId.picture}
+												userName={comment.commenterId.username}
+												paragraph={comment.body}
+												isOwner={comment.commenterId._id === account?._id}
+												ownerId={account?._id}
+												isReply={isReply}
+												parentCommentDeleted={parentCommentDeleted}
+												onDeleteBtnClick={() => {
+													setConfirmDelete(true);
+													setWhatToDelete("comment");
+													setIdOfCommentToDelete(comment._id);
+												}}
+												nestedUserName={
+													""
+												}
+												nestedProfile={
+													""
+												}
+												nestedParagraph={"Comment has been deleted."}
+												likes={comment.reactions.likerIds}
+												dislikes={comment.reactions.dislikerIds}
+												onLikeClick={() => onCommentLikeClick(comment._id)}
+												onDislikeClick={() => onCommentDislikeClick(comment._id)}
+											/>
+										);
+									} else {
+											return (
+											<CommentBody
+												id={comment._id}
+												key={comment._id}
+												postId={comment.postId}
+												posterId={comment.commenterId._id}
+												profile={comment.commenterId.picture}
+												userName={comment.commenterId.username}
+												paragraph={comment.body}
+												isOwner={comment.commenterId._id === account?._id}
+												ownerId={account?._id}
+												isReply={isReply}
+												onDeleteBtnClick={() => {
+													setConfirmDelete(true);
+													setWhatToDelete("comment");
+													setIdOfCommentToDelete(comment._id);
+												}}
+												nestedUserName={
+													comment.commentRepliedToId.commenterId.username
+												}
+												nestedProfile={
+													comment.commentRepliedToId.commenterId.picture
+												}
+												nestedParagraph={comment.commentRepliedToId.body}
+												likes={comment.reactions.likerIds}
+												dislikes={comment.reactions.dislikerIds}
+												onLikeClick={() => onCommentLikeClick(comment._id)}
+												onDislikeClick={() => onCommentDislikeClick(comment._id)}
+											/>
+										);
+									}
                 } else {
                   return (
                     <CommentBody
