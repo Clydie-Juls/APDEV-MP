@@ -182,10 +182,10 @@ apiRouter.get("/search", async (req, res) => {
   try {
     const titleQuery = req.query.q || "";
     const tagsQuery = req.query.t ? req.query.t.split(",") : null;
-
+		
     const dateOrder = req.query.do || "asc";
     const popularityOrder = req.query.po || "asc";
-    
+		
     const posts = await Post.aggregate([
       {
         $match: {
@@ -221,7 +221,9 @@ apiRouter.get("/search", async (req, res) => {
         },
       },
     ]);
-    
+		
+		await User.populate(posts, {path: "posterId", select: "username"});
+		
     res.status(200).json(posts);
   } catch (e) {
     res.status(500).json({ error: e.message });
